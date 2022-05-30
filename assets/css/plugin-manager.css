@@ -37,15 +37,60 @@
     grid-gap: 25px;
     margin-top: 50px;
 }
-.wpte-pm-card-wrapper .wpte-pm-cart{
-    display: flex;
+.wpte-pm-card-wrapper .wpte-pm-card{
     background: #fff;
+}
+
+.wpte-pm-card-wrapper .wpte-pm-card-header{
+    display: flex;
     padding: 20px;
     border-radius: 5px;
 }
 .wpte-pm-card-wrapper .wpte-pm-plugin-icon-area{
-    padding-right: 20px;
+    padding-right: 26px;
 }
-.wpte-pm-card-wrapper .wpte-pm-cart img{
+.wpte-pm-card-wrapper .wpte-pm-card img{
     width: 70px;
+}
+
+.wpte-pm-card .wpte-pm-plugin-name{
+    font-size: 18px;
+    font-weight: 500;
+}
+.wpte-pm-card .wpte-pm-plugin-slug{
+    color: #a7a7a7;
+    font-size: 15px;
+    margin: 8px 0;
+}
+.wpte-pm-card .wpte-pm-plugin-version{
+    color: #878787;
+    font-size: 15px;
+    margin: 8px 0;
+}
+
+.wpte-pm-card .wpte-pm-card-footer{
+    border-top: 1px solid #e7e7e7;
+    height: 40px;
+}
+
+/* Popup */
+.wpte-pm-popup-wrapper{
+   position: fixed;
+   width: 100%;
+   left: 0;
+   top: 0;
+   right: 0;
+   bottom: 0;
+   background: #89848473;
+   display: flex;
+   justify-content: center;
+}
+
+.wpte-pm-popup-box{
+    height: 385px;
+    width: 100%;
+    max-width: 450px;
+    background: #fff;
+    padding: 38px;
+    border-radius: 6px;
 }
