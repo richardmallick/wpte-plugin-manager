@@ -1,0 +1,20 @@
+{
+    "name": "wptoffee/wpte-plugin-manager",
+    "description": "This is Plugin Manager Plugin for Fast Spring. You can create license and sell your wordpress plugin using this plugin.",
+    "type": "wordpress-plugin",
+    "license": "GPLv2",
+    "authors": [
+        {
+            "name": "richardmallick",
+            "email": "richardsetu@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "WPTE_PM_MANAGER\\" : ""
+        },
+        "files": [ "Includes/functions.php" ]
+    }
+}

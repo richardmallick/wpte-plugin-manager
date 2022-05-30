@@ -1,0 +1,104 @@
+#wpcontent{
+    padding-left: 0 !important;
+    background: #f1f1f8;
+}
+.wpte-pm-admin-top-menu{
+    display: flex;
+    width: 100%;
+    background: #fff;
+    box-sizing: border-box;
+    border-bottom: 1px solid #e0e5e9;
+    z-index: 20;
+}
+
+.wpte-pm-admin-top-logo{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 10px 0 20px;
+    min-height: 54px;
+}
+.wpte-pm-admin-top-logo a{
+    margin-top: 4px;
+    margin-right: 40px;
+}
+
+.wpte-pm-admin-top-logo img{
+    width: 100%;
+}
+
+.wpte-pm-admin-top-nav{
+    width: 80%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.wpte-pm-admin-menu, .wpte-pm-admin-menu2{
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+.wpte-pm-admin-menu li,
+.wpte-pm-admin-menu2 li{
+    padding: 0;
+    margin: 0;
+    border-right: 1px solid #f1f1f1;
+    position: relative;
+}
+
+.wpte-pm-admin-top-nav ul.wpte-pm-admin-menu li.active a, 
+.wpte-pm-admin-top-nav ul.wpte-pm-admin-menu li a:focus, 
+.wpte-pm-admin-top-nav ul.wpte-pm-admin-menu2 li.active a, 
+.wpte-pm-admin-top-nav ul.wpte-pm-admin-menu2 li a:focus {
+    outline: 0;
+    border: none;
+    background-color: #f0f2f4;
+}
+
+.wpte-pm-admin-top-nav ul.wpte-pm-admin-menu li a, 
+.wpte-pm-admin-top-nav ul.wpte-pm-admin-menu2 li a {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+    align-items: center;
+    font-weight: 500;
+    text-align: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    font-size: 13px;
+    text-decoration: none;
+    color: #555d66;
+    height: 55px;
+    padding: 0 25px;
+    cursor: pointer;
+    position: relative;
+}
+
+.wpte-pm-admin-top-nav ul.wpte-pm-admin-menu li.active a:after, 
+.wpte-pm-admin-top-nav ul.wpte-pm-admin-menu2 li.active a:after {
+    content: "";
+    position: absolute;
+    width: calc(100% + 2px);
+    bottom: 0;
+    background: repeat;
+    height: 1px;
+    left: -1px;
+    box-shadow: inset 0 -2px 0 0 #9b5cff;
+}
+
+.wpte-pm-admin-top-nav .dashicons-admin-generic{
+    -webkit-animation:spin 5s linear infinite;
+    -moz-animation:spin 5s linear infinite;
+    animation:spin 5s linear infinite;
+}
+
+.wpte-pm-admin-top-nav ul.wpte-pm-admin-menu2 li:hover .dashicons-admin-generic{
+    -webkit-animation:none;
+    -moz-animation:none;
+    animation:none;
+}
+
+/* @-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
+@-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
+@keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } } */
