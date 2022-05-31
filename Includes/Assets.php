@@ -45,7 +45,12 @@ class Assets{
      */
     public function AdminAssetsJS() {
         return [
-            
+            [
+                'handler'   => 'wpte-pm-main',
+                'src'       => 'js/main.js',
+                'deps'      => ['jquery'],
+                'in_footer' => true
+            ],
         ];
     }
 

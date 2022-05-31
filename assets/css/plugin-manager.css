@@ -87,10 +87,115 @@
 }
 
 .wpte-pm-popup-box{
-    height: 385px;
+    height: 450px;
     width: 100%;
-    max-width: 450px;
+    max-width: 500px;
     background: #fff;
     padding: 38px;
     border-radius: 6px;
+}
+
+.wpte-pm-popup-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.wpte-pm-popup-header h1{
+    color: #1d2327;
+    font-size: 2em;
+}
+
+.wpte-pm-popup-close{
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    color: #8d8a8a;
+}
+.wpte-pm-popup-close:hover{
+    color: #535252;
+}
+
+.wpte-pm-popup-form-fields{
+    display: flex;
+    justify-content: space-between;
+}
+.wpte-pm-popup-form-fields label{
+    font-size: 16px;
+    line-height: 30px;
+    margin: 10px 0px 5px 8px;
+    display: block;
+}
+.wpte-pm-popup-form-fields input{
+    width: 100%;
+    border: 1px solid #ddd;
+    background: #f2f0f0;
+    padding: 6px;
+    border-radius: 30px;
+}
+.wpte-pm-popup-form-fields input:focus,
+.wpte-pm-popup-form-fields input:active
+{
+    border: 1px solid #b163f540;
+    box-shadow: 0px 0px 2px 1px #b163f540;
+    outline: none;
+}
+.wpte-pm-popup-form-field-left{
+    width: 50%;
+    margin-right: 10px;
+}
+.wpte-pm-popup-form-field-right{
+    width: 50%;
+    margin-left: 10px;
+}
+
+.wpte-pm-popup-footer{
+    display: flex;
+    margin-top: 34px;
+    align-items: center;
+    justify-content: end;
+}
+
+.wpte-popup-close-button,
+.wpte-popup-save-button{
+    border: 0;
+    color: #fff;
+    padding: 8px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+}
+
+.wpte-popup-close-button{
+    background-color: #d8353b;
+    margin-right: 10px;
+    cursor: pointer;
+}
+.wpte-popup-close-button:hover{
+    background-color: #a42226;
+}
+.wpte-popup-save-button{
+    background-color: #428817;
+    cursor: pointer;
+}
+.wpte-popup-save-button:hover{
+    background-color: #285c08;
+}
+
+/* Jquery Classes */
+.wpte-pm-popup-wrapper,
+.wpte-pm-popup-box{
+    display: none;
+}
+
+.wpte-pm-popup-block{
+    display: flex;
+}
+
+.wpte-add-plugin-loader {
+    visibility: visible;
+}
+
+.wpte-pm-popup-form-fields p{
+    color: red;
+    line-height: 0;
+    margin-left: 8px;
 }

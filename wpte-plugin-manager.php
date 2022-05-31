@@ -52,6 +52,7 @@ if ( ! class_exists( 'wpte_plugin_manager' ) ) {
         private function __construct() {
 
             $this->define_constance();
+            register_activation_hook( __FILE__, [$this, 'activate'] );
             add_action( "plugins_loaded", [$this, 'init_plugin'] );
             add_action( 'init', [$this, 'i18n'] );
             add_action( 'admin_init', [$this, 'activation_redirect'] );

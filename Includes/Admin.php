@@ -17,6 +17,7 @@ class Admin{
      */
     public function __construct(){
         new Admin\Class_menu();
+        new Admin\Ajax();
     }
 
 }

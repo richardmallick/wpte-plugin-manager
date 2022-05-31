@@ -25,6 +25,12 @@ class Plugin_manager{
      */
     public function Render_Plugins() {
         wp_enqueue_style('wpte-plugin-manager-style');
+        wp_enqueue_script('wpte-pm-main');
+        wp_localize_script('wpte-pm-main', 'wptePlugin', [
+            'ajaxUrl' => admin_url('admin-ajax.php'),
+            'wpte_nonce' => wp_create_nonce('wpte-insert-nonce'),
+            'error'   => __('Something Went Wrong!', WPTE_WPL_TEXT_DOMAIN)
+        ]);
         $this->Elements_Render();
     }
 
@@ -126,48 +132,59 @@ class Plugin_manager{
             <div class="wpte-pm-popup-box">
                 <div class="wpte-pm-popup-header">
                     <h1>Add New Plugin</h1>
-                    <div class="wpte-pm-popup-close">x</div>
+                    <div class="wpte-pm-popup-close">╳</div>
                 </div>
                 <form action="" method="post">
-                    <table>
-                        <tr>
-                            <td>Plugin Name</td>
-                            <td><input type="text" name="wpte_pm_plugin_name"></td>
-                        </tr>
-                        <tr>
-                            <td>Plugin Slug</td>
-                            <td><input type="text" name="wpte_pm_plugin_slug"></td>
-                        </tr>
-                        <tr>
-                            <td>Plugin Version</td>
-                            <td><input type="text" name="wpte_pm_plugin_version"></td>
-                        </tr>
-                        <tr>
-                            <td>PHP Version</td>
-                            <td><input type="text" name="wpte_pm_plugin_php_version"></td>
-                        </tr>
-                        <tr>
-                            <td>WordPress Version</td>
-                            <td><input type="text" name="wpte_pm_plugin_wordpress_version"></td>
-                        </tr>
-                        <tr>
-                            <td>Tested up to</td>
-                            <td><input type="text" name="wpte_pm_plugin_wordpress_tested_version"></td>
-                        </tr>
-                        <tr>
-                            <td>Demo URL</td>
-                            <td><input type="text" name="wpte_pm_plugin_demo_url"></td>
-                        </tr>
-                        <tr>
-                            <td>Description</td>
-                            <td><input type="text" name="wpte_pm_plugin_description"></td>
-                        </tr>
-                    </table>
+                    <div class="wpte-pm-popup-form-fields">
+                        <div class="wpte-pm-popup-form-field-left">
+                            <label for='wpte_pm_plugin_name'>Plugin Name *</label>
+                            <input type="text" id='wpte_pm_plugin_name' name='wpte_pm_plugin_name'>
+                            <p id="plugin-name"></p>
+                        </div>
+                        <div class="wpte-pm-popup-form-field-right">
+                            <label for='wpte_pm_plugin_slug'>Plugin Slug</label>
+                            <input type="text" id='wpte_pm_plugin_slug' name='wpte_pm_plugin_slug'>
+                        </div>
+                    </div>
+                    <div class="wpte-pm-popup-form-fields">
+                        <div class="wpte-pm-popup-form-field-left">
+                            <label for='wpte_pm_plugin_version'>Plugin Version *</label>
+                            <input type="text" id='wpte_pm_plugin_version' name='wpte_pm_plugin_version'>
+                            <p id="plugin-version"></p>
+                        </div>
+                        <div class="wpte-pm-popup-form-field-right">
+                            <label for='wpte_pm_plugin_php_version'>PHP Version *</label>
+                            <input type="text" id='wpte_pm_plugin_php_version' name='wpte_pm_plugin_php_version'>
+                            <p id="php-version"></p>
+                        </div>
+                    </div>
+                    <div class="wpte-pm-popup-form-fields">
+                        <div class="wpte-pm-popup-form-field-left">
+                            <label for='wpte_pm_plugin_wordpress_version'>WordPress Version *</label>
+                            <input type="text" id='wpte_pm_plugin_wordpress_version' name='wpte_pm_plugin_wordpress_version'>
+                            <p id="wp-version"></p>
+                        </div>
+                        <div class="wpte-pm-popup-form-field-right">
+                            <label for='wpte_pm_plugin_wordpress_tested_version'>Tested up to *</label>
+                            <input type="text" id='wpte_pm_plugin_wordpress_tested_version' name='wpte_pm_plugin_wordpress_tested_version'>
+                            <p id="tested-version"></p>
+                        </div>
+                    </div>
+                    <div class="wpte-pm-popup-form-fields">
+                        <div class="wpte-pm-popup-form-field-left">
+                            <label for='wpte_pm_plugin_demo_url'>Demo URL</label>
+                            <input type="text" id='wpte_pm_plugin_demo_url' name='wpte_pm_plugin_demo_url'>
+                        </div>
+                        <div class="wpte-pm-popup-form-field-right">
+                            <label for='wpte_pm_plugin_description'>Description</label>
+                            <input type="text" id='wpte_pm_plugin_description' name='wpte_pm_plugin_description'>
+                        </div>
+                    </div>
                 </form>
                 <div class="wpte-pm-popup-footer">
-                    <span id="create-loader" class="spinner sa-spinner-open"></span>
-                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                    <input type="submit" class="btn btn-success" name="addonsdatasubmit" id="addonsdatasubmit" value="Save">
+                    <span id="wpte-add-plugin-loader" class="spinner sa-spinner-open"></span>
+                    <button type="button" class="wpte-popup-close-button">Close</button>
+                    <input type="submit" class="wpte-popup-save-button" name="wpte_popup_form_submit" id="wpte_popup_form_submit" value="Save">
                 </div>
             </div>
         </div>
