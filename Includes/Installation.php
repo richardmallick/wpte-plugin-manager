@@ -18,7 +18,7 @@ class Installation{
      */
     public function __construct(){
  
-        //$this->Activate();
+        $this->Activate();
         $this->Product_layout_db();
 
     }
@@ -31,16 +31,16 @@ class Installation{
      */
     public function Activate() {
 
-        $installed = get_option('WPTE_lm_installed');
+        $installed = get_option('WPTE_pm_installed');
 
         if ( ! $installed ) {
 
-            update_option('WPTE_lm_installed', time());
+            update_option('WPTE_pm_installed', time());
         }
 
-        update_option('WPTE_lm_version', WPTE_LM_VERSION);
+        update_option('WPTE_pm_version', WPTE_LM_VERSION);
 
-        add_option('WPTE_lm_activation_redirect', true);
+        add_option('WPTE_pm_activation_redirect', true);
     }
 
     /**

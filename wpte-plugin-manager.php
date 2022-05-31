@@ -147,7 +147,7 @@ if ( ! class_exists( 'wpte_plugin_manager' ) ) {
 
                 delete_option( 'WPTE_pm_activation_redirect' );
 
-                wp_safe_redirect( admin_url( 'edit.php?post_type=wpte_product' ) );
+                wp_safe_redirect( admin_url( 'admin.php?page=wpte-plugin-manager' ) );
                 exit();
             }
         }
@@ -168,7 +168,7 @@ if ( ! class_exists( 'wpte_plugin_manager' ) ) {
                 [
                     sprintf(
                         '<a href="%s">%s</a>',
-                        admin_url( 'edit.php?post_type=wpte_product' ),
+                        admin_url( 'admin.php?page=wpte-plugin-manager' ),
                         esc_html__( 'Settings', WPTE_PM_TEXT_DOMAIN )
                     ),
                 ], $links );
