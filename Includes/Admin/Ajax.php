@@ -41,6 +41,7 @@ class Ajax{
         $tested_version = $args['tested_version'] ? sanitize_text_field($args['tested_version']) : '';
         $demo_url = $args['demo_url'] ? sanitize_url($args['demo_url']) : '';
         $description = $args['description'] ? sanitize_text_field($args['description']) : '';
+        $logo_id = $args['logo_id'] ? sanitize_text_field($args['logo_id']) : '';
 
         if ( empty( $plugin_name ) ) {
             $this->errors['plugin_name'] = __("Plugin Name field is required!", WPTE_PM_TEXT_DOMAIN);
@@ -87,12 +88,13 @@ class Ajax{
             'tested_version' => $tested_version,
             'demo_url' => $demo_url,
             'description' => $description,
+            'logo_id' => $logo_id,
             'created_date' => current_time('mysql'),
 
         ] );
 
         wp_send_json_success( [
-            'success' =>  __( 'Your plugin has beed added', WPTE_PM_TEXT_DOMAIN ),
+            'added' =>  __( 'Your plugin has beed added', WPTE_PM_TEXT_DOMAIN ),
         ] );
 
         if ( is_wp_error( $insert_id ) ) {

@@ -51,6 +51,7 @@
 }
 .wpte-pm-card-wrapper .wpte-pm-card img{
     width: 70px;
+    height: auto;
 }
 
 .wpte-pm-card .wpte-pm-plugin-name{
@@ -87,9 +88,9 @@
 }
 
 .wpte-pm-popup-box{
-    height: 450px;
+    height: 460px;
     width: 100%;
-    max-width: 500px;
+    max-width: 550px;
     background: #fff;
     padding: 38px;
     border-radius: 6px;
@@ -151,9 +152,24 @@
 
 .wpte-pm-popup-footer{
     display: flex;
-    margin-top: 24px;
+    margin-top: 10px;
     align-items: center;
-    justify-content: end;
+    justify-content: space-between;
+}
+.wpte-pm-footer-attachment{
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+}
+#wpte-pm-attachment img{
+    width: 64px;
+    margin: 0px 0 0 10px;
+    cursor: pointer;
+}
+
+.wpte-footer-buttons{
+    display: flex;
+    align-items: center;
 }
 
 .wpte-popup-close-button,
@@ -193,6 +209,7 @@
 
 .wpte-add-plugin-loader {
     visibility: visible;
+    
 }
 
 .wpte-pm-popup-form-fields p{

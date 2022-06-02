@@ -24,6 +24,7 @@ function wpte_pm_add_plugin( $args = [] ) {
         'tested_version' => '',
         'demo_url' => '',
         'description' => '',
+        'logo_id' => '',
         'created_date' => current_time('mysql'),
 
     ];
@@ -43,6 +44,7 @@ function wpte_pm_add_plugin( $args = [] ) {
             '%s',
             '%s',
             '%d',
+            '%d',
         ]
     );
 
@@ -51,4 +53,38 @@ function wpte_pm_add_plugin( $args = [] ) {
     }
 
     return $wpdb->insert_id;
+}
+
+/**
+ * Method wpte_get_products_layout
+ *
+ * @param $arg
+ *
+ * Fetch all product layouts from database
+ *
+ * @return dbdata
+ */
+function wpte_pm_get_plugins( $arg = [] ) {
+
+    global $wpdb;
+
+    $default = [
+        'number'   => 20,
+        'offset'   => 0,
+        'orderby' => 'ID',
+        'order'    => 'DESC',
+    ];
+
+    $args = wp_parse_args( $arg, $default );
+
+    $items = $wpdb->get_results(
+        $wpdb->prepare(
+            "SELECT * FROM {$wpdb->prefix}wpte_plugin_data
+            ORDER BY %s %s
+            LIMIT %d, %d",
+            $args['orderby'], $args['order'], $args['offset'], $args['number']
+        )
+   );
+
+    return $items;
 }

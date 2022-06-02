@@ -24,6 +24,7 @@ class Plugin_manager{
      * @since 1.0.0
      */
     public function Render_Plugins() {
+        wp_enqueue_media();
         wp_enqueue_style('wpte-plugin-manager-style');
         wp_enqueue_script('wpte-pm-main');
         wp_localize_script('wpte-pm-main', 'wptePlugin', [
@@ -35,37 +36,27 @@ class Plugin_manager{
     }
 
     /**
-     * Elements List
-     *
-     * @since 1.0.0
-     */
-    public function Plugins() {
-        return [
-            'general' => [
-                'name'    => 'general-layouts',
-                'status'  => 'New', //Popular, Updated, Premium
-                'icon'    => WPTE_PM_URL . '/Image/general.svg',
-                'src'     => '',
-                'version' => 1.0,
-            ],
-            'calltoaction'  => [
-                'name'    => 'call-to-action-layouts',
-                'status'  => 'Coming...',
-                'icon'    => WPTE_PM_URL . '/Image/call-to-action.svg',
-                'src'     => '',
-                'version' => 1.0,
-            ]
-        ];
-    }
-
-    /**
      * Elements Render
      *
      * @since 1.0.0
      */
     public function Elements_Render() {
 
-        $Plugins = $this->Plugins();
+        $arg = [
+            'number'   => 20,
+            'offset'   => 0,
+            'orderby' => 'ID',
+            'order'    => 'ASC',
+        ];
+
+        $Plugins = wpte_pm_get_plugins() ? wpte_pm_get_plugins($arg) : [];
+        $Plugins = array_reverse($Plugins);
+
+        // echo "<pre>";
+        //     print_r($Plugins);
+        // echo "</pre>";
+
+      
 
         ?>
         <div class="wpte-pm-row">
@@ -78,50 +69,19 @@ class Plugin_manager{
                         </div>
                     </div>
                     <div class="wpte-pm-card-wrapper">
+                        <?php foreach( $Plugins as $Plugin ): ?>
                         <div class="wpte-pm-card">
                            <div class="wpte-pm-card-header">
-                            <div class="wpte-pm-plugin-icon-area"><img src="https://ps.w.org/wc-thank-you-page/assets/icon-256x256.jpg?rev=2444508"></div>
+                            <div class="wpte-pm-plugin-icon-area"><?php   echo wp_get_attachment_image( $Plugin->logo_id, 'thumbnail' ); ?></div>
                                 <div class="wpte-pm-plugin-details-area">
-                                    <div class="wpte-pm-plugin-name">WC Thank You Page</div>
-                                    <div class="wpte-pm-plugin-slug">wc-thank-you-page</div>
-                                    <div class="wpte-pm-plugin-version"><strong>Version:</strong> 1.0.3</div>
+                                    <div class="wpte-pm-plugin-name"><?php echo esc_html__($Plugin->plugin_name, WPTE_PM_TEXT_DOMAIN); ?></div>
+                                    <div class="wpte-pm-plugin-slug"><?php echo esc_html__($Plugin->plugin_slug, WPTE_PM_TEXT_DOMAIN); ?></div>
+                                    <div class="wpte-pm-plugin-version"><strong><?php echo esc_html__('Version:', WPTE_PM_TEXT_DOMAIN); ?></strong> <?php echo esc_html__($Plugin->plugin_version, WPTE_PM_TEXT_DOMAIN); ?></div>
                                 </div>
                            </div>
                            <div class="wpte-pm-card-footer"></div>
                         </div>
-                        <div class="wpte-pm-card">
-                           <div class="wpte-pm-card-header">
-                            <div class="wpte-pm-plugin-icon-area"><img src="https://ps.w.org/wc-thank-you-page/assets/icon-256x256.jpg?rev=2444508"></div>
-                                <div class="wpte-pm-plugin-details-area">
-                                    <div class="wpte-pm-plugin-name">WC Thank You Page</div>
-                                    <div class="wpte-pm-plugin-slug">wc-thank-you-page</div>
-                                    <div class="wpte-pm-plugin-version"><strong>Version:</strong> 1.0.3</div>
-                                </div>
-                           </div>
-                           <div class="wpte-pm-card-footer"></div>
-                        </div>
-                        <div class="wpte-pm-card">
-                           <div class="wpte-pm-card-header">
-                            <div class="wpte-pm-plugin-icon-area"><img src="https://ps.w.org/wc-thank-you-page/assets/icon-256x256.jpg?rev=2444508"></div>
-                                <div class="wpte-pm-plugin-details-area">
-                                    <div class="wpte-pm-plugin-name">WC Thank You Page</div>
-                                    <div class="wpte-pm-plugin-slug">wc-thank-you-page</div>
-                                    <div class="wpte-pm-plugin-version"><strong>Version:</strong> 1.0.3</div>
-                                </div>
-                           </div>
-                           <div class="wpte-pm-card-footer"></div>
-                        </div>
-                        <div class="wpte-pm-card">
-                           <div class="wpte-pm-card-header">
-                            <div class="wpte-pm-plugin-icon-area"><img src="https://ps.w.org/wc-thank-you-page/assets/icon-256x256.jpg?rev=2444508"></div>
-                                <div class="wpte-pm-plugin-details-area">
-                                    <div class="wpte-pm-plugin-name">WC Thank You Page</div>
-                                    <div class="wpte-pm-plugin-slug">wc-thank-you-page</div>
-                                    <div class="wpte-pm-plugin-version"><strong>Version:</strong> 1.0.3</div>
-                                </div>
-                           </div>
-                           <div class="wpte-pm-card-footer"></div>
-                        </div>
+                        <?php endforeach; ?>
                     </div>
 
                 </div>
@@ -181,12 +141,23 @@ class Plugin_manager{
                             <input type="text" id='wpte_pm_plugin_description' name='wpte_pm_plugin_description'>
                         </div>
                     </div>
+                    <div class="wpte-pm-popup-footer">
+                        <div class="wpte-pm-footer-attachment">
+                            <label for=''>Logo</label>
+                            <div id="wpte-pm-attachment">
+                                    <input type="hidden" class="wpte-pm-logo-id" name="wpte-pm-logo-id" value="">
+                                    <input type="hidden" class="wpte-pm-logo-url" name="wpte-pm-logo-url" value="">
+                                    <img src="<?php echo WPTE_PM_URL ?>/images/kd-img.png" alt="">
+                            </div>
+                        </div>
+                        <div class="wpte-footer-buttons">
+                            <span id="wpte-add-plugin-loader" class="spinner sa-spinner-open"></span>
+                            <button type="button" class="wpte-popup-close-button">Close</button>
+                            <input type="submit" class="wpte-popup-save-button" name="wpte_popup_form_submit" id="wpte_popup_form_submit" value="Save">
+                        </div>
+                    </div>
                 </form>
-                <div class="wpte-pm-popup-footer">
-                    <span id="wpte-add-plugin-loader" class="spinner sa-spinner-open"></span>
-                    <button type="button" class="wpte-popup-close-button">Close</button>
-                    <input type="submit" class="wpte-popup-save-button" name="wpte_popup_form_submit" id="wpte_popup_form_submit" value="Save">
-                </div>
+                
             </div>
         </div>
         <?php

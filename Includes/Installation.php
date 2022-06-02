@@ -65,6 +65,7 @@ class Installation{
             demo_url varchar(50),
             description longtext,
             created_date timestamp,
+            logo_id mediumint(10),
             PRIMARY KEY  (id)
         ) $charset_collate";
 

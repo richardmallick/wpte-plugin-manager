@@ -45,9 +45,10 @@
                     $('#wp-version').html(response.data.errors.wordpress_version);
                     $('#tested-version').html(response.data.errors.tested_version);
                     $('#wpte-add-plugin-loader').removeClass('wpte-add-plugin-loader');
+                    return false;
                 }
 
-                if ( response.data.success ) {
+                if ( response.data.added ) {
                     setTimeout(function(){ 
                         location.reload()
                     }, 2000);
@@ -60,8 +61,8 @@
         });
     }
 
-    $('.wpte-popup-save-button').on('click', function(){
-
+    $('.wpte-popup-save-button').on('click', function(e){
+        e.preventDefault();
         var data={
             plugin_name: $('#wpte_pm_plugin_name').val(),
             plugin_slug: $('#wpte_pm_plugin_slug').val(),
@@ -71,8 +72,48 @@
             tested_version: $('#wpte_pm_plugin_wordpress_tested_version').val(),
             demo_url: $('#wpte_pm_plugin_demo_url').val(),
             description: $('#wpte_pm_plugin_description').val(),
+            logo_id: $('.wpte-pm-logo-id').val(),
         }
         wpte_insert_data( data );
     });
+
+    // Logo Upload
+    var frame;
+
+    $(document).on('click', '#wpte-pm-attachment', function(){
+
+       if ( frame ) {
+           frame.open();
+           return;
+       }
+
+       frame = wp.media({
+           title:'Select Image',
+           button:{
+               'text':'Insert Image'
+           },
+           multiple:false
+       });
+
+       var wpteVal = $(this),
+           ImageId = ".wpte-pm-logo-id",
+           ImageUrl = ".wpte-pm-logo-url";
+
+       frame.on('select', function(e){
+           var attachment = frame.state().get('selection').first().toJSON();
+           console.log(attachment);
+           wpteVal.find(ImageId).val(attachment.id);
+           wpteVal.find(ImageUrl).val(attachment.url);
+           wpteVal.find('img').remove();
+           wpteVal.append(
+               `<img src="${attachment.url}" alt="${attachment.id}">
+               `
+           )
+
+       });
+
+       frame.open();
+   });
+
 
 })(jQuery);
