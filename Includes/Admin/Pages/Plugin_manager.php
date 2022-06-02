@@ -142,8 +142,9 @@ class Plugin_manager{
                             <p id="plugin-name"></p>
                         </div>
                         <div class="wpte-pm-popup-form-field-right">
-                            <label for='wpte_pm_plugin_slug'>Plugin Slug</label>
+                            <label for='wpte_pm_plugin_slug'>Plugin Slug *</label>
                             <input type="text" id='wpte_pm_plugin_slug' name='wpte_pm_plugin_slug'>
+                            <p id="plugin-slug"></p>
                         </div>
                     </div>
                     <div class="wpte-pm-popup-form-fields">

@@ -1,13 +1,17 @@
 <?php
 
 /**
- * Method wpte_layout_insert
+ * Method wpte_pm_add_plugin
  *
  * @param $args $args [explicite description]
- * Inser Layout to wpte_product_layout_style data table when create new 
+ * 
+ * Inser Pluting data to wpte_plugin_data data table when create new 
+ * 
  * @return int|WP_ERROR
+ * 
  */
 function wpte_pm_add_plugin( $args = [] ) {
+
 
     global $wpdb;
 
@@ -23,7 +27,6 @@ function wpte_pm_add_plugin( $args = [] ) {
         'created_date' => current_time('mysql'),
 
     ];
-
 
     $data = wp_parse_args( $args, $default );
 
@@ -44,7 +47,7 @@ function wpte_pm_add_plugin( $args = [] ) {
     );
 
     if ( !$inserted ) {
-        return new \WP_Error( 'failed-to-insert', __( 'Failed to insert data', WPTE_WPL_TEXT_DOMAIN ) );
+        return new \WP_Error( 'failed-to-insert', __( 'Failed to insert data', WPTE_PM_TEXT_DOMAIN ) );
     }
 
     return $wpdb->insert_id;

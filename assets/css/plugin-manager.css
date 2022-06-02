@@ -99,6 +99,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-bottom: 10px;
 }
 .wpte-pm-popup-header h1{
     color: #1d2327;
@@ -122,7 +123,7 @@
 .wpte-pm-popup-form-fields label{
     font-size: 16px;
     line-height: 30px;
-    margin: 10px 0px 5px 8px;
+    margin: 0px 0px 2px 8px;
     display: block;
 }
 .wpte-pm-popup-form-fields input{
@@ -150,7 +151,7 @@
 
 .wpte-pm-popup-footer{
     display: flex;
-    margin-top: 34px;
+    margin-top: 24px;
     align-items: center;
     justify-content: end;
 }
@@ -196,6 +197,8 @@
 
 .wpte-pm-popup-form-fields p{
     color: red;
-    line-height: 0;
-    margin-left: 8px;
+    margin: 6px 0 0 10px;
+    line-height: 1;
+    height: 12px;
+    padding: 0;
 }

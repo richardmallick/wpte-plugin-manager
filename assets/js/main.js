@@ -37,8 +37,17 @@
                $('#wpte-add-plugin-loader').addClass('wpte-add-plugin-loader');
             },
             success: function (response) {
+                if ( response.data.errors ) {
+                    $('#plugin-name').html(response.data.errors.plugin_name);
+                    $('#plugin-slug').html(response.data.errors.plugin_slug);
+                    $('#plugin-version').html(response.data.errors.plugin_version);
+                    $('#php-version').html(response.data.errors.php_version);
+                    $('#wp-version').html(response.data.errors.wordpress_version);
+                    $('#tested-version').html(response.data.errors.tested_version);
+                    $('#wpte-add-plugin-loader').removeClass('wpte-add-plugin-loader');
+                }
 
-                if ( response.success ) {
+                if ( response.data.success ) {
                     setTimeout(function(){ 
                         location.reload()
                     }, 2000);
