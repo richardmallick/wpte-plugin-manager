@@ -54,9 +54,10 @@
     height: auto;
 }
 
-.wpte-pm-card .wpte-pm-plugin-name{
+.wpte-pm-card .wpte-pm-plugin-name a{
     font-size: 18px;
     font-weight: 500;
+    text-decoration: none;
 }
 .wpte-pm-card .wpte-pm-plugin-slug{
     color: #a7a7a7;
@@ -218,4 +219,131 @@
     line-height: 1;
     height: 12px;
     padding: 0;
+}
+/* ==========================Single Plugin Page========================== */
+/* Tabs */
+/* #wpbody-content{
+    float: none;
+    overflow: none;
+} */
+.wpte-pm-single-plugin-tabs{
+    display: grid;
+    grid-template-columns: 1fr 4fr;
+    grid-column-gap: 40px;
+    grid-auto-rows: minmax(min-content, max-content);
+}
+.wpte-pm-single-plugin-sidebar{
+    position:relative;
+    height: 100%;
+    min-height: 800px;
+    background-color: #fff;
+    box-shadow: 0 8px 21px 0 rgba(0,0,0,.1);  
+}
+.wpte-pm-single-plugin-tabs ul{
+   
+}
+
+.wpte-pm-single-plugin-tabs ul li{
+    list-style: none;
+    width: 100%;
+    padding-left: 20px;
+    box-sizing: border-box;
+    transition: .3s;
+}
+.wpte-pm-single-plugin-tabs ul li a{
+    text-decoration: none;
+    width: 100%;
+    font-family: "Montserrat",Sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    text-transform: capitalize;
+    text-align: left;
+    color: #777;
+    display: flex;
+    align-items: center;
+    padding-top: 15px;
+    padding-bottom: 15px;
+  
+}
+
+.wpte-pm-single-plugin-tabs ul li a:focus,
+.wpte-pm-single-plugin-tabs ul li a:active{
+    border: 0;
+    box-shadow: none;
+    outline: 0;
+}
+
+/* .wpte-pm-single-plugin-tabs .wpte-pm-single-plugin-tab-button li:hover, */
+.wpte-pm-single-plugin-tabs .wpte-pm-single-plugin-tab-button .active{
+        border-left: 5px solid #15c7a4;
+        background: #ddd6;
+}
+
+.wpte-pm-single-plugin-tabs .wpte-pm-single-plugin-tab-button li a:hover, 
+.wpte-pm-single-plugin-tabs .wpte-pm-single-plugin-tab-button .active a{
+    color: #15c7a4;
+}
+
+.wpte-pm-single-plugin-tab-content{
+    min-height: 500px;
+    padding: 20px 50px;
+}
+.tab-item {
+    display: none;
+}
+
+.tab-item.active {
+    display: block;
+}
+
+.wpte-pm-tab-content{
+    margin-top: 30px;
+}
+
+.wpte-tab-item-card{
+    background: #fff;
+    /* box-shadow: 0 8px 21px 0 rgb(0 0 0 / 10%); */
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+
+/* End Tabs */
+
+/* Sidebar */
+/* Sidebar */
+
+.wpte-pm-sidebar-header{
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+.wpte-pm-sidebar-logo{
+
+}
+.wpte-pm-sidebar-logo img{
+    width: 50px;
+    border-radius: 100%;
+    border: 2px solid #ddd;
+    padding: 2px;
+    margin-right: 10px;
+}
+.wpte-pm-sidebar-plugin-title{
+
+}
+.wpte-pm-sidebar-plugin-title h2{
+    font-size: 16px;
+    font-weight: normal;
+    line-height: 1;
+    margin: 0;
+}
+.wpte-pm-sidebar-plugin-title p{
+    font-size: 13px;
+    line-height: 1;
+    margin: 15px 0 0 0;
+}
+
+.wpte-pm-side-menu-icon{
+    line-height: 0;
+    margin-right: 5px;
 }

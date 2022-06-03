@@ -32,7 +32,13 @@ class Plugin_manager{
             'wpte_nonce' => wp_create_nonce('wpte-insert-nonce'),
             'error'   => __('Something Went Wrong!', WPTE_WPL_TEXT_DOMAIN)
         ]);
-        $this->Elements_Render();
+        if ( ! isset($_GET['plugin']) && ! isset($_GET['id']) ) {
+
+            $this->Elements_Render();
+            
+        } else {
+            new Single_plugin;
+        }
     }
 
     /**
@@ -72,9 +78,21 @@ class Plugin_manager{
                         <?php foreach( $Plugins as $Plugin ): ?>
                         <div class="wpte-pm-card">
                            <div class="wpte-pm-card-header">
-                            <div class="wpte-pm-plugin-icon-area"><?php   echo wp_get_attachment_image( $Plugin->logo_id, 'thumbnail' ); ?></div>
+                                <a href="<?php echo admin_url("admin.php?page=wpte-plugin-manager&id=".$Plugin->id."&plugin=".$Plugin->plugin_slug.""); ?>">
+                                    <div class="wpte-pm-plugin-icon-area">
+                                    <?php   
+                                        if ( $Plugin->logo_id ) {
+                                            echo wp_get_attachment_image( $Plugin->logo_id, 'thumbnail' );
+                                        } else {
+                                            ?>
+                                                <img src="<?php echo  WPTE_PM_URL ?>/images/kd-img.png" alt="" srcset="">
+                                            <?php
+                                        }
+                                        ?>
+                                    </div>
+                                </a>
                                 <div class="wpte-pm-plugin-details-area">
-                                    <div class="wpte-pm-plugin-name"><?php echo esc_html__($Plugin->plugin_name, WPTE_PM_TEXT_DOMAIN); ?></div>
+                                    <div class="wpte-pm-plugin-name"> <a href="<?php echo admin_url("admin.php?page=wpte-plugin-manager&id=".$Plugin->id."&plugin=".$Plugin->plugin_slug.""); ?>"><?php echo esc_html__($Plugin->plugin_name, WPTE_PM_TEXT_DOMAIN); ?></a></div>
                                     <div class="wpte-pm-plugin-slug"><?php echo esc_html__($Plugin->plugin_slug, WPTE_PM_TEXT_DOMAIN); ?></div>
                                     <div class="wpte-pm-plugin-version"><strong><?php echo esc_html__('Version:', WPTE_PM_TEXT_DOMAIN); ?></strong> <?php echo esc_html__($Plugin->plugin_version, WPTE_PM_TEXT_DOMAIN); ?></div>
                                 </div>
