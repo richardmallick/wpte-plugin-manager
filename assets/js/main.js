@@ -77,48 +77,72 @@
         wpte_insert_data( data );
     });
 
-    // Logo Upload
+    // File Upload
     var frame;
 
-    $(document).on('click', '#wpte-pm-attachment', function(){
-
+    function wpte_media_file_selector(This = ''){
+        
        if ( frame ) {
-           frame.open();
-           return;
-       }
+            frame.open();
+            return;
+        }
 
-       frame = wp.media({
-           title:'Select Image',
-           button:{
-               'text':'Insert Image'
-           },
-           multiple:false
-       });
+        frame = wp.media({
+            title:'Select Image',
+            button:{
+                'text':'Insert Image'
+            },
+            multiple:false
+        });
 
-       var wpteVal = $(this),
-           ImageId = ".wpte-pm-logo-id",
-           ImageUrl = ".wpte-pm-logo-url";
+        // Add Plugin
+        var wpteVal = $(This),
+            ImageId = ".wpte-pm-logo-id",
+            ImageUrl = ".wpte-pm-logo-url";
 
-       frame.on('select', function(e){
-           var attachment = frame.state().get('selection').first().toJSON();
-           console.log(attachment);
-           wpteVal.find(ImageId).val(attachment.id);
-           wpteVal.find(ImageUrl).val(attachment.url);
-           wpteVal.find('img').remove();
-           wpteVal.append(
-               `<img src="${attachment.url}" alt="${attachment.id}">
-               `
-           )
+        // Add Product
+        var wpteFileVal = $("#wpte-pm-product-attachment-area"),
+            fileId = ".wpte-pm-file-id",
+            fileUrl = ".wpte-pm-file-url";
 
-       });
+        frame.on('select', function(e){
 
-       frame.open();
-   });
+            var attachment = frame.state().get('selection').first().toJSON();
+
+            if ( This ) {
+                wpteVal.find(ImageId).val(attachment.id);
+                wpteVal.find(ImageUrl).val(attachment.url);
+                wpteVal.find('img').remove();
+                wpteVal.append(
+                    `<img src="${attachment.url}" alt="${attachment.id}">
+                    `
+                );
+            } else {
+                // Add Product
+                wpteFileVal.find(fileId).val(attachment.id);
+                wpteFileVal.find(fileUrl).val(attachment.url);
+            }
+
+        });
+
+        frame.open();
+    }
+
+    // Add Plugin
+    $(document).on('click', '#wpte-pm-attachment', function(){
+        var This = this;
+        wpte_media_file_selector(This);
+    });
+
+    // Add Product
+    $(document).on('click', '#wpte-pm-product-attachment', function(e){
+       e.preventDefault();
+        wpte_media_file_selector();
+    });
 
 
      // Tabs
      $(document).ready(function() {
-
 
         // Have the previously selected tab open
         if (sessionStorage.activeTab) {
@@ -149,6 +173,96 @@
         }); 
 
     });
+
+    // Variable Fields
+
+    setTimeout(function(){  $(".wpte-pm-variable-product-data").show(); }, 3000);
+     // Admin Accordion
+     
+
+     if( $('.wpte-pm-variable-product-header').hasClass('wpte-pm-active') ){
+        $('.wpte-pm-active').next().show();
+     };
+
+     $(document).on("click",".wpte-pm-variable-product-header", function(){
+
+        if( $(this).hasClass('wpte-pm-active') ){
+             $(this).removeClass('wpte-pm-active');
+             $(this).next().slideUp();
+        }else{
+             $(this).addClass('wpte-pm-active');
+             $(this).next().slideDown(); 
+        }
+    });
+
+    // Add Files
+    var wrapper         = $(".wpte-pm-variable-product-options"); //Fields wrapper
+    var add_field      = $("#wpte-pm-variable-add-field"); //Add button ID
+
+    var i = 5;
+
+    $(add_field).on('click', function(){
+         $(wrapper).append(`<div class="wpte-pm-variable-product-area">
+         <div class="wpte-pm-variable-product-header wpte-pm-active">
+                <div class="wpte-pm-variable-product-name">
+                    Product Layouts Pro
+                </div>
+                <div class="wpte-pm-variable-product-remove-button">
+                ╳
+                </div>
+         </div>
+         <div class="wpte-pm-variable-product-content">
+            <div class="wpte-pm-variable-product-content-inner">
+                <div class="wpte-pm-variable wpte-pm-varition-name">
+                    <div>
+                        <label for="wpte_pm_variation_name">Variation Name:</label>
+                        <input type="text" id="wpte_pm_variation_name" name="wpte_pm_variation_name[]">
+                    </div>
+                    
+                    <div>
+                        <label for="wpte_pm_variation_activation_limit">Activation Limit:</label>
+                        <input type="text" id="wpte_pm_variation_activation_limit" name="wpte_pm_variation_activation_limit[]">
+                    </div>
+                    
+                    <div>
+                        <label for="wpte_pm_variation_price">Price:</label>
+                        <input type="text" id="wpte_pm_variation_price" name="wpte_pm_variation_price[]">
+                    </div>
+
+                    <div>
+                        <label for="wpte_pm_variation_path">Product Path:</label>
+                        <input type="text" id="wpte_pm_variation_path" name="wpte_pm_variation_path[]">
+                    </div>
+                    
+                    <div>
+                        <label for="wpte_pm_variation_recurring_payment">Recurring Payment:</label>
+                        <input type="checkbox" id="wpte_pm_variation_recurring_payment" name="wpte_pm_variation_recurring_payment[]">
+                    </div>
+
+                    <div>
+                        <label for="wpte_pm_variation_recurring_period">Recurring Period:</label>
+                        <select name="wpte_pm_variation_recurring_period[]" id="wpte_pm_variation_recurring_period">
+                            <option value="days">Days</option>
+                            <option value="months">Months</option>
+                            <option value="years">Years</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label for="wpte_pm_variation_recurring_times">Times:</label>
+                        <input type="number" id="wpte_pm_variation_recurring_times" name="wpte_pm_variation_recurring_times[]">
+                    </div>
+                </div>
+            </div>
+         </div>
+    </div>`); //add input box
+    i++;
+    });
+
+    $(wrapper).on("click",".wpte-pm-variable-product-remove-button", function(e){ //user click on remove text
+         e.preventDefault(); 
+         $(this).parent().parent('div').remove();
+     });
 
 
 })(jQuery);

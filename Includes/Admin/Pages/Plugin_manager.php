@@ -107,7 +107,8 @@ class Plugin_manager{
         </div>
 
         <div class="wpte-pm-popup-wrapper">
-            <div class="wpte-pm-popup-box">
+           <div class="wpte-pm-popup-inner">
+           <div class="wpte-pm-popup-box">
                 <div class="wpte-pm-popup-header">
                     <h1>Add New Plugin</h1>
                     <div class="wpte-pm-popup-close">╳</div>
@@ -177,6 +178,7 @@ class Plugin_manager{
                 </form>
                 
             </div>
+           </div>
         </div>
         <?php
     }

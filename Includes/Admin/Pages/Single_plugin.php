@@ -56,7 +56,11 @@ class Single_plugin{
 						<h1><?php echo  esc_html__('Product', WPTE_PM_TEXT_DOMAIN); ?></h1>
 						<div class="wpte-tab-item-card wpte-pm-tab-content">
 							<?php
-								echo "Shortcode";
+								if (file_exists(__DIR__ . "/views/Product.php")) {
+
+									include __DIR__ . "/views/Product.php";
+
+								}
 							?>
 						</div>
 				</div>
