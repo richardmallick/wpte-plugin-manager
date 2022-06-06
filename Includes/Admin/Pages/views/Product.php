@@ -1,5 +1,11 @@
 <?php
     $plugin_id = isset($_GET['id']) ? $_GET['id'] : '';
+
+    $product = wpte_get_product( $plugin_id );
+
+    echo "<pre>";
+        print_r($product);
+    echo "</pre>";
 ?>
 <div class="wpte-pm-product-wrapper">
     <div class="wpte-pm-popup-inner">
@@ -29,16 +35,6 @@
             <br>
             <p><input type="checkbox" id="wpte_pm_is_variation" name="wpte_pm_is_variation"/>
                 <label for="wpte_pm_is_variation">This Plugin has variation</label></p>
-
-
-
-
-
-
-
-
-
-
             <?php
                 $kdIds = [1, 2, 3, 4, 5];
                 $kdIdCount = 5; ?>
@@ -118,19 +114,6 @@
                 </div>
             </div>
             
-
-
-
-
-
-
-
-
-
-
-
-
-
             <div class="wpte-pm-popup-footer">
                 <div class="wpte-footer-product-buttons">
                     <span id="wpte-add-plugin-loader" class="spinner sa-spinner-open"></span>

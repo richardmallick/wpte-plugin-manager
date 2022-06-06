@@ -94,6 +94,10 @@ class Ajax{
 
         ] );
 
+        wpte_pm_add_product( [
+            'plugin_id' => $insert_id
+        ] );
+
         wp_send_json_success( [
             'added' =>  __( 'Your plugin has beed added', WPTE_PM_TEXT_DOMAIN ),
         ] );
@@ -141,25 +145,18 @@ class Ajax{
         $product_file = isset($data['wpte_pm_file_id']) ? sanitize_text_field($data['wpte_pm_file_id']) : '';
         $is_variation = isset($data['wpte_pm_is_variation']) ? sanitize_text_field($data['wpte_pm_is_variation']) : '';
         
-        $insert_id = wpte_pm_add_product( [
-            'plugin_id' => $plugin_id,
-            'product_name' => $product_name,
-            'product_slug' => $product_slug,
-            'product_file' => $product_file,
-            'is_variation' => $is_variation,
-            'product_prices' => wp_json_encode($variation),
-            'product_variation' => wp_json_encode($variation),
-        ] );
+
+        wpte_product_update( $plugin_id, $product_name, $product_slug, $product_file, $is_variation, wp_json_encode($variation));
         
         wp_send_json_success( [
             'added' =>  __( 'Your Product has beed added', WPTE_PM_TEXT_DOMAIN ),
         ] );
 
-        if ( is_wp_error( $insert_id ) ) {
-            wp_send_json_error( [
-                'message' => __( 'Data Insert Failed Please retry again!', WPTE_PM_TEXT_DOMAIN ),
-            ] );
-        }
+        // if ( is_wp_error( $insert_id ) ) {
+        //     wp_send_json_error( [
+        //         'message' => __( 'Data Insert Failed Please retry again!', WPTE_PM_TEXT_DOMAIN ),
+        //     ] );
+        // }
     }
    
 }

@@ -105,13 +105,6 @@ function wpte_pm_add_product( $args = [] ) {
 
     $default = [
         'plugin_id'  => '',
-        'product_name'  => '',
-        'product_slug'=> '',
-        'product_file'  => '',
-        'is_variation' => '',
-        'product_prices' => '',
-        'product_variation' => '',
-        'created_date' => current_time('mysql'),
     ];
 
     $data = wp_parse_args( $args, $default );
@@ -120,14 +113,7 @@ function wpte_pm_add_product( $args = [] ) {
         "{$wpdb->prefix}wpte_product_data",
         $data,
         [
-            '%d',
-            '%s',
-            '%s',
-            '%d',
-            '%s',
-            '%s',
-            '%s',
-            '%d',
+            '%d'
         ]
     );
 
@@ -136,4 +122,38 @@ function wpte_pm_add_product( $args = [] ) {
     }
 
     return $wpdb->insert_id;
+}
+
+/**
+ * Method wpte_get_product
+ *
+ * @param $id $id [explicite description]
+ * Fetch Product Row by Plugin ID
+ * @return void
+ */
+function wpte_get_product( $plugin_id ) {
+    global $wpdb;
+    return $wpdb->get_row(
+        $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}wpte_product_data WHERE plugin_id = %d", $plugin_id )
+    );
+}
+
+/**
+ * Method wpte_product_update
+ *
+ * @param $plugin_id $plugin_id [explicite description].
+ * @param $product_name $product_name [explicite description].
+ * @param $product_slug $product_slug [explicite description].
+ * @param $product_file $product_file [explicite description].
+ * @param $is_variation $is_variation [explicite description].
+ * @param $variation $variation [explicite description].
+ * 
+ * Update Product
+ * 
+ * @return void
+ */
+function wpte_product_update( $plugin_id, $product_name, $product_slug, $product_file, $is_variation, $variation) {
+    global $wpdb;
+    $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}wpte_product_data SET product_name = %s, product_slug = %s, product_file = %d, is_variation = %s, product_prices = %s, product_variation = %s WHERE plugin_id = %d", $product_name, $product_slug, $product_file, $is_variation, $variation, $variation, $plugin_id ) );
+
 }
