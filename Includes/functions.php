@@ -88,3 +88,52 @@ function wpte_pm_get_plugins( $arg = [] ) {
 
     return $items;
 }
+
+/**
+ * Method wpte_pm_add_product
+ *
+ * @param $args $args [explicite description]
+ * 
+ * Inser Pluting data to wpte_plugin_data data table when create new 
+ * 
+ * @return int|WP_ERROR
+ * 
+ */
+function wpte_pm_add_product( $args = [] ) {
+
+    global $wpdb;
+
+    $default = [
+        'plugin_id'  => '',
+        'product_name'  => '',
+        'product_slug'=> '',
+        'product_file'  => '',
+        'is_variation' => '',
+        'product_prices' => '',
+        'product_variation' => '',
+        'created_date' => current_time('mysql'),
+    ];
+
+    $data = wp_parse_args( $args, $default );
+
+    $inserted = $wpdb->insert(
+        "{$wpdb->prefix}wpte_product_data",
+        $data,
+        [
+            '%d',
+            '%s',
+            '%s',
+            '%d',
+            '%s',
+            '%s',
+            '%s',
+            '%d',
+        ]
+    );
+
+    if ( !$inserted ) {
+        return new \WP_Error( 'failed-to-insert', __( 'Failed to insert data', WPTE_PM_TEXT_DOMAIN ) );
+    }
+
+    return $wpdb->insert_id;
+}

@@ -46,6 +46,12 @@ class Assets{
     public function AdminAssetsJS() {
         return [
             [
+                'handler'   => 'wpte-pm-serializejson',
+                'src'       => 'js/jquery.serializejson.min.js',
+                'deps'      => ['jquery'],
+                'in_footer' => true
+            ],
+            [
                 'handler'   => 'wpte-pm-main',
                 'src'       => 'js/main.js',
                 'deps'      => ['jquery'],

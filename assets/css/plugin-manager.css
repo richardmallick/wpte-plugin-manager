@@ -178,7 +178,8 @@
 }
 
 .wpte-popup-close-button,
-.wpte-popup-save-button{
+.wpte-popup-save-button,
+.wpte-product-save-button{
     border: 0;
     color: #fff;
     padding: 8px 20px;
@@ -194,12 +195,20 @@
 .wpte-popup-close-button:hover{
     background-color: #a42226;
 }
-.wpte-popup-save-button{
+.wpte-popup-save-button,
+.wpte-product-save-button{
     background-color: #428817;
     cursor: pointer;
 }
-.wpte-popup-save-button:hover{
+.wpte-popup-save-button:hover,
+.wpte-product-save-button:hover{
     background-color: #285c08;
+}
+
+.wpte-footer-product-buttons{
+    width: 100%;
+    display: flex;
+    justify-content: end;
 }
 
 /* Jquery Classes */

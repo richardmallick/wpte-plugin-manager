@@ -26,6 +26,7 @@ class Plugin_manager{
     public function Render_Plugins() {
         wp_enqueue_media();
         wp_enqueue_style('wpte-plugin-manager-style');
+        wp_enqueue_script('wpte-pm-serializejson');
         wp_enqueue_script('wpte-pm-main');
         wp_localize_script('wpte-pm-main', 'wptePlugin', [
             'ajaxUrl' => admin_url('admin-ajax.php'),

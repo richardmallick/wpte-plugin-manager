@@ -1,6 +1,10 @@
+<?php
+    $plugin_id = isset($_GET['id']) ? $_GET['id'] : '';
+?>
 <div class="wpte-pm-product-wrapper">
     <div class="wpte-pm-popup-inner">
-        <form action="" method="post">
+        <form id="wpte-pm-product-form" action="" method="post">
+            <input type="hidden" id="wpte_plugin_id" name="wpte_plugin_id" value="<?php echo intval($plugin_id); ?>">
             <div class="wpte-pm-popup-form-fields">
                 <div class="wpte-pm-popup-form-field-left">
                     <label for="wpte_product_name">Product Name *</label>
@@ -16,8 +20,8 @@
 
             <div class="wpte-pm-footer-attachment">
                 <div id="wpte-pm-product-attachment-area">
-                        <input type="hidden" class="wpte-pm-file-id" name="wpte-pm-file-id" value="">
-                        <input type="text" class="wpte-pm-file-url" name="wpte-pm-file-url" value="">
+                        <input type="hidden" class="wpte-pm-file-id" name="wpte_pm_file_id" value="">
+                        <input type="text" class="wpte-pm-file-url" name="wpte_pm_file_url" value="">
                         <button id="wpte-pm-product-attachment">Choose File</button>
                 </div>
             </div>
@@ -128,10 +132,9 @@
 
 
             <div class="wpte-pm-popup-footer">
-                <div class="wpte-footer-buttons">
+                <div class="wpte-footer-product-buttons">
                     <span id="wpte-add-plugin-loader" class="spinner sa-spinner-open"></span>
-                    <button type="button" class="wpte-popup-close-button">Close</button>
-                    <input type="submit" class="wpte-popup-save-button" name="wpte_popup_form_submit" id="wpte_popup_form_submit" value="Save">
+                    <input type="submit" class="wpte-product-save-button" name="wpte_product_form_submit" id="wpte_product_form_submit" value="Save">
                 </div>
             </div>
         </form>

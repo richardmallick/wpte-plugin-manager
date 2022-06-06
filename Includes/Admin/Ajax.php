@@ -19,6 +19,7 @@ class Ajax{
      */
     function __construct(){
         add_action( 'wp_ajax_wpte_add_new_plugin', [$this, 'wpte_add_new_plugin'] );
+        add_action( 'wp_ajax_wpte_add_product', [$this, 'wpte_add_product'] );
     }
 
     function wpte_add_new_plugin() {
@@ -105,7 +106,60 @@ class Ajax{
  
     }
 
+    function wpte_add_product() {
+        if ( !current_user_can( 'manage_options' ) ) {
+            return;
+        }
 
+        if ( ! wp_verify_nonce( wp_unslash($_REQUEST['_nonce']), 'wpte-insert-nonce' ) ) {
+            return esc_html__( 'Nonce Varification Failed!', WPTE_PM_TEXT_DOMAIN );
+        }
 
+        $data = isset($_POST['data']) ? $_POST['data'] : [];
+
+        $variation_name = isset($data['wpte_pm_variation_name']) ? $data['wpte_pm_variation_name'] : '';
+        $activation_limit = isset($data['wpte_pm_variation_activation_limit']) ? $data['wpte_pm_variation_activation_limit'] : '';
+        $variation_price = isset($data['wpte_pm_variation_price']) ? $data['wpte_pm_variation_price'] : '';
+        $variation_path = isset($data['wpte_pm_variation_path']) ? $data['wpte_pm_variation_path'] : '';
+        $recurring_payment = isset($data['wpte_pm_variation_recurring_payment']) ? $data['wpte_pm_variation_recurring_payment'] : '';
+        $recurring_period = isset($data['wpte_pm_variation_recurring_period']) ? $data['wpte_pm_variation_recurring_period'] : '';
+        $recurring_times = isset($data['wpte_pm_variation_recurring_times']) ? $data['wpte_pm_variation_recurring_times'] : '';
+
+        $variation = [
+            'variation_name' => $variation_name,
+            'activation_limit' => $activation_limit,
+            'variation_price' => $variation_price,
+            'variation_path' => $variation_path,
+            'recurring_payment' => $recurring_payment,
+            'recurring_period' => $recurring_period,
+            'recurring_times' => $recurring_times,
+        ];
+
+        $plugin_id = isset($data['wpte_plugin_id']) ? sanitize_text_field($data['wpte_plugin_id']) : '';
+        $product_name = isset($data['wpte_product_name']) ? sanitize_text_field($data['wpte_product_name']) : '';
+        $product_slug = isset($data['wpte_product_slug']) ? sanitize_text_field($data['wpte_product_slug']) : '';
+        $product_file = isset($data['wpte_pm_file_id']) ? sanitize_text_field($data['wpte_pm_file_id']) : '';
+        $is_variation = isset($data['wpte_pm_is_variation']) ? sanitize_text_field($data['wpte_pm_is_variation']) : '';
+        
+        $insert_id = wpte_pm_add_product( [
+            'plugin_id' => $plugin_id,
+            'product_name' => $product_name,
+            'product_slug' => $product_slug,
+            'product_file' => $product_file,
+            'is_variation' => $is_variation,
+            'product_prices' => wp_json_encode($variation),
+            'product_variation' => wp_json_encode($variation),
+        ] );
+        
+        wp_send_json_success( [
+            'added' =>  __( 'Your Product has beed added', WPTE_PM_TEXT_DOMAIN ),
+        ] );
+
+        if ( is_wp_error( $insert_id ) ) {
+            wp_send_json_error( [
+                'message' => __( 'Data Insert Failed Please retry again!', WPTE_PM_TEXT_DOMAIN ),
+            ] );
+        }
+    }
    
 }

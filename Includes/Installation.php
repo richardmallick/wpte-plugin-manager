@@ -51,10 +51,11 @@ class Installation{
     public function Product_layout_db() {
 
         global $wpdb;
-        $table_name = $wpdb->prefix . 'wpte_plugin_data';
+        $plugin_data = $wpdb->prefix . 'wpte_plugin_data';
+        $product_data = $wpdb->prefix . 'wpte_product_data';
         $charset_collate = $wpdb->get_charset_collate();
 
-        $wpte_sql = "CREATE TABLE $table_name (
+        $wpte_sql = "CREATE TABLE $plugin_data (
             id mediumint(5) NOT NULL AUTO_INCREMENT,
             plugin_name varchar(50) NOT NULL,
             plugin_slug varchar(50) NOT NULL,
@@ -69,9 +70,23 @@ class Installation{
             PRIMARY KEY  (id)
         ) $charset_collate";
 
+        $sql_two = "CREATE TABLE $product_data (
+            id mediumint(5) NOT NULL AUTO_INCREMENT,
+            plugin_id mediumint(5) NOT NULL,
+            product_name varchar(50) NOT NULL,
+            product_slug varchar(50) NOT NULL,
+            product_file mediumint(10) NOT NULL,
+            is_variation varchar(10),
+            product_prices longtext,
+            product_variation longtext,
+            created_date timestamp,
+            PRIMARY KEY  (id)
+        ) $charset_collate";
+
         require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
         dbDelta($wpte_sql);
+        dbDelta($sql_two);
 
-        }
+    }
     
 }

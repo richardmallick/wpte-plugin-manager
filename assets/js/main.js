@@ -264,5 +264,54 @@
          $(this).parent().parent('div').remove();
      });
 
+    //  Insert Product Data
+    function wpte_insert_product_data( data ) {
+
+        $.ajax({
+            type: 'POST',
+            url: wptePlugin.ajaxUrl,
+            data: {
+                action: "wpte_add_product",
+                _nonce: wptePlugin.wpte_nonce,
+                data: data
+            },
+            beforeSend: function () {
+               $('#wpte-add-plugin-loader').addClass('wpte-add-plugin-loader');
+            },
+            success: function (response) {
+                $('#wpte-add-plugin-loader').removeClass('wpte-add-plugin-loader');
+                console.log(response);
+                // if ( response.data.errors ) {
+                //     $('#plugin-name').html(response.data.errors.plugin_name);
+                //     $('#plugin-slug').html(response.data.errors.plugin_slug);
+                //     $('#plugin-version').html(response.data.errors.plugin_version);
+                //     $('#php-version').html(response.data.errors.php_version);
+                //     $('#wp-version').html(response.data.errors.wordpress_version);
+                //     $('#tested-version').html(response.data.errors.tested_version);
+                //     $('#wpte-add-plugin-loader').removeClass('wpte-add-plugin-loader');
+                //     return false;
+                // }
+
+                // if ( response.data.added ) {
+                //     setTimeout(function(){ 
+                //         location.reload()
+                //     }, 2000);
+                // }
+
+            },
+            error: function (data) {
+                console.log('error')
+            }
+        });
+    }
+
+    $('.wpte-product-save-button').on('click', function(e){
+        e.preventDefault();
+
+        var data = $('#wpte-pm-product-form').serializeJSON();
+
+        wpte_insert_product_data( data );
+    });
+
 
 })(jQuery);
