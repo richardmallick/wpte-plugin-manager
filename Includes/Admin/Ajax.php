@@ -125,7 +125,7 @@ class Ajax{
         $activation_limit = isset($data['wpte_pm_variation_activation_limit']) ? $data['wpte_pm_variation_activation_limit'] : '';
         $variation_price = isset($data['wpte_pm_variation_price']) ? $data['wpte_pm_variation_price'] : '';
         $variation_path = isset($data['wpte_pm_variation_path']) ? $data['wpte_pm_variation_path'] : '';
-        $recurring_payment = isset($data['wpte_pm_variation_recurring_payment']) ? $data['wpte_pm_variation_recurring_payment'] : '';
+        $recurring_payment = $data['wpte_pm_variation_recurring_payment'];
         $recurring_period = isset($data['wpte_pm_variation_recurring_period']) ? $data['wpte_pm_variation_recurring_period'] : '';
         $recurring_times = isset($data['wpte_pm_variation_recurring_times']) ? $data['wpte_pm_variation_recurring_times'] : '';
 

@@ -80,9 +80,10 @@
     // File Upload
     var frame;
 
-    function wpte_media_file_selector(This = ''){
-        
-       if ( frame ) {
+    // Add Plugin
+    $(document).on('click', '#wpte-pm-attachment', function(){
+
+        if ( frame ) {
             frame.open();
             return;
         }
@@ -96,48 +97,61 @@
         });
 
         // Add Plugin
-        var wpteVal = $(This),
+        var wpteVal = $(this),
             ImageId = ".wpte-pm-logo-id",
             ImageUrl = ".wpte-pm-logo-url";
-
-        // Add Product
-        var wpteFileVal = $("#wpte-pm-product-attachment-area"),
-            fileId = ".wpte-pm-file-id",
-            fileUrl = ".wpte-pm-file-url";
 
         frame.on('select', function(e){
 
             var attachment = frame.state().get('selection').first().toJSON();
 
-            if ( This ) {
-                wpteVal.find(ImageId).val(attachment.id);
-                wpteVal.find(ImageUrl).val(attachment.url);
-                wpteVal.find('img').remove();
-                wpteVal.append(
-                    `<img src="${attachment.url}" alt="${attachment.id}">
-                    `
-                );
-            } else {
-                // Add Product
-                wpteFileVal.find(fileId).val(attachment.id);
-                wpteFileVal.find(fileUrl).val(attachment.url);
-            }
+            wpteVal.find(ImageId).val(attachment.id);
+            wpteVal.find(ImageUrl).val(attachment.url);
+            wpteVal.find('img').remove();
+            wpteVal.append(
+                `<img src="${attachment.url}" alt="${attachment.id}">
+                `
+            );
 
         });
 
         frame.open();
-    }
-
-    // Add Plugin
-    $(document).on('click', '#wpte-pm-attachment', function(){
-        var This = this;
-        wpte_media_file_selector(This);
     });
 
+
+    var frame = [];
     // Add Product
     $(document).on('click', '#wpte-pm-product-attachment', function(e){
-       e.preventDefault();
-        wpte_media_file_selector();
+           e.preventDefault();
+           var id = $(this).data('id');
+            
+           if ( frame[id] ) {
+               frame[id].open();
+               return;
+           }
+   
+           frame[id] = wp.media({
+               title:'Select Image',
+               button:{
+                   'text':'Insert Image'
+               },
+               multiple:false
+           });
+   
+           var wpteFileVal = $(this).parent(),
+                fileId = ".wpte-pm-file-id",
+                fileUrl = ".wpte-pm-file-url";
+   
+           frame[id].on('select', function(e){
+               var attachment = frame[id].state().get('selection').first().toJSON();
+               //console.log(attachment);
+               wpteFileVal.find(fileId).val(attachment.id);
+               wpteFileVal.find(fileUrl).val(attachment.url);
+   
+           });
+   
+           frame[id].open();
+
     });
 
 
