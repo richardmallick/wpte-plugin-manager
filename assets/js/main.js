@@ -269,8 +269,8 @@
                     </div>
                     <div>
                         <div id="wpte-pm-product-attachment-area">
-                                <input type="hidden" class="wpte-pm-file-id" name="wpte_pm_file_id" value="">
-                                <input type="text" class="wpte-pm-file-url" name="wpte_pm_file_url" value="">
+                                <input type="hidden" class="wpte-pm-file-id" name="wpte_pm_file_id[]" value="">
+                                <input type="text" class="wpte-pm-file-url" name="wpte_pm_file_url[]" value="">
                                 <button id="wpte-pm-product-attachment" data-id="${i}">Choose File</button>
                         </div>
                     </div>

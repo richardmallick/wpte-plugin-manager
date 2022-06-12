@@ -152,10 +152,9 @@ function wpte_get_product( $plugin_id ) {
  * 
  * @return void
  */
-function wpte_product_update( $plugin_id, $product_name, $product_slug, $is_variation, $variation) {
+function wpte_product_update( $plugin_id, $product_name, $product_slug, $is_variation) {
     global $wpdb;
     $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}wpte_product_data SET product_name = %s, product_slug = %s, is_variation = %s WHERE plugin_id = %d", $product_name, $product_slug, $is_variation, $plugin_id ) );
-
 }
 
 /**

@@ -163,7 +163,7 @@ class Ajax{
         $product_slug   = isset($data['wpte_product_slug']) ? sanitize_text_field($data['wpte_product_slug']) : '';
         $is_variation   = isset($data['wpte_pm_is_variation']) ? sanitize_text_field($data['wpte_pm_is_variation']) : '';
         
-        wpte_product_update( $plugin_id, $product_name, $product_slug, $is_variation, 'hello');
+        wpte_product_update( $plugin_id, $product_name, $product_slug, $is_variation);
 
         // Variation Products
         $variation_name     = isset($data['wpte_pm_variation_name']) ? $data['wpte_pm_variation_name'] : '';
