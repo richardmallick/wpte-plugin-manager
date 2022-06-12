@@ -157,33 +157,50 @@ class Ajax{
 
         $data = isset($_POST['data']) ? $_POST['data'] : [];
 
-        $variation_name     = isset($data['wpte_pm_variation_name']) ? $data['wpte_pm_variation_name'] : '';
-        $activation_limit   = isset($data['wpte_pm_variation_activation_limit']) ? $data['wpte_pm_variation_activation_limit'] : '';
-        $variation_price    = isset($data['wpte_pm_variation_price']) ? $data['wpte_pm_variation_price'] : '';
-        $variation_path     = isset($data['wpte_pm_variation_path']) ? $data['wpte_pm_variation_path'] : '';
-        $recurring_period   = isset($data['wpte_pm_variation_recurring_period']) ? $data['wpte_pm_variation_recurring_period'] : '';
-        $recurring_times    = isset($data['wpte_pm_variation_recurring_times']) ? $data['wpte_pm_variation_recurring_times'] : '';
-
-        $recurring_payment = $this->get_variation_recurring_payment($data['wpte_pm_variation_recurring_payment']);
-
-        $variation = [
-            'variation_name'    => $variation_name,
-            'activation_limit'  => $activation_limit,
-            'variation_price'   => $variation_price,
-            'variation_path'    => $variation_path,
-            'recurring_payment' => $recurring_payment,
-            'recurring_period'  => $recurring_period,
-            'recurring_times'   => $recurring_times,
-        ];
 
         $plugin_id      = isset($data['wpte_plugin_id']) ? sanitize_text_field($data['wpte_plugin_id']) : '';
         $product_name   = isset($data['wpte_product_name']) ? sanitize_text_field($data['wpte_product_name']) : '';
         $product_slug   = isset($data['wpte_product_slug']) ? sanitize_text_field($data['wpte_product_slug']) : '';
         $is_variation   = isset($data['wpte_pm_is_variation']) ? sanitize_text_field($data['wpte_pm_is_variation']) : '';
         
+        wpte_product_update( $plugin_id, $product_name, $product_slug, $is_variation, 'hello');
 
-        wpte_product_update( $plugin_id, $product_name, $product_slug, $is_variation, wp_json_encode($variation));
-       //wpte_pm_add_product_variation($variation);
+        // Variation Products
+        $variation_name     = isset($data['wpte_pm_variation_name']) ? $data['wpte_pm_variation_name'] : '';
+        $variation_slug     = isset($data['wpte_pm_variation_path']) ? $data['wpte_pm_variation_path'] : '';
+        $activation_limit   = isset($data['wpte_pm_variation_activation_limit']) ? $data['wpte_pm_variation_activation_limit'] : '';
+        $variation_price    = isset($data['wpte_pm_variation_price']) ? $data['wpte_pm_variation_price'] : '';
+        $variation_file     = isset($data['wpte_pm_file_id']) ? $data['wpte_pm_file_id'] : '';
+        $recurring_payment  = $this->get_variation_recurring_payment($data['wpte_pm_variation_recurring_payment']);
+        $recurring_period   = isset($data['wpte_pm_variation_recurring_period']) ? $data['wpte_pm_variation_recurring_period'] : '';
+        $recurring_times    = isset($data['wpte_pm_variation_recurring_times']) ? $data['wpte_pm_variation_recurring_times'] : '';
+        $product_variation_id    = isset($data['product_variation_id']) ? $data['product_variation_id'] : '';
+        $product_variation_id_remove    = isset($data['product_variation_id_remove']) ? $data['product_variation_id_remove'] : '';
+
+        $variation_count = count($variation_name);
+        for( $i = 0; $i < $variation_count; $i++ ) {
+            $variation = [
+                'plugin_id'         => $plugin_id,
+                'variation_name'    => $variation_name[$i],
+                'variation_slug'    => $variation_slug[$i],
+                'activation_limit'  => $activation_limit[$i],
+                'variation_price'   => $variation_price[$i],
+                'variation_file'    => $variation_file[$i],
+                'recurring_payment' => $recurring_payment[$i],
+                'recurring_period'  => strtolower($recurring_period[$i]),
+                'recurring_times'   => $recurring_times[$i],
+            ];
+
+            if ( $product_variation_id_remove[$i] ) {
+                wpte_product_variation_delete($product_variation_id[$i]);
+            } elseif ( ! $product_variation_id[$i] ) {
+                wpte_pm_add_product_variation($variation);
+            } else {
+                wpte_product_variation_update( $product_variation_id[$i], $variation_name[$i], $variation_slug[$i], $activation_limit[$i], $variation_price[$i], $variation_file[$i], $recurring_payment[$i], strtolower($recurring_period[$i]), $recurring_times[$i] );
+            }
+            
+        }
+        
         wp_send_json_success( [
             'added' =>  __( 'Your Product has beed added', WPTE_PM_TEXT_DOMAIN ),
         ] );

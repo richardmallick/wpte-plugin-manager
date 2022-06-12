@@ -77,8 +77,6 @@ class Installation{
             product_name varchar(50) NOT NULL,
             product_slug varchar(50) NOT NULL,
             is_variation varchar(10),
-            product_prices longtext,
-            product_variation longtext,
             created_date timestamp,
             PRIMARY KEY  (id)
         ) $charset_collate";

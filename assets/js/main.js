@@ -283,7 +283,9 @@
 
     $(wrapper).on("click",".wpte-pm-variable-product-remove-button", function(e){ //user click on remove text
          e.preventDefault(); 
-         $(this).parent().parent('div').remove();
+         var product_variation_id = $(this).parent().parent('div').find('.product_variation_id').val();
+         $(this).parent().parent('div').find('.product_variation_id_remove').val(product_variation_id);
+         $(this).parent().parent('div').hide();
      });
 
     //  Insert Product Data

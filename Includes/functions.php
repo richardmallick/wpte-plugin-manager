@@ -154,7 +154,7 @@ function wpte_get_product( $plugin_id ) {
  */
 function wpte_product_update( $plugin_id, $product_name, $product_slug, $is_variation, $variation) {
     global $wpdb;
-    $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}wpte_product_data SET product_name = %s, product_slug = %s, is_variation = %s, product_prices = %s, product_variation = %s WHERE plugin_id = %d", $product_name, $product_slug, $is_variation, $variation, $variation, $plugin_id ) );
+    $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}wpte_product_data SET product_name = %s, product_slug = %s, is_variation = %s WHERE plugin_id = %d", $product_name, $product_slug, $is_variation, $plugin_id ) );
 
 }
 
@@ -211,4 +211,46 @@ function wpte_pm_add_product_variation( $args = [] ) {
     }
 
     return $wpdb->insert_id;
+}
+
+/**
+ * Method wpte_get_product
+ *
+ * @param $id $id [explicite description]
+ * Fetch Product Row by Plugin ID
+ * @return void
+ */
+function wpte_get_product_variations( $plugin_id ) {
+    global $wpdb;
+    return $wpdb->get_results(
+        $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}wpte_product_variation WHERE plugin_id = %d", $plugin_id )
+    );
+}
+
+/**
+ * Method wpte_product_variation_update
+ * 
+ * Update Variations
+ * 
+ * @return void
+ */
+function wpte_product_variation_update( $product_variation_id, $variation_name, $variation_slug, $activation_limit, $variation_price, $variation_file, $recurring_payment, $recurring_period, $recurring_times ) {
+    global $wpdb;
+    $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}wpte_product_variation SET variation_name = %s, variation_slug = %s, activation_limit = %d, variation_price = %d, variation_file = %d, recurring_payment = %d, recurring_period = %s, recurring_times = %d WHERE id = %d", $variation_name, $variation_slug, $activation_limit, $variation_price, $variation_file, $recurring_payment, $recurring_period, $recurring_times, $product_variation_id) );
+
+}
+
+/**
+ * Method wpte_product_variation_delete
+ *
+ * @param $id $id [explicite description]
+ * Delete Product Variation
+ * 
+ */
+function wpte_product_variation_delete( $id ) {
+    global $wpdb;
+    return $wpdb->delete(
+        $wpdb->prefix . 'wpte_product_variation',
+        ['id' => $id]
+    );
 }
