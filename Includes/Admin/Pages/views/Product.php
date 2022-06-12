@@ -22,13 +22,14 @@
 
     $variation_name_count = count($variation_name);
     echo "<pre>";
-        print_r($recurring_payment);
+        print_r($product);
     echo "</pre>";
 ?>
 <div class="wpte-pm-product-wrapper">
     <div class="wpte-pm-popup-inner">
         <form id="wpte-pm-product-form" action="" method="post">
             <input type="hidden" id="wpte_plugin_id" name="wpte_plugin_id" value="<?php echo intval($plugin_id); ?>">
+            <input type="hidden" id="wpte_plugin_name_count" value="<?php echo intval($variation_name_count); ?>">
             <div class="wpte-pm-popup-form-fields">
                 <div class="wpte-pm-popup-form-field-left">
                     <label for="wpte_product_name">Product Name *</label>
@@ -89,9 +90,10 @@
                                                    </div>
                                                     
                                                     <div>
-                                                        <?php $checked = $recurring_payment[$i] == 'on' ? 'checked' : '' ?>
+                                                        <?php $checked = $recurring_payment[$i] == '1' ? 'checked' : '' ?>
                                                         <label for="wpte_pm_variation_recurring_payment">Recurring Payment:</label>
-                                                        <input <?php echo esc_attr($checked); ?> type="checkbox" id="wpte_pm_variation_recurring_payment" name="wpte_pm_variation_recurring_payment[]">
+                                                        <input type="hidden" name="wpte_pm_variation_recurring_payment[]" value="0" />
+                                                        <input <?php echo esc_attr($checked); ?> type="checkbox" id="wpte_pm_variation_recurring_payment" name="wpte_pm_variation_recurring_payment[]" value="1">
                                                     </div>
 
                                                     <div>

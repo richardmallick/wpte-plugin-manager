@@ -53,6 +53,7 @@ class Installation{
         global $wpdb;
         $plugin_data = $wpdb->prefix . 'wpte_plugin_data';
         $product_data = $wpdb->prefix . 'wpte_product_data';
+        $product_variation = $wpdb->prefix . 'wpte_product_variation';
         $charset_collate = $wpdb->get_charset_collate();
 
         $wpte_sql = "CREATE TABLE $plugin_data (
@@ -75,7 +76,6 @@ class Installation{
             plugin_id mediumint(5) NOT NULL,
             product_name varchar(50) NOT NULL,
             product_slug varchar(50) NOT NULL,
-            product_file mediumint(10) NOT NULL,
             is_variation varchar(10),
             product_prices longtext,
             product_variation longtext,
@@ -83,9 +83,25 @@ class Installation{
             PRIMARY KEY  (id)
         ) $charset_collate";
 
+        $sql_three = "CREATE TABLE $product_variation (
+            id mediumint(5) NOT NULL AUTO_INCREMENT,
+            plugin_id mediumint(5) NOT NULL,
+            variation_name varchar(50) NOT NULL,
+            variation_slug varchar(50) NOT NULL,
+            activation_limit mediumint(5) NOT NULL,
+            variation_price mediumint(5) NOT NULL,
+            variation_file mediumint(10) NOT NULL,
+            recurring_payment mediumint(5) NOT NULL,
+            recurring_period varchar(15) NOT NULL,
+            recurring_times mediumint(5) NOT NULL,
+            created_date timestamp,
+            PRIMARY KEY  (id)
+        ) $charset_collate";
+
         require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
         dbDelta($wpte_sql);
         dbDelta($sql_two);
+        dbDelta($sql_three);
 
     }
     

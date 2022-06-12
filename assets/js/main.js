@@ -78,17 +78,17 @@
     });
 
     // File Upload
-    var frame;
+    var imageframe;
 
     // Add Plugin
     $(document).on('click', '#wpte-pm-attachment', function(){
 
-        if ( frame ) {
-            frame.open();
+        if ( imageframe ) {
+            imageframe.open();
             return;
         }
 
-        frame = wp.media({
+        imageframe = wp.media({
             title:'Select Image',
             button:{
                 'text':'Insert Image'
@@ -101,9 +101,9 @@
             ImageId = ".wpte-pm-logo-id",
             ImageUrl = ".wpte-pm-logo-url";
 
-        frame.on('select', function(e){
+            imageframe.on('select', function(e){
 
-            var attachment = frame.state().get('selection').first().toJSON();
+            var attachment = imageframe.state().get('selection').first().toJSON();
 
             wpteVal.find(ImageId).val(attachment.id);
             wpteVal.find(ImageUrl).val(attachment.url);
@@ -115,7 +115,7 @@
 
         });
 
-        frame.open();
+        imageframe.open();
     });
 
 
@@ -213,7 +213,7 @@
     var wrapper         = $(".wpte-pm-variable-product-options"); //Fields wrapper
     var add_field      = $("#wpte-pm-variable-add-field"); //Add button ID
 
-    var i = 5;
+    var i = $('#wpte_plugin_name_count').val();
 
     $(add_field).on('click', function(){
          $(wrapper).append(`<div class="wpte-pm-variable-product-area">
@@ -250,7 +250,8 @@
                     
                     <div>
                         <label for="wpte_pm_variation_recurring_payment">Recurring Payment:</label>
-                        <input type="checkbox" id="wpte_pm_variation_recurring_payment" name="wpte_pm_variation_recurring_payment[]">
+                        <input type="hidden" name="wpte_pm_variation_recurring_payment[]" value="0" />
+                        <input type="checkbox" id="wpte_pm_variation_recurring_payment" name="wpte_pm_variation_recurring_payment[]" value="1">
                     </div>
 
                     <div>
@@ -265,6 +266,13 @@
                     <div>
                         <label for="wpte_pm_variation_recurring_times">Times:</label>
                         <input type="number" id="wpte_pm_variation_recurring_times" name="wpte_pm_variation_recurring_times[]">
+                    </div>
+                    <div>
+                        <div id="wpte-pm-product-attachment-area">
+                                <input type="hidden" class="wpte-pm-file-id" name="wpte_pm_file_id" value="">
+                                <input type="text" class="wpte-pm-file-url" name="wpte_pm_file_url" value="">
+                                <button id="wpte-pm-product-attachment" data-id="${i}">Choose File</button>
+                        </div>
                     </div>
                 </div>
             </div>

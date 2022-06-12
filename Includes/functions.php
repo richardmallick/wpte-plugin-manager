@@ -152,8 +152,63 @@ function wpte_get_product( $plugin_id ) {
  * 
  * @return void
  */
-function wpte_product_update( $plugin_id, $product_name, $product_slug, $product_file, $is_variation, $variation) {
+function wpte_product_update( $plugin_id, $product_name, $product_slug, $is_variation, $variation) {
     global $wpdb;
-    $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}wpte_product_data SET product_name = %s, product_slug = %s, product_file = %d, is_variation = %s, product_prices = %s, product_variation = %s WHERE plugin_id = %d", $product_name, $product_slug, $product_file, $is_variation, $variation, $variation, $plugin_id ) );
+    $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}wpte_product_data SET product_name = %s, product_slug = %s, is_variation = %s, product_prices = %s, product_variation = %s WHERE plugin_id = %d", $product_name, $product_slug, $is_variation, $variation, $variation, $plugin_id ) );
 
+}
+
+/**
+ * Method wpte_pm_add_product_variation
+ *
+ * @param $args $args [explicite description]
+ * 
+ * Inser Product Variation Data to wpte_product_variation data table
+ * 
+ * @return int|WP_ERROR
+ * 
+ */
+function wpte_pm_add_product_variation( $args = [] ) {
+
+
+    global $wpdb;
+
+    $default = [
+        'plugin_id'  => '',
+        'variation_name'  => '',
+        'variation_slug'=> '',
+        'activation_limit'  => '',
+        'variation_price' => '',
+        'variation_file' => '',
+        'recurring_payment' => '',
+        'recurring_period' => '',
+        'recurring_times' => '',
+        'created_date' => current_time('mysql'),
+
+    ];
+
+    $data = wp_parse_args( $args, $default );
+
+    $inserted = $wpdb->insert(
+        "{$wpdb->prefix}wpte_product_variation",
+        $data,
+        [
+            '%d',
+            '%s',
+            '%s',
+            '%d',
+            '%d',
+            '%d',
+            '%d',
+            '%s',
+            '%d',
+            '%d',
+        ]
+    );
+
+    if ( !$inserted ) {
+        return new \WP_Error( 'failed-to-insert', __( 'Failed to insert data', WPTE_PM_TEXT_DOMAIN ) );
+    }
+
+    return $wpdb->insert_id;
 }
