@@ -11,16 +11,18 @@
 
     $variations = wpte_get_product_variations( $plugin_id ) ? wpte_get_product_variations( $plugin_id ) : [];
     $variation_name_count = count($variations);
-    // echo "<pre>";
-    //     print_r($product);
-    // echo "</pre>";
+
+    $productsss = wpte_get_product_variation( 'product-layout-ultimate-5-year' );
+    echo "<pre>";
+        print_r($productsss);
+    echo "</pre>";
 ?>
 <div class="wpte-pm-product-wrapper">
     <div class="wpte-pm-popup-inner">
         <form id="wpte-pm-product-form" action="" method="post">
             <input type="hidden" id="wpte_plugin_id" name="wpte_plugin_id" value="<?php echo intval($plugin_id); ?>">
             <input type="hidden" id="wpte_plugin_name_count" value="<?php echo intval($variation_name_count); ?>">
-            <div class="wpte-pm-popup-form-fields">
+            <div class="wpte-pm-popup-form-fields wpte-pm-form-fields">
                 <div class="wpte-pm-popup-form-field-left">
                     <label for="wpte_product_name">Product Name *</label>
                     <input type="text" id="wpte_product_name" name="wpte_product_name" value="<?php echo esc_html($product->product_name); ?>">
@@ -32,7 +34,6 @@
                     <p id="plugin-slug"></p>
                 </div>
             </div>
-            <br>
             <p>
                 <?php 
                 $is_variation_checked = $product->is_variation ? 'checked' : '';
@@ -58,7 +59,7 @@
                                     <input type="hidden" class="product_variation_id_remove" name="product_variation_id_remove[]" value="">
                                         <div class="wpte-pm-variable-product-header <?php echo $active; ?>">
                                             <div class="wpte-pm-variable-product-name">
-                                            Product Layouts Pro
+                                            <?php echo esc_attr($variation->variation_name); ?>
                                             </div>
                                             <div class="wpte-pm-variable-product-remove-button">
                                             ╳

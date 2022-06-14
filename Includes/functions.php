@@ -253,3 +253,17 @@ function wpte_product_variation_delete( $id ) {
         ['id' => $id]
     );
 }
+
+/**
+ * Method wpte_get_product_variation
+ *
+ * @param $id $id [explicite description]
+ * Fetch Product Row by Plugin ID
+ * @return void
+ */
+function wpte_get_product_variation( $product_slug ) {
+    global $wpdb;
+    return $wpdb->get_row(
+        $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}wpte_product_variation WHERE variation_slug = %s", $product_slug )
+    );
+}
