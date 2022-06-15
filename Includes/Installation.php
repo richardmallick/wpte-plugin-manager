@@ -38,7 +38,7 @@ class Installation{
             update_option('WPTE_pm_installed', time());
         }
 
-        update_option('WPTE_pm_version', WPTE_LM_VERSION);
+        update_option('WPTE_pm_version', WPTE_PM_VERSION);
 
         add_option('WPTE_pm_activation_redirect', true);
     }
@@ -54,6 +54,7 @@ class Installation{
         $plugin_data = $wpdb->prefix . 'wpte_plugin_data';
         $product_data = $wpdb->prefix . 'wpte_product_data';
         $product_variation = $wpdb->prefix . 'wpte_product_variation';
+        $product_license = $wpdb->prefix . 'wpte_product_license';
         $charset_collate = $wpdb->get_charset_collate();
 
         $wpte_sql = "CREATE TABLE $plugin_data (
@@ -96,10 +97,29 @@ class Installation{
             PRIMARY KEY  (id)
         ) $charset_collate";
 
+        $sql_four = "CREATE TABLE $product_license (
+            id mediumint(5) NOT NULL AUTO_INCREMENT,
+            plugin_id mediumint(5) NOT NULL,
+            license_key varchar(250) NOT NULL,
+            customer_email varchar(50) NOT NULL,
+            product_name varchar(50) NOT NULL,
+            product_slug varchar(50) NOT NULL,
+            activation_limit mediumint(5) NOT NULL,
+            product_price mediumint(5) NOT NULL,
+            product_file mediumint(10) NOT NULL,
+            recurring_payment mediumint(5) NOT NULL,
+            recurring_period varchar(15) NOT NULL,
+            recurring_times mediumint(5) NOT NULL,
+            activated mediumint(5) NOT NULL,
+            created_date timestamp,
+            PRIMARY KEY  (id)
+        ) $charset_collate";
+
         require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
         dbDelta($wpte_sql);
         dbDelta($sql_two);
         dbDelta($sql_three);
+        dbDelta($sql_four);
 
     }
     

@@ -23,9 +23,16 @@ class Class_get_order{
     
     public function wpte_get_order_response($request) {
 
-        $data = $request->get_body();
+        $data = json_decode($request->get_body());
 
-        write_log(json_decode($data));
+        $product_path = $data->events[0]->data->order->items[0]->product; //path  // Product Path from fastspring
+
+        // This code for create License
+        $token = openssl_random_pseudo_bytes(16);
+        //Convert the binary data into hexadecimal representation.
+        $token = bin2hex($token);
+        //Print it out for example purposes.
+        //echo $token;
         
     }
 

@@ -338,4 +338,43 @@
     });
 
 
+    $('.wpte-pm-license-edit').on('click', function(){
+        var id = $(this).attr('data_id');
+
+        $('.wpte-pm-popup-wrapper').addClass('wpte-pm-popup-block');
+
+        $.ajax({
+            type: 'POST',
+            url: wptePlugin.ajaxUrl,
+            data: {
+                action: "wpte_get_license_data",
+                id: id
+            },
+            beforeSend: function () {
+            },
+            success: function (response) {
+               
+                $('#wpte_pm_license_email').val(response.data.customer_email);
+                $('#wpte_pm_license_product_name').val(response.data.product_name);
+                $('#wpte_pm_license_product_slug').val(response.data.product_slug);
+                $('#wpte_pm_license_activation_limit').val(response.data.activation_limit);
+                $('#wpte_pm_license_product_price').val(response.data.product_price);
+                $('#wpte_pm_license_recurring_period').val(response.data.recurring_period);
+                $('#wpte_pm_license_recurring_times').val(response.data.recurring_times);
+                $('#wpte-pm-file-id').val(response.data.product_file_id);
+                $('#wpte-pm-file-url').val(response.data.product_file_url);
+
+                $('.wpte-pm-popup-box').slideDown() ;
+
+            },
+            error: function (data) {
+                console.log('error')
+            }
+        });
+
+        
+    });
+
+
+
 })(jQuery);

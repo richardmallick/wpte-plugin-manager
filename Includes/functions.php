@@ -267,3 +267,32 @@ function wpte_get_product_variation( $product_slug ) {
         $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}wpte_product_variation WHERE variation_slug = %s", $product_slug )
     );
 }
+
+
+/**
+ * Method wpte_get_product_license
+ *
+ * @param $id $id [explicite description]
+ * Fetch License Rows by Plugin ID
+ * @return void
+ */
+function wpte_get_product_license( $plugin_id ) {
+    global $wpdb;
+    return $wpdb->get_results(
+        $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}wpte_product_license WHERE plugin_id = %d", $plugin_id )
+    );
+}
+
+/**
+ * Method wpte_get_product_license_row
+ *
+ * @param $id $id [explicite description]
+ * Fetch Product Row by Plugin ID
+ * @return void
+ */
+function wpte_get_product_license_row( $license_id ) {
+    global $wpdb;
+    return $wpdb->get_row(
+        $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}wpte_product_license WHERE id = %d", $license_id )
+    );
+}

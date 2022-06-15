@@ -139,6 +139,16 @@
     padding: 6px;
     border-radius: 30px;
 }
+
+.wpte-pm-popup-form-field-checkbox input{
+    width: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+    margin-top: 6px;
+    padding: 18px 0px 12px 4px!important;
+}
 .wpte-pm-form-fields input{
     background: transparent;
     border-radius: 5px;
@@ -303,7 +313,7 @@
 
 .wpte-pm-single-plugin-tab-content{
     min-height: 500px;
-    padding: 20px 50px;
+    padding: 20px 20px 20px 0;
 }
 .tab-item {
     display: none;
@@ -454,18 +464,27 @@
 
 
 /* License Tabs */
+.wpte-pm-license-wrapper{
+    border: 1px solid #ddd;
+    border-bottom: 0;
+}
 .wpte-pm-license-row{
     display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr;
+    grid-template-columns: 2fr 1fr 1fr 1fr 60px;
 }
 .wpte-pm-license-header-content{
     font-size: 16px;
     font-weight: 500;
-    border: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    background: #ddd;
     padding: 16px;
 }
 .wpte-pm-license-row-content{
     font-size: 16px;
-    border: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
     padding: 16px;
+}
+
+.wpte-pm-license-edit span{
+    cursor: pointer;
 }
