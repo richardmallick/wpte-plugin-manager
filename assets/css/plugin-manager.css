@@ -12,7 +12,8 @@
     margin: 0;
 }
 
-.wpte-pm-add-new-button button{
+.wpte-pm-add-new-button button,
+.wpte-pm-add-new-linense button{
     background: #F15F64;
     color: #fff;
     font-size: 16px;
@@ -21,7 +22,8 @@
     padding: 8px 16px;
     cursor: pointer;
 }
-.wpte-pm-add-new-button button:hover{
+.wpte-pm-add-new-button button:hover,
+.wpte-pm-add-new-linense button:hover{
     background: #be4347;
 }
 
@@ -90,6 +92,21 @@
 
 .wpte-pm-popup-inner{
     width: 100%;
+    position: relative;
+}
+
+.wpte-pm-popup-loader{
+    position: absolute;
+    right: 50%;
+    top: 50%;
+    transform: translate(50%, -50%);
+    display: none;
+}
+.wpte-pm-popup-loader img{
+    width: 110px;
+}
+.wpte-pm-popup-loader.active{
+    display: block;
 }
 
 .wpte-pm-popup-box{
@@ -223,6 +240,7 @@
     width: 100%;
     display: flex;
     justify-content: end;
+    align-items: center;
 }
 
 /* Jquery Classes */
@@ -502,6 +520,9 @@
     display: flex;
     align-items: center;
 }
+.wpte-pm-input-checkbox-inline span{
+    font-size: 18px;
+}
 
 
 /* License Tabs */
@@ -570,7 +591,7 @@
 	transform: translateX(-100%);
 }
 
-.wpte-pm-input-checkbox label:active:after {
+/* .wpte-pm-input-checkbox label:active:after {
     width: 60px;
-}
+} */
 

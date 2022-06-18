@@ -78,7 +78,13 @@ class Single_plugin{
 						</div>
 				</div>
 				<div id="license" class="tab-item">
-						<h1><?php echo  esc_html__('License', WPTE_PM_TEXT_DOMAIN); ?></h1>
+						<div class="wpte-pm-add-new-area">
+							<h1><?php echo  esc_html__('License', WPTE_PM_TEXT_DOMAIN); ?></h1>
+							<div class="wpte-pm-add-new-linense">
+								<button>+ Add License</button>
+							</div>
+						</div>
+						
 						<div class="wpte-tab-item-card wpte-pm-tab-content">
 							<?php
 								if (file_exists(__DIR__ . "/views/License.php")) {

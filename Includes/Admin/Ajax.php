@@ -21,6 +21,7 @@ class Ajax{
         add_action( 'wp_ajax_wpte_add_new_plugin', [$this, 'wpte_add_new_plugin'] );
         add_action( 'wp_ajax_wpte_add_product', [$this, 'wpte_add_product'] );
         add_action( 'wp_ajax_wpte_get_license_data', [$this, 'wpte_get_license_data'] );
+        add_action( 'wp_ajax_wpte_add_license', [$this, 'wpte_add_license'] );
     }
 
      /**
@@ -220,7 +221,7 @@ class Ajax{
 
         $id = isset($_POST['id']) ? $_POST['id'] : '';
 
-        $license = wpte_get_product_license_row( $id );
+        $license = wpte_get_product_license_row( $id ) ? wpte_get_product_license_row( $id ) : (object)[];
 
         $file = wp_get_attachment_url($license->product_file);
 
@@ -237,6 +238,51 @@ class Ajax{
             'product_file_id'      =>  $license->product_file,
         ] );
 
+    }
+
+    public function wpte_add_license(){
+        if ( !current_user_can( 'manage_options' ) ) {
+            return;
+        }
+
+        if ( ! wp_verify_nonce( wp_unslash($_REQUEST['_nonce']), 'wpte-insert-nonce' ) ) {
+            return esc_html__( 'Nonce Varification Failed!', WPTE_PM_TEXT_DOMAIN );
+        }
+
+        $data = isset($_POST['data']) ? $_POST['data'] : '';
+
+        // This code for create License
+        $token = openssl_random_pseudo_bytes(16);
+        $token = bin2hex($token);
+
+        $args = [
+            'plugin_id'         => $data['wpte_pm_license_plugin_id'],
+            'license_key'       => $token,
+            'customer_email'    => $data['wpte_pm_license_email'],
+            'product_name'      => $data['wpte_pm_license_product_name'],
+            'product_slug'      => $data['wpte_pm_license_product_slug'],
+            'activation_limit'  => $data['wpte_pm_license_activation_limit'],
+            'product_price'     => $data['wpte_pm_license_product_price'],
+            'product_file'      => $data['wpte_pm_file_id'][0],
+            'recurring_payment' => $data['wpte_pm_license_recurring_payment'],
+            'recurring_period'  => $data['wpte_pm_license_recurring_period'],
+            'recurring_times'   => $data['wpte_pm_license_recurring_times'],
+            'activated'         => 0,
+            'created_date'      => current_time('mysql'),
+    
+        ];
+
+        $insert_id = wpte_pm_create_license( $args );
+
+        wp_send_json_success( [
+            'added' =>  __( 'Your License has beed added', WPTE_PM_TEXT_DOMAIN ),
+        ] );
+
+        if ( is_wp_error( $insert_id ) ) {
+            wp_send_json_error( [
+                'message' => __( 'Data Insert Failed Please retry again!', WPTE_PM_TEXT_DOMAIN ),
+            ] );
+        }
     }
    
 }

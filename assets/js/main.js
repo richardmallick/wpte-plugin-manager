@@ -265,8 +265,8 @@
                         <div class="wpte-pm-input-checkbox">
                             <p>Recurring Payment:</p>
                             <input type="hidden" name="wpte_pm_variation_recurring_payment[]" value="0">
-                            <input checked="" type="checkbox" id="wpte_pm_variation_recurring_payment" name="wpte_pm_variation_recurring_payment[]" value="1">
-                            <label for="wpte_pm_variation_recurring_payment"></label>
+                            <input checked="" type="checkbox" id="wpte_pm_variation_recurring_payment-${i}" name="wpte_pm_variation_recurring_payment[]" value="1">
+                            <label for="wpte_pm_variation_recurring_payment-${i}"></label>
                         </div>
 
                         <div>
@@ -318,7 +318,11 @@
             },
             success: function (response) {
                 $('#wpte-add-plugin-loader').removeClass('wpte-add-plugin-loader');
-                console.log(response);
+                $('#wpte_product_form_submit').val('Saved');
+                setTimeout(() =>{
+                    $('#wpte_product_form_submit').val('Save');
+                }, 3000);
+                //console.log(response);
                 // if ( response.data.errors ) {
                 //     $('#plugin-name').html(response.data.errors.plugin_name);
                 //     $('#plugin-slug').html(response.data.errors.plugin_slug);
@@ -365,6 +369,7 @@
                 id: id
             },
             beforeSend: function () {
+                $('.wpte-pm-popup-loader').addClass('active');
             },
             success: function (response) {
                
@@ -377,7 +382,7 @@
                 $('#wpte_pm_license_recurring_times').val(response.data.recurring_times);
                 $('#wpte-pm-file-id').val(response.data.product_file_id);
                 $('#wpte-pm-file-url').val(response.data.product_file_url);
-
+                $('.wpte-pm-popup-loader').removeClass('active');
                 $('.wpte-pm-popup-box').slideDown() ;
 
             },
@@ -387,6 +392,58 @@
         });
 
         
+    });
+
+    $('.wpte-pm-add-new-linense').on('click', function(){
+        $('#wpte_pm_license_email').val('');
+        $('#wpte_pm_license_product_name').val('');
+        $('#wpte_pm_license_product_slug').val('');
+        $('#wpte_pm_license_activation_limit').val('');
+        $('#wpte_pm_license_product_price').val('');
+        $('#wpte_pm_license_recurring_period').val('');
+        $('#wpte_pm_license_recurring_times').val('');
+        $('#wpte-pm-file-id').val('');
+        $('#wpte-pm-file-url').val('');
+        
+        $('.wpte-pm-popup-wrapper').addClass('wpte-pm-popup-block');
+        $('.wpte-pm-popup-box').slideDown() ;
+        $('.wpte-footer-buttons').html(`<span id="wpte-add-plugin-loader" class="spinner sa-spinner-open"></span><button type="button" class="wpte-popup-close-button">Close</button><input type="submit" class="wpte-popup-save-button" name="wpte_popup_licnese_submit" id="wpte_popup_licnese_submit" value="Save">`);
+    });
+
+    $(document).on('click', '#wpte_popup_licnese_submit', function(e){
+        e.preventDefault();
+
+        var This = $(this);
+
+        var data = $('.wpte-pm-popup-box form').serializeJSON();
+
+        $.ajax({
+            type: 'POST',
+            url: wptePlugin.ajaxUrl,
+            data: {
+                action: "wpte_add_license",
+                _nonce: wptePlugin.wpte_nonce,
+                data: data
+            },
+            beforeSend: function () {
+                This.siblings('#wpte-add-plugin-loader').addClass('wpte-add-plugin-loader');
+            },
+            success: function (response) {
+
+                console.log(response);
+               
+                if ( response.data.added ) {
+                    setTimeout(function(){ 
+                        location.reload()
+                    }, 2000);
+                }
+
+            },
+            error: function (data) {
+                console.log('error')
+            }
+        });
+
     });
 
 

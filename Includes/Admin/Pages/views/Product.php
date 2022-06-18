@@ -108,8 +108,8 @@
                                                             <?php $checked = $variation->recurring_payment == '1' ? 'checked' : '' ?>
                                                             <p>Recurring Payment:</p>
                                                             <input type="hidden" name="wpte_pm_variation_recurring_payment[]" value="0" />
-                                                            <input <?php echo esc_attr($checked); ?> type="checkbox" id="wpte_pm_variation_recurring_payment" name="wpte_pm_variation_recurring_payment[]" value="1">
-                                                            <label for="wpte_pm_variation_recurring_payment"></label>
+                                                            <input <?php echo esc_attr($checked); ?> type="checkbox" id="wpte_pm_variation_recurring_payment-<?php echo $i; ?>" name="wpte_pm_variation_recurring_payment[]" value="1">
+                                                            <label for="wpte_pm_variation_recurring_payment-<?php echo $i; ?>"></label>
                                                         </div>
 
                                                         <div>

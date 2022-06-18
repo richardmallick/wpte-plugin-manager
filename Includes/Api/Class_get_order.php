@@ -20,20 +20,43 @@ class Class_get_order{
         );
     }
 
-    
     public function wpte_get_order_response($request) {
 
         $data = json_decode($request->get_body());
 
-        $product_path = $data->events[0]->data->order->items[0]->product; //path  // Product Path from fastspring
+        $product_path = $data->events[0]->data->items[0]->product; //path  // Product 
+        $customer_email = $data->events[0]->data->customer->email; //path  // Product 
 
+        $product = wpte_get_product_variation( $product_path ) ? wpte_get_product_variation( $product_path ) : (object)[];
+ 
         // This code for create License
         $token = openssl_random_pseudo_bytes(16);
-        //Convert the binary data into hexadecimal representation.
         $token = bin2hex($token);
-        //Print it out for example purposes.
-        //echo $token;
-        
+
+        $args = [
+            'plugin_id'         => $product->plugin_id,
+            'license_key'       => $token,
+            'customer_email'    => $customer_email,
+            'product_name'      => $product->variation_name,
+            'product_slug'      => $product->variation_slug,
+            'activation_limit'  => $product->activation_limit,
+            'product_price'     => $product->variation_price,
+            'product_file'      => $product->variation_file,
+            'recurring_payment' => $product->recurring_payment,
+            'recurring_period'  => $product->recurring_period,
+            'recurring_times'   => $product->recurring_times,
+            'activated'         => 0,
+            'created_date'      => current_time('mysql'),
+    
+        ];
+
+        $insert_id = wpte_pm_create_license( $args );
+
+        if ( is_wp_error( $insert_id ) ) {
+            wp_send_json_error( [
+                'message' => __( 'Data Insert Failed Please retry again!', WPTE_PM_TEXT_DOMAIN ),
+            ] );
+        }
     }
 
 }

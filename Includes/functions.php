@@ -282,6 +282,66 @@ function wpte_get_product_variation( $product_slug ) {
     );
 }
 
+/**
+ * Method wpte_pm_create_license
+ *
+ * @param $args $args [explicite description]
+ * 
+ * Inser Product Variation Data to wpte_product_variation data table
+ * 
+ * @return int|WP_ERROR
+ * 
+ */
+function wpte_pm_create_license( $args = [] ) {
+
+
+    global $wpdb;
+
+    $default = [
+        'plugin_id'  => '',
+        'license_key'  => '',
+        'customer_email'=> '',
+        'product_name'  => '',
+        'product_slug' => '',
+        'activation_limit' => '',
+        'product_price' => '',
+        'product_file' => '',
+        'recurring_payment' => '',
+        'recurring_period' => '',
+        'recurring_times' => '',
+        'activated' => '',
+        'created_date' => current_time('mysql'),
+
+    ];
+
+    $data = wp_parse_args( $args, $default );
+
+    $inserted = $wpdb->insert(
+        "{$wpdb->prefix}wpte_product_license",
+        $data,
+        [
+            '%d',
+            '%s',
+            '%s',
+            '%s',
+            '%s',
+            '%d',
+            '%d',
+            '%d',
+            '%d',
+            '%s',
+            '%d',
+            '%d',
+            '%d',
+        ]
+    );
+
+    if ( !$inserted ) {
+        return new \WP_Error( 'failed-to-insert', __( 'Failed to insert data', WPTE_PM_TEXT_DOMAIN ) );
+    }
+
+    return $wpdb->insert_id;
+}
 
 /**
  * Method wpte_get_product_license
