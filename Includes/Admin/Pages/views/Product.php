@@ -1,7 +1,7 @@
 <?php
     $plugin_id = isset($_GET['id']) ? $_GET['id'] : '';
 
-    $product = wpte_get_product( $plugin_id ) ? wpte_get_product( $plugin_id ) : '';
+    $product = wpte_get_product( $plugin_id ) ? wpte_get_product( $plugin_id ) : (object)[];
 
     $recurring_periods = [
         'Days',
@@ -34,12 +34,14 @@
                     <p id="plugin-slug"></p>
                 </div>
             </div>
-            <p>
+            <p class="wpte-pm-input-checkbox wpte-pm-input-checkbox-inline">
                 <?php 
                 $is_variation_checked = $product->is_variation ? 'checked' : '';
                 ?>
+                <span>This Plugin has variation</span>
                 <input type="checkbox" id="wpte_pm_is_variation" name="wpte_pm_is_variation" <?php echo esc_attr($is_variation_checked); ?> />
-                <label for="wpte_pm_is_variation">This Plugin has variation</label>
+                <label for="wpte_pm_is_variation"></label>
+                
             </p>
             <div id="wpte_pm_product_variable">
                 <div class="wpte-pm-variable-product-data">
@@ -68,58 +70,67 @@
                                         <div class="wpte-pm-variable-product-content" style="display:none">
                                             <div class="wpte-pm-variable-product-content-inner">
                                                 <div class="wpte-pm-variable wpte-pm-varition-name">
-                                                    <div>
-                                                        <label for="wpte_pm_variation_name">Variation Name:</label>
-                                                        <input type="text" id="wpte_pm_variation_name" name="wpte_pm_variation_name[]" value="<?php echo esc_attr($variation->variation_name); ?>">
-                                                    </div>
-                                                    
-                                                   <div>
-                                                        <label for="wpte_pm_variation_activation_limit">Activation Limit:</label>
-                                                        <input type="text" id="wpte_pm_variation_activation_limit" name="wpte_pm_variation_activation_limit[]" value="<?php echo esc_attr($variation->activation_limit); ?>">
-                                                   </div>
-                                                    
-                                                    <div>
-                                                        <label for="wpte_pm_variation_price">Price:</label>
-                                                        <input type="text" id="wpte_pm_variation_price" name="wpte_pm_variation_price[]" value="<?php echo esc_attr($variation->variation_price); ?>">
-                                                    </div>
-
-                                                    <div>
-                                                        <label for="wpte_pm_variation_path">Product Path:</label>
-                                                        <input type="text" id="wpte_pm_variation_path" name="wpte_pm_variation_path[]" value="<?php echo esc_attr($variation->variation_slug); ?>">
-                                                   </div>
-                                                    
-                                                    <div>
-                                                        <?php $checked = $variation->recurring_payment == '1' ? 'checked' : '' ?>
-                                                        <label for="wpte_pm_variation_recurring_payment">Recurring Payment:</label>
-                                                        <input type="hidden" name="wpte_pm_variation_recurring_payment[]" value="0" />
-                                                        <input <?php echo esc_attr($checked); ?> type="checkbox" id="wpte_pm_variation_recurring_payment" name="wpte_pm_variation_recurring_payment[]" value="1">
-                                                    </div>
-
-                                                    <div>
-                                                        <label for="wpte_pm_variation_recurring_period">Recurring Period:</label>
-                                                        <select name="wpte_pm_variation_recurring_period[]" id="wpte_pm_variation_recurring_period" value="<?php echo esc_attr($variation->recurring_period); ?>">
-                                                            <?php 
-                                                                foreach( $recurring_periods as $_recurring_period): 
-                                                                    $active = strtolower($variation->recurring_period) == strtolower($_recurring_period) ? 'selected' : '';
-                                                            ?>  
-                                                                <option <?php echo esc_attr($active); ?> value="<?php echo esc_attr($_recurring_period); ?>"><?php echo esc_html($_recurring_period); ?></option>
-                                                            <?php endforeach; ?>
-                                                           
-                                                        </select>
-                                                    </div>
-                                                    
-                                                    <div>
-                                                        <label for="wpte_pm_variation_recurring_times">Times:</label>
-                                                        <input type="number" id="wpte_pm_variation_recurring_times" name="wpte_pm_variation_recurring_times[]"  value="<?php echo esc_attr($variation->recurring_times); ?>">
-                                                    </div>
-                                                    <div>
-                                                        <div id="wpte-pm-product-attachment-area">
-
-                                                                <input type="hidden" class="wpte-pm-file-id" name="wpte_pm_file_id[]" value="<?php echo esc_attr($variation->variation_file); ?>">
-                                                                <input type="text" class="wpte-pm-file-url" name="wpte_pm_file_url[]" value="<?php echo esc_url($atchment); ?>">
-                                                                <button id="wpte-pm-product-attachment" data-id="<?php echo $i; ?>">Choose File</button>
+                                                    <div class="wpte-pm-input-wrapper">
+                                                        <div>
+                                                            <label for="wpte_pm_variation_name">Variation Name:</label>
+                                                            <input type="text" id="wpte_pm_variation_name" name="wpte_pm_variation_name[]" value="<?php echo esc_attr($variation->variation_name); ?>">
+                                                        </div>
+                                                        
+                                                        <div>
+                                                            <label for="wpte_pm_variation_path">Product Path:</label>
+                                                            <input type="text" id="wpte_pm_variation_path" name="wpte_pm_variation_path[]" value="<?php echo esc_attr($variation->variation_slug); ?>">
+                                                        </div>
+                                                        
+                                                        <div>
+                                                            <label for="wpte_pm_variation_price">Price:</label>
+                                                            <input type="number" id="wpte_pm_variation_price" name="wpte_pm_variation_price[]" value="<?php echo esc_attr($variation->variation_price); ?>">
                                                         </div>
                                                     </div>
+
+                                                    <div class="wpte-pm-input-wrapper wpte-pm-input-wrapper-middle">
+                                                        <div>
+                                                            <label for="wpte_pm_variation_activation_limit">Activation Limit:</label>
+                                                            <input type="number" id="wpte_pm_variation_activation_limit" name="wpte_pm_variation_activation_limit[]" value="<?php echo esc_attr($variation->activation_limit); ?>">
+                                                        </div>
+
+                                                        <div>
+                                                            <div id="wpte-pm-product-attachment-area">
+                                                                <label for="wpte-pm-file-url">File:</label>
+                                                                <input type="hidden" class="wpte-pm-file-id" name="wpte_pm_file_id[]" value="<?php echo esc_attr($variation->variation_file); ?>">
+                                                                <input type="text" class="wpte-pm-file-url" name="wpte_pm_file_url[]" value="<?php echo esc_url($atchment); ?>">
+                                                                <button id="wpte-pm-product-attachment" data-id="<?php echo $i; ?>"><span class="dashicons dashicons-media-document"></span></button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div class="wpte-pm-input-wrapper">
+                                                        <div class="wpte-pm-input-checkbox">
+                                                            <?php $checked = $variation->recurring_payment == '1' ? 'checked' : '' ?>
+                                                            <p>Recurring Payment:</p>
+                                                            <input type="hidden" name="wpte_pm_variation_recurring_payment[]" value="0" />
+                                                            <input <?php echo esc_attr($checked); ?> type="checkbox" id="wpte_pm_variation_recurring_payment" name="wpte_pm_variation_recurring_payment[]" value="1">
+                                                            <label for="wpte_pm_variation_recurring_payment"></label>
+                                                        </div>
+
+                                                        <div>
+                                                            <label for="wpte_pm_variation_recurring_period">Recurring Period:</label>
+                                                            <select name="wpte_pm_variation_recurring_period[]" id="wpte_pm_variation_recurring_period" value="<?php echo esc_attr($variation->recurring_period); ?>">
+                                                                <?php 
+                                                                    foreach( $recurring_periods as $_recurring_period): 
+                                                                        $active = strtolower($variation->recurring_period) == strtolower($_recurring_period) ? 'selected' : '';
+                                                                ?>  
+                                                                    <option <?php echo esc_attr($active); ?> value="<?php echo esc_attr($_recurring_period); ?>"><?php echo esc_html($_recurring_period); ?></option>
+                                                                <?php endforeach; ?>
+                                                            
+                                                            </select>
+                                                        </div>
+                                                        
+                                                        <div>
+                                                            <label for="wpte_pm_variation_recurring_times">Times:</label>
+                                                            <input type="number" id="wpte_pm_variation_recurring_times" name="wpte_pm_variation_recurring_times[]"  value="<?php echo esc_attr($variation->recurring_times); ?>">
+                                                        </div>
+                                                    </div>
+                                                   
                                                 </div>
                                             </div>
                                         </div>

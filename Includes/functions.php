@@ -90,6 +90,20 @@ function wpte_pm_get_plugins( $arg = [] ) {
 }
 
 /**
+ * Method wpte_get_product
+ *
+ * @param $id $id [explicite description]
+ * Fetch Product Row by Plugin ID
+ * @return void
+ */
+function wpte_pm_get_plugin( $plugin_id ) {
+    global $wpdb;
+    return $wpdb->get_row(
+        $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}wpte_plugin_data WHERE id = %d", $plugin_id )
+    );
+}
+
+/**
  * Method wpte_pm_add_product
  *
  * @param $args $args [explicite description]

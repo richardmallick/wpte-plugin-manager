@@ -23,15 +23,28 @@ class Single_plugin{
      * @since 1.0.0
      */
     public function wpte_single_plugin() {
+		$plugin_id = isset($_GET['id']) ? $_GET['id'] : '';
+		$plugin_data = wpte_pm_get_plugin( $plugin_id ) ? wpte_pm_get_plugin( $plugin_id ) : (object)[];
+		// echo "<pre>";
+		// 	print_r($plugin_data);
+		// echo "</pre>";
         ?>
         <div class="wpte-pm-single-plugin-tabs">
 			<aside class="wpte-pm-single-plugin-sidebar">
 				<div class="wpte-pm-sidebar-header">
 					<div class="wpte-pm-sidebar-logo">
-						<img src="https://ps.w.org/wc-thank-you-page/assets/icon-256x256.jpg?rev=2444508" alt="" srcset="">
+						<?php   
+							if ( $plugin_data->logo_id ) {
+								echo wp_get_attachment_image( $plugin_data->logo_id, 'thumbnail' );
+							} else {
+								?>
+									<img src="<?php echo  WPTE_PM_URL ?>/images/kd-img.png" alt="" srcset="">
+								<?php
+							}
+						?>
 					</div>
 					<div class="wpte-pm-sidebar-plugin-title">
-						<h2>WC Thank You Page</h2>
+						<h2><?php echo esc_html($plugin_data->plugin_name); ?></h2>
 						<p>Plugin</p>
 					</div>
 				</div>

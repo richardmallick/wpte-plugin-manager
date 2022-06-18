@@ -219,7 +219,7 @@
          $(wrapper).append(`<div class="wpte-pm-variable-product-area">
          <div class="wpte-pm-variable-product-header wpte-pm-active">
                 <div class="wpte-pm-variable-product-name">
-                    Product Layouts Pro
+                   
                 </div>
                 <div class="wpte-pm-variable-product-remove-button">
                 ╳
@@ -228,52 +228,66 @@
          <div class="wpte-pm-variable-product-content">
             <div class="wpte-pm-variable-product-content-inner">
                 <div class="wpte-pm-variable wpte-pm-varition-name">
-                    <div>
-                        <label for="wpte_pm_variation_name">Variation Name:</label>
-                        <input type="text" id="wpte_pm_variation_name" name="wpte_pm_variation_name[]">
-                    </div>
-                    
-                    <div>
-                        <label for="wpte_pm_variation_activation_limit">Activation Limit:</label>
-                        <input type="text" id="wpte_pm_variation_activation_limit" name="wpte_pm_variation_activation_limit[]">
-                    </div>
-                    
-                    <div>
-                        <label for="wpte_pm_variation_price">Price:</label>
-                        <input type="text" id="wpte_pm_variation_price" name="wpte_pm_variation_price[]">
-                    </div>
-
-                    <div>
-                        <label for="wpte_pm_variation_path">Product Path:</label>
-                        <input type="text" id="wpte_pm_variation_path" name="wpte_pm_variation_path[]">
-                    </div>
-                    
-                    <div>
-                        <label for="wpte_pm_variation_recurring_payment">Recurring Payment:</label>
-                        <input type="hidden" name="wpte_pm_variation_recurring_payment[]" value="0" />
-                        <input type="checkbox" id="wpte_pm_variation_recurring_payment" name="wpte_pm_variation_recurring_payment[]" value="1">
-                    </div>
-
-                    <div>
-                        <label for="wpte_pm_variation_recurring_period">Recurring Period:</label>
-                        <select name="wpte_pm_variation_recurring_period[]" id="wpte_pm_variation_recurring_period">
-                            <option value="days">Days</option>
-                            <option value="months">Months</option>
-                            <option value="years">Years</option>
-                        </select>
-                    </div>
-                    
-                    <div>
-                        <label for="wpte_pm_variation_recurring_times">Times:</label>
-                        <input type="number" id="wpte_pm_variation_recurring_times" name="wpte_pm_variation_recurring_times[]">
-                    </div>
-                    <div>
-                        <div id="wpte-pm-product-attachment-area">
-                                <input type="hidden" class="wpte-pm-file-id" name="wpte_pm_file_id[]" value="">
-                                <input type="text" class="wpte-pm-file-url" name="wpte_pm_file_url[]" value="">
-                                <button id="wpte-pm-product-attachment" data-id="${i}">Choose File</button>
+                    <div class="wpte-pm-input-wrapper">
+                        <div>
+                            <label for="wpte_pm_variation_name">Variation Name:</label>
+                            <input type="text" id="wpte_pm_variation_name" name="wpte_pm_variation_name[]" value="">
+                        </div>
+                        
+                        <div>
+                            <label for="wpte_pm_variation_path">Product Path:</label>
+                            <input type="text" id="wpte_pm_variation_path" name="wpte_pm_variation_path[]" value="">
+                        </div>
+                        
+                        <div>
+                            <label for="wpte_pm_variation_price">Price:</label>
+                            <input type="number" id="wpte_pm_variation_price" name="wpte_pm_variation_price[]" value="0">
                         </div>
                     </div>
+
+                    <div class="wpte-pm-input-wrapper wpte-pm-input-wrapper-middle">
+                        <div>
+                            <label for="wpte_pm_variation_activation_limit">Activation Limit:</label>
+                            <input type="number" id="wpte_pm_variation_activation_limit" name="wpte_pm_variation_activation_limit[]" value="0">
+                        </div>
+
+                        <div>
+                            <div id="wpte-pm-product-attachment-area">
+                                <label for="wpte-pm-file-url">File:</label>
+                                <input type="hidden" class="wpte-pm-file-id" name="wpte_pm_file_id[]" value="0">
+                                <input type="text" class="wpte-pm-file-url" name="wpte_pm_file_url[]" value="">
+                                <button id="wpte-pm-product-attachment" data-id="${i}"><span class="dashicons dashicons-media-document"></span></button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="wpte-pm-input-wrapper">
+                        <div class="wpte-pm-input-checkbox">
+                            <p>Recurring Payment:</p>
+                            <input type="hidden" name="wpte_pm_variation_recurring_payment[]" value="0">
+                            <input checked="" type="checkbox" id="wpte_pm_variation_recurring_payment" name="wpte_pm_variation_recurring_payment[]" value="1">
+                            <label for="wpte_pm_variation_recurring_payment"></label>
+                        </div>
+
+                        <div>
+                            <label for="wpte_pm_variation_recurring_period">Recurring Period:</label>
+                            <select name="wpte_pm_variation_recurring_period[]" id="wpte_pm_variation_recurring_period" value="days">
+                                
+                                    <option selected="" value="Days">Days</option>
+                                
+                                    <option value="Months">Months</option>
+                                
+                                    <option value="Years">Years</option>
+                                                                                            
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label for="wpte_pm_variation_recurring_times">Times:</label>
+                            <input type="number" id="wpte_pm_variation_recurring_times" name="wpte_pm_variation_recurring_times[]" value="0">
+                        </div>
+                    </div>
+                
                 </div>
             </div>
          </div>
