@@ -372,18 +372,31 @@
                 $('.wpte-pm-popup-loader').addClass('active');
             },
             success: function (response) {
-               
+
+                console.log(response.data.product_file_url);
+
+                $('#wpte_pm_license_id').val(id);
                 $('#wpte_pm_license_email').val(response.data.customer_email);
                 $('#wpte_pm_license_product_name').val(response.data.product_name);
                 $('#wpte_pm_license_product_slug').val(response.data.product_slug);
                 $('#wpte_pm_license_activation_limit').val(response.data.activation_limit);
                 $('#wpte_pm_license_product_price').val(response.data.product_price);
-                $('#wpte_pm_license_recurring_period').val(response.data.recurring_period);
+                if ( response.data.recurring_payment ) {
+                    $('#wpte_pm_license_recurring_payment').prop('checked', true);
+                } else {
+                    $('#wpte_pm_license_recurring_payment').prop('checked', false);
+                } 
+                $("#wpte_pm_license_recurring_period").val(response.data.recurring_period).change();
                 $('#wpte_pm_license_recurring_times').val(response.data.recurring_times);
-                $('#wpte-pm-file-id').val(response.data.product_file_id);
-                $('#wpte-pm-file-url').val(response.data.product_file_url);
+                $('.wpte-pm-file-id').val(response.data.product_file_id);
+                $('.wpte-pm-file-url').val(response.data.product_file_url);
                 $('.wpte-pm-popup-loader').removeClass('active');
                 $('.wpte-pm-popup-box').slideDown() ;
+                $('.wpte-footer-buttons').html(`
+                    <span id="wpte-add-plugin-loader" class="spinner sa-spinner-open"></span>
+                    <button type="button" class="wpte-popup-delete-button">Delete</button>
+                    <input type="submit" class="wpte-popup-save-button" name="wpte_popup_form_submit" id="wpte_popup_form_submit" value="Update">
+                `);
 
             },
             error: function (data) {
@@ -400,14 +413,19 @@
         $('#wpte_pm_license_product_slug').val('');
         $('#wpte_pm_license_activation_limit').val('');
         $('#wpte_pm_license_product_price').val('');
+        $('#wpte_pm_license_recurring_payment').prop('checked', false);
         $('#wpte_pm_license_recurring_period').val('');
         $('#wpte_pm_license_recurring_times').val('');
-        $('#wpte-pm-file-id').val('');
-        $('#wpte-pm-file-url').val('');
+        $('.wpte-pm-file-id').val('');
+        $('.wpte-pm-file-url').val('');
         
         $('.wpte-pm-popup-wrapper').addClass('wpte-pm-popup-block');
         $('.wpte-pm-popup-box').slideDown() ;
-        $('.wpte-footer-buttons').html(`<span id="wpte-add-plugin-loader" class="spinner sa-spinner-open"></span><button type="button" class="wpte-popup-close-button">Close</button><input type="submit" class="wpte-popup-save-button" name="wpte_popup_licnese_submit" id="wpte_popup_licnese_submit" value="Save">`);
+        $('.wpte-footer-buttons').html(`
+            <span id="wpte-add-plugin-loader" class="spinner sa-spinner-open"></span>
+            <button type="button" class="wpte-popup-close-button">Close</button>
+            <input type="submit" class="wpte-popup-save-button" name="wpte_popup_licnese_submit" id="wpte_popup_licnese_submit" value="Save">
+        `);
     });
 
     $(document).on('click', '#wpte_popup_licnese_submit', function(e){
@@ -444,6 +462,45 @@
             }
         });
 
+    });
+
+    function wpte_pm_delete( id, action, This ) {
+        $.ajax({
+            type: 'POST',
+            url: wptePlugin.ajaxUrl,
+            data: {
+                action: action,
+                _nonce: wptePlugin.wpte_nonce,
+                id: id
+            },
+            beforeSend: function () {
+                This.siblings('#wpte-add-plugin-loader').addClass('wpte-add-plugin-loader');
+            },
+            success: function (response) {
+
+                if ( response.data.deleted ) {
+                    setTimeout(function(){ 
+                        location.reload()
+                    }, 2000);
+                }
+
+            },
+            error: function (data) {
+                console.log('error')
+            }
+        });
+    }
+
+    $(document).on('click', '.wpte-popup-delete-button', function(){
+        var id = $('#wpte_pm_license_id').val();
+        var action = 'wpte_license_delete';
+        var This = $(this);
+
+        if(confirm("Are you sure you want to delete this?")){
+            wpte_pm_delete( id, action,  This);
+        }else{
+            return false;
+        }
     });
 
 

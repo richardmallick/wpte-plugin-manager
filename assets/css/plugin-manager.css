@@ -149,12 +149,13 @@
     margin: 0px 0px 2px 8px;
     display: block;
 }
-.wpte-pm-popup-form-fields input{
+.wpte-pm-popup-form-fields input,
+.wpte-pm-popup-form-fields select{
     width: 100%;
     border: 1px solid #ddd;
     background: #f2f0f0;
     padding: 6px;
-    border-radius: 30px;
+    border-radius: 5px;
 }
 
 .wpte-pm-popup-form-field-checkbox input{
@@ -209,6 +210,7 @@
 }
 
 .wpte-popup-close-button,
+.wpte-popup-delete-button,
 .wpte-popup-save-button,
 .wpte-product-save-button{
     border: 0;
@@ -218,12 +220,14 @@
     border-radius: 5px;
 }
 
-.wpte-popup-close-button{
+.wpte-popup-close-button,
+.wpte-popup-delete-button{
     background-color: #d8353b;
     margin-right: 10px;
     cursor: pointer;
 }
-.wpte-popup-close-button:hover{
+.wpte-popup-close-button:hover,
+.wpte-popup-delete-button:hover{
     background-color: #a42226;
 }
 .wpte-popup-save-button,
@@ -457,13 +461,15 @@
     width: 100%;
     height: 35px;
 }
-.wpte-pm-variable #wpte-pm-product-attachment-area{
+.wpte-pm-variable #wpte-pm-product-attachment-area,
+.wpte-pm-product-attachment-area{
     position: relative;
 }
 .wpte-pm-variable #wpte-pm-product-attachment-area input{
     width: 86%;
 }
-.wpte-pm-variable #wpte-pm-product-attachment-area button{
+.wpte-pm-variable #wpte-pm-product-attachment-area button,
+.wpte-pm-product-attachment-area button{
     background: #f15f64;
     color: #fff;
     position: absolute;
@@ -473,6 +479,15 @@
     border: 2px solid #f15f64;
     border-radius: 0 5px 5px 0;
     cursor: pointer;
+}
+
+.wpte-pm-product-attachment-area{
+    width: 266px;
+}
+
+.wpte-pm-product-attachment-area button {
+    right: 4px;
+    height: 31px;
 }
 
 .wpte-pm-variable div label{
@@ -532,7 +547,7 @@
 }
 .wpte-pm-license-row{
     display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr 60px;
+    grid-template-columns: 60px 2fr 1fr 1fr 1fr 60px;
 }
 .wpte-pm-license-header-content{
     font-size: 16px;

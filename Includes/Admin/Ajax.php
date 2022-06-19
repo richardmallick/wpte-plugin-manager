@@ -22,6 +22,7 @@ class Ajax{
         add_action( 'wp_ajax_wpte_add_product', [$this, 'wpte_add_product'] );
         add_action( 'wp_ajax_wpte_get_license_data', [$this, 'wpte_get_license_data'] );
         add_action( 'wp_ajax_wpte_add_license', [$this, 'wpte_add_license'] );
+        add_action( 'wp_ajax_wpte_license_delete', [$this, 'wpte_license_delete'] );
     }
 
      /**
@@ -234,8 +235,8 @@ class Ajax{
             'recurring_payment' =>  $license->recurring_payment,
             'recurring_period'  =>  $license->recurring_period,
             'recurring_times'   =>  $license->recurring_times,
-            'product_file_url'      =>  $file,
-            'product_file_id'      =>  $license->product_file,
+            'product_file_url'  =>  $file,
+            'product_file_id'   =>  $license->product_file,
         ] );
 
     }
@@ -283,6 +284,24 @@ class Ajax{
                 'message' => __( 'Data Insert Failed Please retry again!', WPTE_PM_TEXT_DOMAIN ),
             ] );
         }
+    }
+
+    public function wpte_license_delete() {
+        if ( !current_user_can( 'manage_options' ) ) {
+            return;
+        }
+
+        if ( ! wp_verify_nonce( wp_unslash($_REQUEST['_nonce']), 'wpte-insert-nonce' ) ) {
+            return esc_html__( 'Nonce Varification Failed!', WPTE_PM_TEXT_DOMAIN );
+        }
+
+        $id = isset($_POST['id']) ? $_POST['id'] : '';
+
+        wpte_product_license_delete( $id );
+
+        wp_send_json_success( [
+            'deleted' =>  __( 'Your License has beed Deleted', WPTE_PM_TEXT_DOMAIN ),
+        ] );
     }
    
 }

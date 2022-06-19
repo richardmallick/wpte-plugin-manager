@@ -370,3 +370,18 @@ function wpte_get_product_license_row( $license_id ) {
         $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}wpte_product_license WHERE id = %d", $license_id )
     );
 }
+
+/**
+ * Method wpte_product_license_delete
+ *
+ * @param $id $id [explicite description]
+ * Delete Product License
+ * 
+ */
+function wpte_product_license_delete( $id ) {
+    global $wpdb;
+    return $wpdb->delete(
+        $wpdb->prefix . 'wpte_product_license',
+        ['id' => $id]
+    );
+}
