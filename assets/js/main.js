@@ -144,7 +144,6 @@
    
            frame[id].on('select', function(e){
                var attachment = frame[id].state().get('selection').first().toJSON();
-               //console.log(attachment);
                wpteFileVal.find(fileId).val(attachment.id);
                wpteFileVal.find(fileUrl).val(attachment.url);
    
@@ -322,23 +321,6 @@
                 setTimeout(() =>{
                     $('#wpte_product_form_submit').val('Save');
                 }, 3000);
-                //console.log(response);
-                // if ( response.data.errors ) {
-                //     $('#plugin-name').html(response.data.errors.plugin_name);
-                //     $('#plugin-slug').html(response.data.errors.plugin_slug);
-                //     $('#plugin-version').html(response.data.errors.plugin_version);
-                //     $('#php-version').html(response.data.errors.php_version);
-                //     $('#wp-version').html(response.data.errors.wordpress_version);
-                //     $('#tested-version').html(response.data.errors.tested_version);
-                //     $('#wpte-add-plugin-loader').removeClass('wpte-add-plugin-loader');
-                //     return false;
-                // }
-
-                // if ( response.data.added ) {
-                //     setTimeout(function(){ 
-                //         location.reload()
-                //     }, 2000);
-                // }
 
             },
             error: function (data) {
@@ -373,7 +355,7 @@
             },
             success: function (response) {
 
-                console.log(response.data.product_file_url);
+                console.log(response.data.recurring_payment);
 
                 $('#wpte_pm_license_id').val(id);
                 $('#wpte_pm_license_email').val(response.data.customer_email);
@@ -381,8 +363,9 @@
                 $('#wpte_pm_license_product_slug').val(response.data.product_slug);
                 $('#wpte_pm_license_activation_limit').val(response.data.activation_limit);
                 $('#wpte_pm_license_product_price').val(response.data.product_price);
-                if ( response.data.recurring_payment ) {
+                if ( response.data.recurring_payment == 1 ) {
                     $('#wpte_pm_license_recurring_payment').prop('checked', true);
+                    $('#wpte_pm_license_recurring_payment').val(1);
                 } else {
                     $('#wpte_pm_license_recurring_payment').prop('checked', false);
                 } 
@@ -395,7 +378,7 @@
                 $('.wpte-footer-buttons').html(`
                     <span id="wpte-add-plugin-loader" class="spinner sa-spinner-open"></span>
                     <button type="button" class="wpte-popup-delete-button">Delete</button>
-                    <input type="submit" class="wpte-popup-save-button" name="wpte_popup_form_submit" id="wpte_popup_form_submit" value="Update">
+                    <input type="submit" class="wpte-popup-save-button" name="wpte_popup_license_update" id="wpte_popup_license_update" value="Update">
                 `);
 
             },
@@ -428,18 +411,19 @@
         `);
     });
 
-    $(document).on('click', '#wpte_popup_licnese_submit', function(e){
-        e.preventDefault();
-
-        var This = $(this);
-
-        var data = $('.wpte-pm-popup-box form').serializeJSON();
+    /**
+     * License Add and Update
+     * @param {*} data 
+     * @param {*} action 
+     * @param {*} This 
+     */
+    function wpte_product_license_add_update(data, action, This) {
 
         $.ajax({
             type: 'POST',
             url: wptePlugin.ajaxUrl,
             data: {
-                action: "wpte_add_license",
+                action: action,
                 _nonce: wptePlugin.wpte_nonce,
                 data: data
             },
@@ -447,8 +431,6 @@
                 This.siblings('#wpte-add-plugin-loader').addClass('wpte-add-plugin-loader');
             },
             success: function (response) {
-
-                console.log(response);
                
                 if ( response.data.added ) {
                     setTimeout(function(){ 
@@ -462,8 +444,38 @@
             }
         });
 
+    }
+    /**
+     * Add New License
+     */
+    $(document).on('click', '#wpte_popup_licnese_submit', function(e){
+        e.preventDefault();
+
+        var This = $(this)
+            data = $('.wpte-pm-popup-box form').serializeJSON(),
+            action = "wpte_add_license";
+
+        wpte_product_license_add_update(data, action, This);
+
     });
 
+    /**
+     * Update License
+     */
+    $(document).on('click', '#wpte_popup_license_update', function(e){
+        e.preventDefault();
+
+        var This = $(this)
+            data = $('.wpte-pm-popup-box form').serializeJSON(),
+            action = "wpte_update_license";
+
+        wpte_product_license_add_update(data, action, This);
+
+    });
+
+    /**
+     * Delete License
+     */
     function wpte_pm_delete( id, action, This ) {
         $.ajax({
             type: 'POST',

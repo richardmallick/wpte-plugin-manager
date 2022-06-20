@@ -385,3 +385,15 @@ function wpte_product_license_delete( $id ) {
         ['id' => $id]
     );
 }
+
+/**
+ * Method wpte_product_license_update
+ * 
+ * Update License
+ * 
+ * @return void
+ */
+function wpte_product_license_update( $license_id, $customer_email, $product_name, $product_slug, $activation_limit, $product_price, $product_file, $recurring_payment, $recurring_period, $recurring_times ) {
+    global $wpdb;
+    $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}wpte_product_license SET customer_email = %s, product_name = %s, product_slug = %s, activation_limit = %d, product_price = %d, product_file = %d, recurring_payment = %d, recurring_period = %s, recurring_times = %d WHERE id = %d", $customer_email, $product_name, $product_slug, $activation_limit, $product_price, $product_file, $recurring_payment, $recurring_period, $recurring_times, $license_id ) );
+}

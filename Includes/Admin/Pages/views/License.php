@@ -21,7 +21,7 @@ $licenses = wpte_get_product_license( $plugin_id ) ? wpte_get_product_license( $
         <?php foreach ( $licenses as $license ) :  ?>
         <div class="wpte-pm-license-row">
             <div class="wpte-pm-license-row-content"><?php echo "#". intval($license->id); ?></div>
-            <div class="wpte-pm-license-row-content"><?php echo esc_html($license->license_key); ?></div>
+            <div class="wpte-pm-license-row-content"><code><?php echo esc_html($license->license_key); ?></code></div>
             <div class="wpte-pm-license-row-content"><?php echo esc_html($license->activation_limit); ?></div>
             <div class="wpte-pm-license-row-content"><?php echo esc_html($license->created_date); ?></div>
             <div class="wpte-pm-license-row-content">Active <span><?php //echo esc_html($license['activated']); ?>/<?php echo esc_html($license->activation_limit); ?></span></div>

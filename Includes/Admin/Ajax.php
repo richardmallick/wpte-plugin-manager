@@ -22,6 +22,7 @@ class Ajax{
         add_action( 'wp_ajax_wpte_add_product', [$this, 'wpte_add_product'] );
         add_action( 'wp_ajax_wpte_get_license_data', [$this, 'wpte_get_license_data'] );
         add_action( 'wp_ajax_wpte_add_license', [$this, 'wpte_add_license'] );
+        add_action( 'wp_ajax_wpte_update_license', [$this, 'wpte_update_license'] );
         add_action( 'wp_ajax_wpte_license_delete', [$this, 'wpte_license_delete'] );
     }
 
@@ -215,6 +216,9 @@ class Ajax{
         // }
     }
 
+    /**
+     * Get License Data for form.
+     */
     public function wpte_get_license_data() {
         if ( !current_user_can( 'manage_options' ) ) {
             return;
@@ -241,6 +245,9 @@ class Ajax{
 
     }
 
+    /**
+     * Add New License
+     */
     public function wpte_add_license(){
         if ( !current_user_can( 'manage_options' ) ) {
             return;
@@ -286,6 +293,43 @@ class Ajax{
         }
     }
 
+    /**
+     * Update License
+     */
+    public function wpte_update_license(){
+        if ( !current_user_can( 'manage_options' ) ) {
+            return;
+        }
+
+        if ( ! wp_verify_nonce( wp_unslash($_REQUEST['_nonce']), 'wpte-insert-nonce' ) ) {
+            return esc_html__( 'Nonce Varification Failed!', WPTE_PM_TEXT_DOMAIN );
+        }
+
+        $data = isset($_POST['data']) ? $_POST['data'] : '';
+
+        $license_id         = isset($data['wpte_pm_license_plugin_id']) ? intval($data['wpte_pm_license_plugin_id']) : '';
+        $customer_email     = isset($data['wpte_pm_license_email']) ? $data['wpte_pm_license_email'] : '';
+        $product_name       = isset($data['wpte_pm_license_product_name']) ? esc_html($data['wpte_pm_license_product_name']) : '';
+        $product_slug       = isset($data['wpte_pm_license_product_slug']) ? esc_html($data['wpte_pm_license_product_slug']) : '';
+        $activation_limit   = isset($data['wpte_pm_license_activation_limit']) ? intval($data['wpte_pm_license_activation_limit']) : '';
+        $product_price      = isset($data['wpte_pm_license_product_price']) ? esc_html($data['wpte_pm_license_product_price']) : '';
+        $product_file       = isset($data['wpte_pm_file_id'][0]) ? intval($data['wpte_pm_file_id'][0]) : '';
+        $recurring_payment  = isset($data['wpte_pm_license_recurring_payment']) ? esc_html($data['wpte_pm_license_recurring_payment']) : 0;
+        $recurring_period   = isset($data['wpte_pm_license_recurring_period']) ? esc_html($data['wpte_pm_license_recurring_period']) : '';
+        $recurring_times    = isset($data['wpte_pm_license_recurring_times']) ? intval($data['wpte_pm_license_recurring_times']) : '';
+
+
+        wpte_product_license_update( $license_id, $customer_email, $product_name, $product_slug, $activation_limit, $product_price, $product_file, $recurring_payment, $recurring_period, $recurring_times );
+
+        wp_send_json_success( [
+            'added' =>  __( 'Your License has beed Updated', WPTE_PM_TEXT_DOMAIN ),
+        ] );
+
+    }
+
+    /**
+     * Delete License
+     */
     public function wpte_license_delete() {
         if ( !current_user_can( 'manage_options' ) ) {
             return;
