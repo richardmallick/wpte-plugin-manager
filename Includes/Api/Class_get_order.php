@@ -15,7 +15,17 @@ class Class_get_order{
             [
                 'methods' => 'POST',
                 'callback' => [$this, 'wpte_get_order_response'],
-                //'permission_callback' => [$this, 'wpte_get_order_permission']
+                'permission_callback' => '__return_true'
+            ]
+        );
+
+        register_rest_route(
+            'wpte/v1', 
+            '/license', 
+            [
+                'methods' => 'POST',
+                'callback' => [$this, 'wpte_get_license_response'],
+                'permission_callback' => '__return_true'
             ]
         );
     }
@@ -57,6 +67,25 @@ class Class_get_order{
                 'message' => __( 'Data Insert Failed Please retry again!', WPTE_PM_TEXT_DOMAIN ),
             ] );
         }
+    }
+
+    public function wpte_get_license_response($request) {
+
+        $header = $request->get_headers();
+
+        $data = json_decode($request->get_body(), true);
+
+        $get_license = wpte_get_product_license_row_key( $data['license'] ) ? wpte_get_product_license_row_key( $data['license'] ) : (object)[];
+
+        $license_key = $get_license->license_key ? $get_license->license_key : (object)[];
+       // write_log($get_license->license_key);
+
+        if ( $data['license'] === $license_key ) {
+            return true;
+        }
+
+        return false;
+        
     }
 
 }

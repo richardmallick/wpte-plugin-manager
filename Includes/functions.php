@@ -372,6 +372,20 @@ function wpte_get_product_license_row( $license_id ) {
 }
 
 /**
+ * Method wpte_get_product_license_row
+ *
+ * @param $id $id [explicite description]
+ * Fetch Product Row by Plugin ID
+ * @return void
+ */
+function wpte_get_product_license_row_key( $license_key ) {
+    global $wpdb;
+    return $wpdb->get_row(
+        $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}wpte_product_license WHERE license_key = %s", $license_key )
+    );
+}
+
+/**
  * Method wpte_product_license_delete
  *
  * @param $id $id [explicite description]
