@@ -101,16 +101,19 @@ class Installation{
             id mediumint(5) NOT NULL AUTO_INCREMENT,
             plugin_id mediumint(5) NOT NULL,
             license_key varchar(250) NOT NULL,
-            customer_email varchar(50) NOT NULL,
-            product_name varchar(50) NOT NULL,
-            product_slug varchar(50) NOT NULL,
+            customer_email varchar(250) NOT NULL,
+            product_name varchar(250) NOT NULL,
+            product_slug varchar(250) NOT NULL,
             activation_limit mediumint(5),
             product_price mediumint(5) NOT NULL,
             product_file mediumint(10) NOT NULL,
             recurring_payment mediumint(5),
             recurring_period varchar(15),
             recurring_times mediumint(5),
-            activated mediumint(5) NOT NULL,
+            is_active mediumint(5),
+            activated mediumint(5),
+            plugin_path varchar(250),
+            domain varchar(250),
             created_date timestamp,
             PRIMARY KEY  (id)
         ) $charset_collate";
@@ -124,3 +127,8 @@ class Installation{
     }
     
 }
+
+
+// Domain
+// Is active
+// Plugin Path

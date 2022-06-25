@@ -76,11 +76,19 @@ class Class_get_order{
         $data = json_decode($request->get_body(), true);
 
         $get_license = wpte_get_product_license_row_key( $data['license'] ) ? wpte_get_product_license_row_key( $data['license'] ) : (object)[];
+        
+        $id = $get_license->id ? $get_license->id : (object)[];
+        
+        $activated_license = $get_license->activated ? $get_license->activated : 0;
+
+        $add_active        = $activated_license + 1;
+
 
         $license_key = $get_license->license_key ? $get_license->license_key : (object)[];
        // write_log($get_license->license_key);
 
         if ( $data['license'] === $license_key ) {
+           wpte_product_license_activate_update( $id, $add_active );
             return true;
         }
 
