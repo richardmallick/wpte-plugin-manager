@@ -315,7 +315,7 @@ class Ajax{
 
         $data = isset($_POST['data']) ? $_POST['data'] : '';
 
-        $license_id         = isset($data['wpte_pm_license_plugin_id']) ? intval($data['wpte_pm_license_plugin_id']) : '';
+        $license_id         = isset($data['wpte_pm_license_id']) ? intval($data['wpte_pm_license_id']) : '';
         $customer_email     = isset($data['wpte_pm_license_email']) ? $data['wpte_pm_license_email'] : '';
         $product_name       = isset($data['wpte_pm_license_product_name']) ? esc_html($data['wpte_pm_license_product_name']) : '';
         $product_slug       = isset($data['wpte_pm_license_product_slug']) ? esc_html($data['wpte_pm_license_product_slug']) : '';
