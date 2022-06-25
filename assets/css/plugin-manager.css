@@ -452,10 +452,6 @@
     margin-bottom: 20px;
 }
 
-.wpte-pm-input-wrapper-middle{
-    grid-template-columns: 1fr 1fr;
-}
-
 .wpte-pm-variable input,
 .wpte-pm-variable select{
     width: 100%;

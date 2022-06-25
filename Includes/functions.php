@@ -187,16 +187,17 @@ function wpte_pm_add_product_variation( $args = [] ) {
     global $wpdb;
 
     $default = [
-        'plugin_id'  => '',
-        'variation_name'  => '',
-        'variation_slug'=> '',
+        'plugin_id'         => '',
+        'variation_name'    => '',
+        'variation_slug'    => '',
         'activation_limit'  => '',
-        'variation_price' => '',
-        'variation_file' => '',
+        'variation_price'   => '',
+        'files_name'        => '',
+        'variation_file'    => '',
         'recurring_payment' => '',
-        'recurring_period' => '',
-        'recurring_times' => '',
-        'created_date' => current_time('mysql'),
+        'recurring_period'  => '',
+        'recurring_times'   => '',
+        'created_date'      => current_time('mysql'),
 
     ];
 
@@ -211,6 +212,7 @@ function wpte_pm_add_product_variation( $args = [] ) {
             '%s',
             '%d',
             '%d',
+            '%s',
             '%d',
             '%d',
             '%s',
@@ -298,19 +300,22 @@ function wpte_pm_create_license( $args = [] ) {
     global $wpdb;
 
     $default = [
-        'plugin_id'  => '',
-        'license_key'  => '',
-        'customer_email'=> '',
-        'product_name'  => '',
-        'product_slug' => '',
-        'activation_limit' => '',
-        'product_price' => '',
-        'product_file' => '',
+        'plugin_id'         => '',
+        'license_key'       => '',
+        'customer_email'    => '',
+        'product_name'      => '',
+        'product_slug'      => '',
+        'activation_limit'  => '',
+        'product_price'     => '',
+        'files_name'        => '',
+        'product_file'      => '',
         'recurring_payment' => '',
-        'recurring_period' => '',
-        'recurring_times' => '',
-        'activated' => '',
-        'created_date' => current_time('mysql'),
+        'recurring_period'  => '',
+        'recurring_times'   => '',
+        'is_active'         => '',
+        'activated'         => '',
+        'domain'            => '',
+        'created_date'      => current_time('mysql'),
 
     ];
 
@@ -327,11 +332,14 @@ function wpte_pm_create_license( $args = [] ) {
             '%s',
             '%d',
             '%d',
+            '%s',
             '%d',
             '%d',
             '%s',
             '%d',
+            '%s',
             '%d',
+            '%s',
             '%d',
         ]
     );
@@ -407,9 +415,9 @@ function wpte_product_license_delete( $id ) {
  * 
  * @return void
  */
-function wpte_product_license_update( $license_id, $customer_email, $product_name, $product_slug, $activation_limit, $product_price, $product_file, $recurring_payment, $recurring_period, $recurring_times ) {
+function wpte_product_license_update( $license_id, $customer_email, $product_name, $product_slug, $activation_limit, $product_price, $files_name, $product_file, $recurring_payment, $recurring_period, $recurring_times, $is_active ) {
     global $wpdb;
-    $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}wpte_product_license SET customer_email = %s, product_name = %s, product_slug = %s, activation_limit = %d, product_price = %d, product_file = %d, recurring_payment = %d, recurring_period = %s, recurring_times = %d WHERE id = %d", $customer_email, $product_name, $product_slug, $activation_limit, $product_price, $product_file, $recurring_payment, $recurring_period, $recurring_times, $license_id ) );
+    $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}wpte_product_license SET customer_email = %s, product_name = %s, product_slug = %s, activation_limit = %d, product_price = %d, files_name = %s, product_file = %d, recurring_payment = %d, recurring_period = %s, recurring_times = %d, is_active = %s WHERE id = %d", $customer_email, $product_name, $product_slug, $activation_limit, $product_price, $files_name, $product_file, $recurring_payment, $recurring_period, $recurring_times, $is_active, $license_id ) );
 }
 
 /**

@@ -251,6 +251,11 @@
                         </div>
 
                         <div>
+                            <label for="wpte_pm_files_name">File Name *</label>
+                            <input type="text" id="wpte_pm_files_name" name="wpte_pm_files_name[]" value="">
+                        </div>
+
+                        <div>
                             <div id="wpte-pm-product-attachment-area">
                                 <label for="wpte-pm-file-url">File:</label>
                                 <input type="hidden" class="wpte-pm-file-id" name="wpte_pm_file_id[]" value="0">
@@ -355,8 +360,6 @@
             },
             success: function (response) {
 
-                console.log(response.data.recurring_payment);
-
                 $('#wpte_pm_license_id').val(id);
                 $('#wpte_pm_license_email').val(response.data.customer_email);
                 $('#wpte_pm_license_product_name').val(response.data.product_name);
@@ -371,6 +374,8 @@
                 } 
                 $("#wpte_pm_license_recurring_period").val(response.data.recurring_period).change();
                 $('#wpte_pm_license_recurring_times').val(response.data.recurring_times);
+                $("#wpte_pm_license_is_active").val(response.data.is_active).change();
+                $('#wpte_pm_license_file_name').val(response.data.file_name);
                 $('.wpte-pm-file-id').val(response.data.product_file_id);
                 $('.wpte-pm-file-url').val(response.data.product_file_url);
                 $('.wpte-pm-popup-loader').removeClass('active');
@@ -397,7 +402,7 @@
         $('#wpte_pm_license_activation_limit').val('');
         $('#wpte_pm_license_product_price').val('');
         $('#wpte_pm_license_recurring_payment').prop('checked', false);
-        $('#wpte_pm_license_recurring_period').val('');
+        $('#wpte_pm_license_recurring_period').val('Days').change();
         $('#wpte_pm_license_recurring_times').val('');
         $('.wpte-pm-file-id').val('');
         $('.wpte-pm-file-url').val('');

@@ -94,8 +94,13 @@
                                                         </div>
 
                                                         <div>
+                                                            <label for="wpte_pm_files_name">File Name *</label>
+                                                            <input type="text" id="wpte_pm_files_name" name="wpte_pm_files_name[]" value="<?php echo esc_attr($variation->files_name); ?>">
+                                                        </div>
+
+                                                        <div>
                                                             <div id="wpte-pm-product-attachment-area">
-                                                                <label for="wpte-pm-file-url">File:</label>
+                                                                <label for="wpte-pm-file-url">File *</label>
                                                                 <input type="hidden" class="wpte-pm-file-id" name="wpte_pm_file_id[]" value="<?php echo esc_attr($variation->variation_file); ?>">
                                                                 <input type="text" class="wpte-pm-file-url" name="wpte_pm_file_url[]" value="<?php echo esc_url($atchment); ?>">
                                                                 <button id="wpte-pm-product-attachment" data-id="<?php echo $i; ?>"><span class="dashicons dashicons-media-document"></span></button>

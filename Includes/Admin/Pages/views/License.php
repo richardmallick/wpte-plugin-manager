@@ -11,9 +11,9 @@ $licenses = wpte_get_product_license( $plugin_id ) ? wpte_get_product_license( $
         <div class="wpte-pm-license-row">
             <div class="wpte-pm-license-header-content">ID</div>
             <div class="wpte-pm-license-header-content">License Key</div>
-            <div class="wpte-pm-license-header-content">Activation Limit</div>
+            <div class="wpte-pm-license-header-content">Activation</div>
             <div class="wpte-pm-license-header-content">Created Date</div>
-            <div class="wpte-pm-license-header-content">Action</div>
+            <div class="wpte-pm-license-header-content">Status</div>
             <div class="wpte-pm-license-header-content">Edit</div>
         </div>
     </div>
@@ -22,9 +22,15 @@ $licenses = wpte_get_product_license( $plugin_id ) ? wpte_get_product_license( $
         <div class="wpte-pm-license-row">
             <div class="wpte-pm-license-row-content"><?php echo "#". intval($license->id); ?></div>
             <div class="wpte-pm-license-row-content"><code><?php echo esc_html($license->license_key); ?></code></div>
-            <div class="wpte-pm-license-row-content"><?php echo esc_html($license->activation_limit); ?></div>
+            <div class="wpte-pm-license-row-content"><span><?php echo ($license->activated ? esc_html($license->activated) : 0); ?>/<?php echo esc_html($license->activation_limit); ?></span></div>
             <div class="wpte-pm-license-row-content"><?php echo esc_html($license->created_date); ?></div>
-            <div class="wpte-pm-license-row-content">Active <span><?php echo ($license->activated ? esc_html($license->activated) : 0); ?>/<?php echo esc_html($license->activation_limit); ?></span></div>
+            <div class="wpte-pm-license-row-content">
+                <?php if ( $license->is_active === 'active' ) {
+                    echo '<span style="color:green">'.esc_html('Active', WPTE_PM_TEXT_DOMAIN).'</span>'; 
+                } else {
+                    echo '<span style="color:orange">'.esc_html('Deactive', WPTE_PM_TEXT_DOMAIN).'</span>'; 
+                }; ?>
+            </div>
             <div class="wpte-pm-license-row-content wpte-pm-license-edit" id="wpte-pm-license-edit-<?php echo esc_html($license->id); ?>" data_id="<?php echo esc_html($license->id); ?>"><span class="dashicons dashicons-edit"></span></div>
         </div>
         <?php endforeach;  ?>
@@ -47,20 +53,20 @@ $licenses = wpte_get_product_license( $plugin_id ) ? wpte_get_product_license( $
                         <input type="hidden" id="wpte_pm_license_id" name="wpte_pm_license_id" value="">
                         <div class="wpte-pm-popup-form-fields">
                             <div class="wpte-pm-popup-form-field-left">
-                                <label for='wpte_pm_license_email'>Customer Email</label>
-                                <input type="email" id='wpte_pm_license_email' name='wpte_pm_license_email' value="">
+                                <label for='wpte_pm_license_email'>Customer Email *</label>
+                                <input type="email" id='wpte_pm_license_email' name='wpte_pm_license_email' value="" required>
                                 <p></p>
                             </div>
                             <div class="wpte-pm-popup-form-field-right">
-                                <label for='wpte_pm_license_product_name'>Product Name</label>
-                                <input type="text" id='wpte_pm_license_product_name' name='wpte_pm_license_product_name'>
+                                <label for='wpte_pm_license_product_name'>Product Name *</label>
+                                <input type="text" id='wpte_pm_license_product_name' name='wpte_pm_license_product_name' required>
                                 <p></p>
                             </div>
                         </div>
                         <div class="wpte-pm-popup-form-fields">
                             <div class="wpte-pm-popup-form-field-left">
-                                <label for='wpte_pm_license_product_slug'>Product Slug</label>
-                                <input type="text" id='wpte_pm_license_product_slug' name='wpte_pm_license_product_slug'>
+                                <label for='wpte_pm_license_product_slug'>Product Slug *</label>
+                                <input type="text" id='wpte_pm_license_product_slug' name='wpte_pm_license_product_slug' required>
                                 <p></p>
                             </div>
                             <div class="wpte-pm-popup-form-field-right">
@@ -71,12 +77,12 @@ $licenses = wpte_get_product_license( $plugin_id ) ? wpte_get_product_license( $
                         </div>
                         <div class="wpte-pm-popup-form-fields">
                             <div class="wpte-pm-popup-form-field-left">
-                                <label for='wpte_pm_license_product_price'>Price</label>
-                                <input type="text" id='wpte_pm_license_product_price' name='wpte_pm_license_product_price'>
+                                <label for='wpte_pm_license_product_price'>Price *</label>
+                                <input type="text" id='wpte_pm_license_product_price' name='wpte_pm_license_product_price' required>
                                 <p></p>
                             </div>
                             <div class="wpte-pm-popup-form-field-right wpte-pm-popup-form-field-checkbox">
-                                <label for='wpte_pm_license_recurring_payment'>Recurring Payment <input type="checkbox" id='wpte_pm_license_recurring_payment' name='wpte_pm_license_recurring_payment'></label>
+                                <label for='wpte_pm_license_recurring_payment'>Recurring Payment <input type="checkbox" id='wpte_pm_license_recurring_payment' name='wpte_pm_license_recurring_payment' value="1"></label>
                                 <p></p>
                             </div>
                         </div>
@@ -88,29 +94,36 @@ $licenses = wpte_get_product_license( $plugin_id ) ? wpte_get_product_license( $
                                     <option value="months">Months</option>
                                     <option value="years">Years</option>
                                 </select>
+                                <p></p>
                             </div>
                             <div class="wpte-pm-popup-form-field-right">
                                 <label for='wpte_pm_license_recurring_times'>Recurring Times</label>
-                                
                                 <input type="number" id='wpte_pm_license_recurring_times' name='wpte_pm_license_recurring_times'>
+                                <p></p>
+                            </div>
+                        </div>
+                        <div class="wpte-pm-popup-form-fields">
+                            <div class="wpte-pm-popup-form-field-left">
+                                <label for='wpte_pm_license_is_active'>Is Active</label>
+                                <select name="wpte_pm_license_is_active" id="wpte_pm_license_is_active">
+                                    <option value="active">Active</option>
+                                    <option value="deactive">Deactive</option>
+                                </select>
+                            </div>
+                            <div class="wpte-pm-popup-form-field-right">
+                                <label for='wpte_pm_license_file_name'>File Name *</label>
+                                
+                                <input type="text" id='wpte_pm_license_file_name' name='wpte_pm_license_file_name' required>
                             </div>
                         </div>
                         <div class="wpte-pm-popup-footer">
 
                             <div class="wpte-pm-product-attachment-area">
-                                <label for="wpte-pm-file-url">File:</label>
+                                <label for="wpte-pm-file-url">File * :</label>
                                 <input type="hidden" class="wpte-pm-file-id" name="wpte_pm_file_id[]" value="0">
                                 <input type="text" class="wpte-pm-file-url" name="wpte_pm_file_url[]" value="">
                                 <button id="wpte-pm-product-attachment" data-id="0"><span class="dashicons dashicons-media-document"></span></button>
                             </div>
-                            <!-- <div class="wpte-pm-footer-attachment">
-                                <label for=''>File</label>
-                                <div id="wpte-pm-product-attachment-area">
-                                    <input type="hidden" id="wpte-pm-file-id" class="wpte-pm-file-id" name="wpte_pm_file_id[]" value="">
-                                    <input type="text" id="wpte-pm-file-url" class="wpte-pm-file-url" name="wpte_pm_file_url[]" value="">
-                                    <button id="wpte-pm-product-attachment" data-id="0">Choose File</button>
-                                </div>
-                            </div> -->
                             <div class="wpte-footer-buttons">
                                 <span id="wpte-add-plugin-loader" class="spinner sa-spinner-open"></span>
                                 <button type="button" class="wpte-popup-delete-button">Delete</button>

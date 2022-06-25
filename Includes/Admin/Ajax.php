@@ -174,6 +174,7 @@ class Ajax{
         $variation_slug     = isset($data['wpte_pm_variation_path']) ? $data['wpte_pm_variation_path'] : '';
         $activation_limit   = isset($data['wpte_pm_variation_activation_limit']) ? $data['wpte_pm_variation_activation_limit'] : '';
         $variation_price    = isset($data['wpte_pm_variation_price']) ? $data['wpte_pm_variation_price'] : '';
+        $files_name         = isset($data['wpte_pm_files_name']) ? $data['wpte_pm_files_name'] : '';
         $variation_file     = isset($data['wpte_pm_file_id']) ? $data['wpte_pm_file_id'] : '';
         $recurring_payment  = $this->get_variation_recurring_payment($data['wpte_pm_variation_recurring_payment']);
         $recurring_period   = isset($data['wpte_pm_variation_recurring_period']) ? $data['wpte_pm_variation_recurring_period'] : '';
@@ -189,6 +190,7 @@ class Ajax{
                 'variation_slug'    => $variation_slug[$i],
                 'activation_limit'  => $activation_limit[$i],
                 'variation_price'   => $variation_price[$i],
+                'files_name'        => $files_name[$i],
                 'variation_file'    => $variation_file[$i],
                 'recurring_payment' => $recurring_payment[$i],
                 'recurring_period'  => strtolower($recurring_period[$i]),
@@ -240,7 +242,9 @@ class Ajax{
             'recurring_period'  =>  $license->recurring_period,
             'recurring_times'   =>  $license->recurring_times,
             'product_file_url'  =>  $file,
+            'file_name'         =>  $license->files_name,
             'product_file_id'   =>  $license->product_file,
+            'is_active'         =>  $license->is_active,
         ] );
 
     }
@@ -271,11 +275,14 @@ class Ajax{
             'product_slug'      => $data['wpte_pm_license_product_slug'],
             'activation_limit'  => $data['wpte_pm_license_activation_limit'],
             'product_price'     => $data['wpte_pm_license_product_price'],
+            'files_name'        => $data['wpte_pm_license_file_name'],
             'product_file'      => $data['wpte_pm_file_id'][0],
             'recurring_payment' => $data['wpte_pm_license_recurring_payment'],
             'recurring_period'  => $data['wpte_pm_license_recurring_period'],
             'recurring_times'   => $data['wpte_pm_license_recurring_times'],
+            'is_active'         => $data['wpte_pm_license_is_active'],
             'activated'         => 0,
+            'domain'            => '',
             'created_date'      => current_time('mysql'),
     
         ];
@@ -297,6 +304,7 @@ class Ajax{
      * Update License
      */
     public function wpte_update_license(){
+        
         if ( !current_user_can( 'manage_options' ) ) {
             return;
         }
@@ -313,13 +321,15 @@ class Ajax{
         $product_slug       = isset($data['wpte_pm_license_product_slug']) ? esc_html($data['wpte_pm_license_product_slug']) : '';
         $activation_limit   = isset($data['wpte_pm_license_activation_limit']) ? intval($data['wpte_pm_license_activation_limit']) : '';
         $product_price      = isset($data['wpte_pm_license_product_price']) ? esc_html($data['wpte_pm_license_product_price']) : '';
+        $files_name         = isset($data['wpte_pm_license_file_name']) ? esc_html($data['wpte_pm_license_file_name']) : '';
         $product_file       = isset($data['wpte_pm_file_id'][0]) ? intval($data['wpte_pm_file_id'][0]) : '';
         $recurring_payment  = isset($data['wpte_pm_license_recurring_payment']) ? esc_html($data['wpte_pm_license_recurring_payment']) : 0;
         $recurring_period   = isset($data['wpte_pm_license_recurring_period']) ? esc_html($data['wpte_pm_license_recurring_period']) : '';
         $recurring_times    = isset($data['wpte_pm_license_recurring_times']) ? intval($data['wpte_pm_license_recurring_times']) : '';
+        $is_active          = isset($data['wpte_pm_license_is_active']) ? esc_html($data['wpte_pm_license_is_active']) : '';
 
 
-        wpte_product_license_update( $license_id, $customer_email, $product_name, $product_slug, $activation_limit, $product_price, $product_file, $recurring_payment, $recurring_period, $recurring_times );
+        wpte_product_license_update( $license_id, $customer_email, $product_name, $product_slug, $activation_limit, $product_price, $files_name, $product_file, $recurring_payment, $recurring_period, $recurring_times, $is_active );
 
         wp_send_json_success( [
             'added' =>  __( 'Your License has beed Updated', WPTE_PM_TEXT_DOMAIN ),
@@ -335,11 +345,11 @@ class Ajax{
             return;
         }
 
-        if ( ! wp_verify_nonce( wp_unslash($_REQUEST['_nonce']), 'wpte-insert-nonce' ) ) {
+        if ( ! wp_verify_nonce( wp_unslash( $_REQUEST['_nonce'] ), 'wpte-insert-nonce' ) ) {
             return esc_html__( 'Nonce Varification Failed!', WPTE_PM_TEXT_DOMAIN );
         }
 
-        $id = isset($_POST['id']) ? $_POST['id'] : '';
+        $id = isset( $_POST['id'] ) ? $_POST['id'] : '';
 
         wpte_product_license_delete( $id );
 
