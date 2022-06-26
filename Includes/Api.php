@@ -16,7 +16,7 @@ class Api{
      * @since 1.0.0
      */
     public function __construct(){
-        new Api\Class_get_order;
+        new Api\Class_api_response;
     }
 
 }

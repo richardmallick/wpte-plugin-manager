@@ -2,13 +2,29 @@
 
 namespace WPTE_PM_MANAGER\Includes\Api;
 
-class Class_get_order{
+/**
+ * Api Response Class
+ * 
+ * @since 1.0.0
+ */
+class Class_api_response{
 
+    /**
+     * Api Response class constructor
+     * 
+     * @since 1.0.0
+     */
     public function __construct() {
-        add_action('rest_api_init', [$this, 'wpte_register_webhook']);
+        add_action('rest_api_init', [$this, 'wpte_register_routes']);
     }
 
-    public function wpte_register_webhook() {
+    /**
+     * Register Routes
+     * 
+     * @since 1.0.0
+     */
+    public function wpte_register_routes() {
+
         register_rest_route(
             'wpte/v1', 
             '/order', 
@@ -21,15 +37,30 @@ class Class_get_order{
 
         register_rest_route(
             'wpte/v1', 
-            '/license', 
+            '/active-license', 
             [
                 'methods' => 'POST',
-                'callback' => [$this, 'wpte_get_license_response'],
+                'callback' => [$this, 'wpte_get_active_license_response'],
+                'permission_callback' => '__return_true'
+            ]
+        );
+
+        register_rest_route(
+            'wpte/v1', 
+            '/deactive-license', 
+            [
+                'methods' => 'POST',
+                'callback' => [$this, 'wpte_get_deactive_license_response'],
                 'permission_callback' => '__return_true'
             ]
         );
     }
 
+    /**
+     * Get Order Response
+     *
+     * @since 1.0.0
+     */
     public function wpte_get_order_response($request) {
 
         $data = json_decode($request->get_body());
@@ -69,7 +100,12 @@ class Class_get_order{
         }
     }
 
-    public function wpte_get_license_response($request) {
+    /**
+     * Get Active License Response
+     * 
+     * @since 1.0.0
+     */
+    public function wpte_get_active_license_response($request) {
 
         $header = $request->get_headers();
 
@@ -81,19 +117,49 @@ class Class_get_order{
         
         $activated_license = $get_license->activated ? $get_license->activated : 0;
 
-        $add_active        = $activated_license + 1;
+        $addition        = $activated_license + 1;
 
 
         $license_key = $get_license->license_key ? $get_license->license_key : (object)[];
        // write_log($get_license->license_key);
 
         if ( $data['license'] === $license_key ) {
-           wpte_product_license_activate_update( $id, $add_active );
+           wpte_product_license_activate_update( $id, $addition );
             return true;
         }
 
         return false;
         
+    }
+
+    /**
+     * Get Deactive License Response
+     * 
+     * @since 1.0.0
+     */
+    public function wpte_get_deactive_license_response($request) {
+
+        $header = $request->get_headers();
+
+        $data = json_decode($request->get_body(), true);
+
+        $get_license = wpte_get_product_license_row_key( $data['license'] ) ? wpte_get_product_license_row_key( $data['license'] ) : (object)[];
+        
+        $id = $get_license->id ? $get_license->id : (object)[];
+        
+        $activated_license = $get_license->activated ? $get_license->activated : 0;
+
+        $subtraction = $activated_license > 0 ? $activated_license - 1 : 0;
+
+
+        $license_key = $get_license->license_key ? $get_license->license_key : (object)[];
+
+        if ( $data['license'] === $license_key ) {
+           wpte_product_license_activate_update( $id, $subtraction );
+            return true;
+        }
+
+        return false;
     }
 
 }

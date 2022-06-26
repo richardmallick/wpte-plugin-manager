@@ -2,7 +2,6 @@
 
 namespace WPTE_PM_MANAGER\Includes\Admin;
 
-
 /**
  * Ajax Handaler Class
  * 
