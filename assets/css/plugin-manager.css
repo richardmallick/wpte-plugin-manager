@@ -118,6 +118,10 @@
     margin: 0 auto;
 }
 
+.popup-box-width{
+    max-width: 700px;
+}
+
 .wpte-pm-popup-header{
     display: flex;
     justify-content: space-between;
@@ -182,9 +186,17 @@
     width: 50%;
     margin-right: 10px;
 }
+.wpte-pm-popup-form-field-middle{
+    width: 50%;
+    margin: 0 10px;
+}
 .wpte-pm-popup-form-field-right{
     width: 50%;
     margin-left: 10px;
+}
+
+.wpte-pm-popup-form-field-checkbox{
+    width: 28%;
 }
 
 .wpte-pm-popup-footer{

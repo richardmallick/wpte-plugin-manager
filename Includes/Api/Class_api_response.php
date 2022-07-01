@@ -65,8 +65,9 @@ class Class_api_response{
 
         $data = json_decode($request->get_body());
 
-        $product_path = $data->events[0]->data->items[0]->product; //path  // Product 
-        $customer_email = $data->events[0]->data->customer->email; //path  // Product 
+        $product_path   = $data->events[0]->data->items[0]->product; //path  // Product 
+        $customer_email = $data->events[0]->data->customer->email; //email
+        $customer_name  = $data->events[0]->data->customer->name; //name
 
         $product = wpte_get_product_variation( $product_path ) ? wpte_get_product_variation( $product_path ) : (object)[];
  
@@ -77,6 +78,7 @@ class Class_api_response{
         $args = [
             'plugin_id'         => $product->plugin_id,
             'license_key'       => $token,
+            'customer_name'     => $customer_name,
             'customer_email'    => $customer_email,
             'product_name'      => $product->variation_name,
             'product_slug'      => $product->variation_slug,

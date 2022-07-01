@@ -345,6 +345,7 @@ function wpte_pm_create_license( $args = [] ) {
     $default = [
         'plugin_id'         => '',
         'license_key'       => '',
+        'customer_name'     => '',
         'customer_email'    => '',
         'product_name'      => '',
         'product_slug'      => '',
@@ -369,6 +370,7 @@ function wpte_pm_create_license( $args = [] ) {
         $data,
         [
             '%d',
+            '%s',
             '%s',
             '%s',
             '%s',
@@ -458,9 +460,9 @@ function wpte_product_license_delete( $id ) {
  * 
  * @return void
  */
-function wpte_product_license_update( $license_id, $customer_email, $product_name, $product_slug, $activation_limit, $product_price, $files_name, $product_file, $recurring_payment, $recurring_period, $recurring_times, $is_active ) {
+function wpte_product_license_update( $license_id, $customer_name, $customer_email, $product_name, $product_slug, $activation_limit, $product_price, $files_name, $product_file, $recurring_payment, $recurring_period, $recurring_times, $is_active ) {
     global $wpdb;
-    $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}wpte_product_license SET customer_email = %s, product_name = %s, product_slug = %s, activation_limit = %d, product_price = %d, files_name = %s, product_file = %d, recurring_payment = %d, recurring_period = %s, recurring_times = %d, is_active = %s WHERE id = %d", $customer_email, $product_name, $product_slug, $activation_limit, $product_price, $files_name, $product_file, $recurring_payment, $recurring_period, $recurring_times, $is_active, $license_id ) );
+    $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}wpte_product_license SET customer_name = %s, customer_email = %s, product_name = %s, product_slug = %s, activation_limit = %d, product_price = %d, files_name = %s, product_file = %d, recurring_payment = %d, recurring_period = %s, recurring_times = %d, is_active = %s WHERE id = %d", $customer_name, $customer_email, $product_name, $product_slug, $activation_limit, $product_price, $files_name, $product_file, $recurring_payment, $recurring_period, $recurring_times, $is_active, $license_id ) );
 }
 
 /**

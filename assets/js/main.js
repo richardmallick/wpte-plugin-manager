@@ -383,7 +383,7 @@
 
     $('.wpte-pm-license-edit').on('click', function(){
         var id = $(this).attr('data_id');
-
+        $('.wpte-pm-popup-header h1').html('Edit License');
         $('.wpte-pm-popup-wrapper').addClass('wpte-pm-popup-block');
 
         $.ajax({
@@ -399,6 +399,7 @@
             success: function (response) {
 
                 $('#wpte_pm_license_id').val(id);
+                $('#wpte_pm_license_customer_name').val(response.data.customer_name);
                 $('#wpte_pm_license_email').val(response.data.customer_email);
                 $('#wpte_pm_license_product_name').val(response.data.product_name);
                 $('#wpte_pm_license_product_slug').val(response.data.product_slug);
@@ -434,6 +435,7 @@
     });
 
     $('.wpte-pm-add-new-linense').on('click', function(){
+        $('.wpte-pm-popup-header h1').html('Add License');
         $('#wpte_pm_license_email').val('');
         $('#wpte_pm_license_product_name').val('');
         $('#wpte_pm_license_product_slug').val('');
@@ -474,8 +476,6 @@
                 This.siblings('#wpte-add-plugin-loader').addClass('wpte-add-plugin-loader');
             },
             success: function (response) {
-
-                console.log(response);
                
                 if ( response.data.added ) {
                     setTimeout(function(){ 

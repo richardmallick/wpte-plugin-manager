@@ -308,6 +308,7 @@ class Ajax{
         $file = wp_get_attachment_url($license->product_file);
 
         wp_send_json_success( [
+            'customer_name'     =>  $license->customer_name,
             'customer_email'    =>  $license->customer_email,
             'product_name'      =>  $license->product_name,
             'product_slug'      =>  $license->product_slug,
@@ -345,6 +346,7 @@ class Ajax{
         $args = [
             'plugin_id'         => $data['wpte_pm_license_plugin_id'],
             'license_key'       => $token,
+            'customer_name'     => $data['wpte_pm_license_customer_name'],
             'customer_email'    => $data['wpte_pm_license_email'],
             'product_name'      => $data['wpte_pm_license_product_name'],
             'product_slug'      => $data['wpte_pm_license_product_slug'],
@@ -413,6 +415,7 @@ EOT;
         $data = isset($_POST['data']) ? $_POST['data'] : '';
 
         $license_id         = isset($data['wpte_pm_license_id']) ? intval($data['wpte_pm_license_id']) : '';
+        $customer_name      = isset($data['wpte_pm_license_customer_name']) ? $data['wpte_pm_license_customer_name'] : '';
         $customer_email     = isset($data['wpte_pm_license_email']) ? $data['wpte_pm_license_email'] : '';
         $product_name       = isset($data['wpte_pm_license_product_name']) ? esc_html($data['wpte_pm_license_product_name']) : '';
         $product_slug       = isset($data['wpte_pm_license_product_slug']) ? esc_html($data['wpte_pm_license_product_slug']) : '';
@@ -426,7 +429,7 @@ EOT;
         $is_active          = isset($data['wpte_pm_license_is_active']) ? esc_html($data['wpte_pm_license_is_active']) : '';
 
 
-        wpte_product_license_update( $license_id, $customer_email, $product_name, $product_slug, $activation_limit, $product_price, $files_name, $product_file, $recurring_payment, $recurring_period, $recurring_times, $is_active );
+        wpte_product_license_update( $license_id, $customer_name, $customer_email, $product_name, $product_slug, $activation_limit, $product_price, $files_name, $product_file, $recurring_payment, $recurring_period, $recurring_times, $is_active );
 
         $get_license = wpte_get_product_license_row( $license_id ) ?  wpte_get_product_license_row( $license_id ) : (object)[];
         

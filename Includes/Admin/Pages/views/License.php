@@ -43,9 +43,9 @@ $licenses = wpte_get_product_license( $plugin_id ) ? wpte_get_product_license( $
         <div class="wpte-pm-popup-loader">
             <img src="<?php echo WPTE_PM_URL . '/Images/loader.webp' ?>" alt="">
         </div>
-        <div class="wpte-pm-popup-box">
+        <div class="wpte-pm-popup-box popup-box-width">
             <div class="wpte-pm-popup-header">
-                <h1>Edit License</h1>
+                <h1>Add License</h1>
                 <div class="wpte-pm-popup-close">╳</div>
             </div>
             <form action="" method="post">
@@ -53,6 +53,11 @@ $licenses = wpte_get_product_license( $plugin_id ) ? wpte_get_product_license( $
                 <input type="hidden" id="wpte_pm_license_id" name="wpte_pm_license_id" value="">
                 <div class="wpte-pm-popup-form-fields">
                     <div class="wpte-pm-popup-form-field-left">
+                        <label for='wpte_pm_license_customer_name'>Customer Name *</label>
+                        <input type="email" id='wpte_pm_license_customer_name' name='wpte_pm_license_customer_name' value="" required>
+                        <p></p>
+                    </div>
+                    <div class="wpte-pm-popup-form-field-middle">
                         <label for='wpte_pm_license_email'>Customer Email *</label>
                         <input type="email" id='wpte_pm_license_email' name='wpte_pm_license_email' value="" required>
                         <p></p>
@@ -69,25 +74,23 @@ $licenses = wpte_get_product_license( $plugin_id ) ? wpte_get_product_license( $
                         <input type="text" id='wpte_pm_license_product_slug' name='wpte_pm_license_product_slug' required>
                         <p></p>
                     </div>
-                    <div class="wpte-pm-popup-form-field-right">
+                    <div class="wpte-pm-popup-form-field-middle">
                         <label for='wpte_pm_license_activation_limit'>Activation Limit</label>
                         <input type="number" id='wpte_pm_license_activation_limit' name='wpte_pm_license_activation_limit'>
                         <p></p>
                     </div>
-                </div>
-                <div class="wpte-pm-popup-form-fields">
-                    <div class="wpte-pm-popup-form-field-left">
+                    <div class="wpte-pm-popup-form-field-right">
                         <label for='wpte_pm_license_product_price'>Price *</label>
-                        <input type="text" id='wpte_pm_license_product_price' name='wpte_pm_license_product_price' required>
+                        <input type="number" id='wpte_pm_license_product_price' name='wpte_pm_license_product_price' required>
                         <p></p>
                     </div>
-                    <div class="wpte-pm-popup-form-field-right wpte-pm-popup-form-field-checkbox">
+                </div>
+                <div class="wpte-pm-popup-form-fields">
+                    <div class="wpte-pm-popup-form-field-left wpte-pm-popup-form-field-checkbox">
                         <label for='wpte_pm_license_recurring_payment'>Recurring Payment <input type="checkbox" id='wpte_pm_license_recurring_payment' name='wpte_pm_license_recurring_payment' value="1"></label>
                         <p></p>
                     </div>
-                </div>
-                <div class="wpte-pm-popup-form-fields">
-                    <div class="wpte-pm-popup-form-field-left">
+                    <div class="wpte-pm-popup-form-field-middle">
                         <label for='wpte_pm_license_recurring_period'>Recurring Period</label>
                         <select name="wpte_pm_license_recurring_period" id="wpte_pm_license_recurring_period">
                             <option value="days">Days</option>

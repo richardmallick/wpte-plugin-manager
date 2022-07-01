@@ -102,6 +102,7 @@ class Installation{
             id mediumint(5) NOT NULL AUTO_INCREMENT,
             plugin_id mediumint(5) NOT NULL,
             license_key varchar(250) NOT NULL,
+            customer_name varchar(250) NOT NULL,
             customer_email varchar(250) NOT NULL,
             product_name varchar(250) NOT NULL,
             product_slug varchar(250) NOT NULL,
