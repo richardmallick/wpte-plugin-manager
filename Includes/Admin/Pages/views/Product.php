@@ -12,10 +12,6 @@
     $variations = wpte_get_product_variations( $plugin_id ) ? wpte_get_product_variations( $plugin_id ) : [];
     $variation_name_count = count($variations);
 
-    $productsss = wpte_get_product_variation( 'product-layout-ultimate-5-year' );
-    echo "<pre>";
-        print_r($productsss);
-    echo "</pre>";
 ?>
 <div class="wpte-pm-product-wrapper">
     <div class="wpte-pm-popup-inner">

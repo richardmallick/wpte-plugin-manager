@@ -211,7 +211,9 @@
 
 .wpte-popup-close-button,
 .wpte-popup-delete-button,
+.wpte-plugin-delete-button,
 .wpte-popup-save-button,
+.wpte-plugin-update-button,
 .wpte-product-save-button{
     border: 0;
     color: #fff;
@@ -221,21 +223,25 @@
 }
 
 .wpte-popup-close-button,
-.wpte-popup-delete-button{
+.wpte-popup-delete-button,
+.wpte-plugin-delete-button{
     background-color: #d8353b;
     margin-right: 10px;
     cursor: pointer;
 }
 .wpte-popup-close-button:hover,
+.wpte-plugin-delete-button:hover,
 .wpte-popup-delete-button:hover{
     background-color: #a42226;
 }
 .wpte-popup-save-button,
+.wpte-plugin-update-button,
 .wpte-product-save-button{
     background-color: #428817;
     cursor: pointer;
 }
 .wpte-popup-save-button:hover,
+.wpte-plugin-update-button:hover,
 .wpte-product-save-button:hover{
     background-color: #285c08;
 }

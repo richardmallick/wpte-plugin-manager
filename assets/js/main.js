@@ -23,21 +23,23 @@
         });
     });
 
-    function wpte_insert_data( data ) {
+    function wpte_insert_data( data, action ) {
 
         $.ajax({
             type: 'POST',
             url: wptePlugin.ajaxUrl,
             data: {
-                action: "wpte_add_new_plugin",
+                action: action,
                 _nonce: wptePlugin.wpte_nonce,
                 data: data
             },
             beforeSend: function () {
                $('#wpte-add-plugin-loader').addClass('wpte-add-plugin-loader');
+               $('#wpte-add-plugin-loaders').addClass('wpte-add-plugin-loader');
             },
             success: function (response) {
-                if ( response.data.errors ) {
+
+                if ( typeof(response.data.errors) != "undefined" && response.data.errors !== null ) {
                     $('#plugin-name').html(response.data.errors.plugin_name);
                     $('#plugin-slug').html(response.data.errors.plugin_slug);
                     $('#plugin-version').html(response.data.errors.plugin_version);
@@ -48,10 +50,27 @@
                     return false;
                 }
 
-                if ( response.data.added ) {
+                if ( typeof(response.data.update_errors) != "undefined" && response.data.update_errors !== null ) {
+                    $('#plugins-name').html(response.data.update_errors.plugin_name);
+                    $('#plugins-slug').html(response.data.update_errors.plugin_slug);
+                    $('#plugins-version').html(response.data.update_errors.plugin_version);
+                    $('#phps-version').html(response.data.update_errors.php_version);
+                    $('#wps-version').html(response.data.update_errors.wordpress_version);
+                    $('#testeds-version').html(response.data.update_errors.tested_version);
+                    $('#wpte-add-plugin-loaders').removeClass('wpte-add-plugin-loader');
+                    return false;
+                }
+
+                if ( typeof(response.data.added) != "undefined" && response.data.added !== null ) {
                     setTimeout(function(){ 
                         location.reload()
                     }, 2000);
+                } else {
+                    $('#wpte_plugin_update').val(response.data.updated);
+                    $('#wpte-add-plugin-loaders').removeClass('wpte-add-plugin-loader');
+                    setTimeout(function(){ 
+                        $('#wpte_plugin_update').val(response.data.update);
+                    }, 3000);
                 }
 
             },
@@ -63,6 +82,7 @@
 
     $('.wpte-popup-save-button').on('click', function(e){
         e.preventDefault();
+        var action = "wpte_add_new_plugin";
         var data={
             plugin_name: $('#wpte_pm_plugin_name').val(),
             plugin_slug: $('#wpte_pm_plugin_slug').val(),
@@ -74,7 +94,25 @@
             description: $('#wpte_pm_plugin_description').val(),
             logo_id: $('.wpte-pm-logo-id').val(),
         }
-        wpte_insert_data( data );
+        wpte_insert_data( data, action );
+    });
+
+    $('#wpte_plugin_update').on('click', function(e){
+        e.preventDefault();
+        var action = "wpte_plugin_update";
+        var data={
+            plugin_id: $('#wpte_plugin_id').val(),
+            plugin_name: $('#wpte_pm_plugin_name').val(),
+            plugin_slug: $('#wpte_pm_plugin_slug').val(),
+            plugin_version: $('#wpte_pm_plugin_version').val(),
+            php_version: $('#wpte_pm_plugin_php_version').val(),
+            wordpress_version: $('#wpte_pm_plugin_wordpress_version').val(),
+            tested_version: $('#wpte_pm_plugin_wordpress_tested_version').val(),
+            demo_url: $('#wpte_pm_plugin_demo_url').val(),
+            description: $('#wpte_pm_plugin_description').val(),
+            logo_id: $('.wpte-pm-logo-id').val(),
+        }
+        wpte_insert_data( data, action );
     });
 
     // File Upload
@@ -494,12 +532,17 @@
             },
             beforeSend: function () {
                 This.siblings('#wpte-add-plugin-loader').addClass('wpte-add-plugin-loader');
+                This.siblings('#wpte-add-plugin-loaders').addClass('wpte-add-plugin-loader');
             },
             success: function (response) {
 
-                if ( response.data.deleted ) {
+                if ( typeof(response.data.deleted) != "undefined" && response.data.deleted !== null ) {
                     setTimeout(function(){ 
-                        location.reload()
+                        location.reload();
+                    }, 2000);
+                } else {
+                    setTimeout(function(){ 
+                        $(location).attr('href', response.data.plugin_url);
                     }, 2000);
                 }
 
@@ -513,6 +556,19 @@
     $(document).on('click', '.wpte-popup-delete-button', function(){
         var id = $('#wpte_pm_license_id').val();
         var action = 'wpte_license_delete';
+        var This = $(this);
+
+        if(confirm("Are you sure you want to delete this?")){
+            wpte_pm_delete( id, action,  This);
+        }else{
+            return false;
+        }
+    });
+
+    // Plugin Delete
+    $(document).on('click', '.wpte-plugin-delete-button', function(){
+        var id = $('#wpte_plugin_id').val();
+        var action = 'wpte_plugin_delete';
         var This = $(this);
 
         if(confirm("Are you sure you want to delete this?")){

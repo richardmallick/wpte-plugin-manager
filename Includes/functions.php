@@ -104,6 +104,49 @@ function wpte_pm_get_plugin( $plugin_id ) {
 }
 
 /**
+ * Method wpte_plugin_data
+ *
+ * @param $plugin_id $plugin_id [explicite description].
+ * @param $plugin_name $plugin_name [explicite description].
+ * @param $plgin_slug $plgin_slug [explicite description].
+ * @param $plugin_version $plugin_version [explicite description].
+ * @param $wordpress_version $wordpress_version [explicite description].
+ * @param $tested_version $tested_version [explicite description].
+ * @param $demo_url $demo_url [explicite description].
+ * @param $description $description [explicite description].
+ * @param $logo_id $logo_id [explicite description].
+ * 
+ * Update Product
+ * 
+ * @return void
+ */
+function wpte_plugin_updater( $plugin_id, $plugin_name, $plugin_slug, $plugin_version, $php_version, $wordpress_version, $tested_version, $demo_url, $description, $logo_id ) {
+    global $wpdb;
+
+    // echo $plugin_id;
+    // echo $plugin_name;
+    // echo $plugin_slug;
+    // echo $plugin_version;
+    // echo $wordpress_version;
+   $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}wpte_plugin_data SET plugin_name = %s, plugin_slug = %s, plugin_version = %s, php_version = %s, wordpress_version = %s, tested_version = %s, demo_url = %s, description = %s, logo_id = %d WHERE id = %d", $plugin_name, $plugin_slug, $plugin_version, $php_version, $wordpress_version, $tested_version, $demo_url, $description, $logo_id, $plugin_id ) );
+}
+
+/**
+ * Method wpte_plugin_delete
+ *
+ * @param $id $id [explicite description]
+ * Delete Plugin
+ * 
+ */
+function wpte_plugin_delete( $id ) {
+    global $wpdb;
+    return $wpdb->delete(
+        $wpdb->prefix . 'wpte_plugin_data',
+        ['id' => $id]
+    );
+}
+
+/**
  * Method wpte_pm_add_product
  *
  * @param $args $args [explicite description]

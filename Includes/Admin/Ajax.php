@@ -25,9 +25,11 @@ class Ajax{
         add_action( 'wp_ajax_wpte_add_license', [$this, 'wpte_add_license'] );
         add_action( 'wp_ajax_wpte_update_license', [$this, 'wpte_update_license'] );
         add_action( 'wp_ajax_wpte_license_delete', [$this, 'wpte_license_delete'] );
+        add_action( 'wp_ajax_wpte_plugin_update', [$this, 'wpte_plugin_update'] );
+        add_action( 'wp_ajax_wpte_plugin_delete', [$this, 'wpte_plugin_delete'] );
     }
 
-     /**
+    /**
      * Add New Plugin
      * 
      * @since 1.0.0
@@ -118,6 +120,78 @@ class Ajax{
             ] );
         }
  
+    }
+
+    /**
+     * Update Plugin
+     * 
+     * @since 1.0.0
+     */
+    public function wpte_plugin_update() {
+        
+        if ( ! current_user_can( 'manage_options' ) ) {
+            return;
+        }
+
+        if ( ! wp_verify_nonce( wp_unslash($_REQUEST['_nonce']), 'wpte-insert-nonce' ) ) {
+            return esc_html__( 'Nonce Varification Failed!', WPTE_PM_TEXT_DOMAIN );
+        }
+
+        $args = isset($_POST['data']) ? $_POST['data'] : [];
+
+        $plugin_id = $args['plugin_id'] ? sanitize_text_field($args['plugin_id']) : '';
+        $plugin_name = $args['plugin_name'] ? sanitize_text_field($args['plugin_name']) : '';
+        $plugin_slug = $args['plugin_slug'] ? sanitize_text_field($args['plugin_slug']) : '';
+        $plugin_version = $args['plugin_version'] ? sanitize_text_field($args['plugin_version']) : '';
+        $php_version = $args['php_version'] ? sanitize_text_field($args['php_version']) : '';
+        $wordpress_version = $args['wordpress_version'] ? sanitize_text_field($args['wordpress_version']) : '';
+        $tested_version = $args['tested_version'] ? sanitize_text_field($args['tested_version']) : '';
+        $demo_url = $args['demo_url'] ? sanitize_url($args['demo_url']) : '';
+        $description = $args['description'] ? sanitize_text_field($args['description']) : '';
+        $logo_id = $args['logo_id'] ? sanitize_text_field($args['logo_id']) : '';
+
+        if ( empty( $plugin_name ) ) {
+            $this->errors['plugin_name'] = __("Plugin Name field is required!", WPTE_PM_TEXT_DOMAIN);
+        }
+
+        if ( empty( $plugin_slug ) ) {
+            $this->errors['plugin_slug'] = __("Plugin Slug field is required!", WPTE_PM_TEXT_DOMAIN);
+        }
+
+        if ( empty( $plugin_slug ) ) {
+            $this->errors['plugin_slug'] = __("Plugin Slug field is required!", WPTE_PM_TEXT_DOMAIN);
+        }
+
+        if ( empty( $plugin_version ) ) {
+            $this->errors['plugin_version'] = __("Plugin Version field is required!", WPTE_PM_TEXT_DOMAIN);
+        }
+
+        if ( empty( $php_version ) ) {
+            $this->errors['php_version'] = __("PHP Version field is required!", WPTE_PM_TEXT_DOMAIN);
+        }
+
+        if ( empty( $wordpress_version ) ) {
+            $this->errors['wordpress_version'] = __("WordPress Version field is required!", WPTE_PM_TEXT_DOMAIN);
+        }
+
+        if ( empty( $tested_version ) ) {
+            $this->errors['tested_version'] = __("Tested Version field is required!", WPTE_PM_TEXT_DOMAIN);
+        }
+
+        if ( $this->errors ) {
+            wp_send_json_success( [
+                'update_errors' =>  $this->errors,
+            ] );
+            return false;
+        }
+        
+        wpte_plugin_updater( $plugin_id, $plugin_name, $plugin_slug, $plugin_version, $php_version, $wordpress_version, $tested_version, $demo_url, $description, $logo_id );
+
+        wp_send_json_success( [
+            'update' =>  __( 'Update', WPTE_PM_TEXT_DOMAIN ),
+            'updated' =>  __( 'Updated', WPTE_PM_TEXT_DOMAIN ),
+        ] );
+
     }
 
      /**
@@ -380,6 +454,24 @@ EOT;
 
         wp_send_json_success( [
             'deleted' =>  __( 'Your License has beed Deleted', WPTE_PM_TEXT_DOMAIN ),
+        ] );
+    }
+
+    public function wpte_plugin_delete() {
+        if ( ! current_user_can( 'manage_options' ) ) {
+            return;
+        }
+
+        if ( ! wp_verify_nonce( wp_unslash( $_REQUEST['_nonce'] ), 'wpte-insert-nonce' ) ) {
+            return esc_html__( 'Nonce Varification Failed!', WPTE_PM_TEXT_DOMAIN );
+        }
+
+        $id = isset( $_POST['id'] ) ? $_POST['id'] : '';
+
+        wpte_plugin_delete( $id );
+
+        wp_send_json_success( [
+            'plugin_url' =>  admin_url( 'admin.php?page=wpte-plugin-manager' ),
         ] );
     }
    

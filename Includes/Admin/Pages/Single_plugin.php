@@ -100,7 +100,11 @@ class Single_plugin{
 					<h1><?php echo esc_html__('Setting', WPTE_PM_TEXT_DOMAIN); ?></h1>
 					<div class="wpte-tab-item-card wpte-pm-tab-content">
 						<?php
-							echo "Documentation";
+							if (file_exists(__DIR__ . "/views/Settings.php")) {
+
+								include __DIR__ . "/views/Settings.php";
+
+							}
 						?>
 					</div>
 				</div>
@@ -108,7 +112,11 @@ class Single_plugin{
 					<h1><?php echo esc_html__('Uses Guide', WPTE_PM_TEXT_DOMAIN); ?></h1>
 					<div class="wpte-tab-item-card wpte-pm-tab-content">
 						<?php
-							echo "Documentation";
+							if (file_exists(__DIR__ . "/views/Doc.php")) {
+
+								include __DIR__ . "/views/Doc.php";
+
+							}
 						?>
 					</div>
 				</div>
