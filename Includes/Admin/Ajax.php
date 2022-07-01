@@ -9,6 +9,8 @@ namespace WPTE_PM_MANAGER\Includes\Admin;
  */
 class Ajax{
 
+    use Email\Invoice;
+
     public $errors = [];
 
     /**
@@ -286,7 +288,29 @@ class Ajax{
     
         ];
 
+        // Create License
         $insert_id = wpte_pm_create_license( $args );
+
+        // Send Invoice to customer
+        if ( $insert_id ) {
+
+            $to = [
+                $data['wpte_pm_license_email']
+            ];
+            $headers        = 'From: WPTOFFEE < order@wptoffee.com > ' . "\r\n";
+            $subject        = "Your order of ".$data['wpte_pm_license_product_name']." is completed";
+            $emailtemplate  = $this->wpte_invoice( $insert_id );
+            $message = <<<EOT
+                    {$emailtemplate}
+EOT;
+            add_filter(
+                'wp_mail_content_type',
+                function ( $content_type ) {
+                    return 'text/html';
+                }
+            );
+            $email_sent = wp_mail( $to, $subject, $message, $headers );
+        }
 
         wp_send_json_success( [
             'added' =>  __( 'Your License has beed added', WPTE_PM_TEXT_DOMAIN ),
@@ -330,6 +354,8 @@ class Ajax{
 
         wpte_product_license_update( $license_id, $customer_email, $product_name, $product_slug, $activation_limit, $product_price, $files_name, $product_file, $recurring_payment, $recurring_period, $recurring_times, $is_active );
 
+        $get_license = wpte_get_product_license_row( $license_id ) ?  wpte_get_product_license_row( $license_id ) : (object)[];
+        
         wp_send_json_success( [
             'added' =>  __( 'Your License has beed Updated', WPTE_PM_TEXT_DOMAIN ),
         ] );

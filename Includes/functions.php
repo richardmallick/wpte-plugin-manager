@@ -427,7 +427,19 @@ function wpte_product_license_update( $license_id, $customer_email, $product_nam
  * 
  * @return void
  */
-function wpte_product_license_activate_update( $license_id, $activated ) {
+function wpte_product_license_activate_update( $license_id, $activated, $domain = '' ) {
     global $wpdb;
-    $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}wpte_product_license SET activated = %d WHERE id = %d", $activated, $license_id ) );
+    $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}wpte_product_license SET activated = %d, domain = %s WHERE id = %d", $activated, $domain, $license_id ) );
 }
+
+
+function mailtrap($phpmailer) {
+    $phpmailer->isSMTP();
+    $phpmailer->Host = 'smtp.mailtrap.io';
+    $phpmailer->SMTPAuth = true;
+    $phpmailer->Port = 2525;
+    $phpmailer->Username = '27daf8b7afe6aa';
+    $phpmailer->Password = '52d71b680269e3';
+}
+  
+add_action('phpmailer_init', 'mailtrap');

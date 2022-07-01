@@ -109,22 +109,32 @@ class Class_api_response{
 
         $header = $request->get_headers();
 
+        //write_log($header['host'][0]);
+
         $data = json_decode($request->get_body(), true);
 
         $get_license = wpte_get_product_license_row_key( $data['license'] ) ? wpte_get_product_license_row_key( $data['license'] ) : (object)[];
         
         $id = $get_license->id ? $get_license->id : (object)[];
         
-        $activated_license = $get_license->activated ? $get_license->activated : 0;
-
-        $addition        = $activated_license + 1;
-
+        $activated_license  = $get_license->activated ? $get_license->activated : 0;
+        $addition           = $activated_license + 1;
+        $activation_limit   = $get_license->activation_limit ? $get_license->activation_limit : 0;
 
         $license_key = $get_license->license_key ? $get_license->license_key : (object)[];
-       // write_log($get_license->license_key);
+        $is_active   = $get_license->is_active ? $get_license->is_active : (object)[];
+        $files_name   = $get_license->files_name ? $get_license->files_name : (object)[];
+        $domain   = $get_license->domain ? json_decode($get_license->domain, true) : [];
 
-        if ( $data['license'] === $license_key ) {
-           wpte_product_license_activate_update( $id, $addition );
+        if ( 
+            $data['license']    === $license_key && 
+            $data['files_name'] === $files_name && 
+            $is_active          === 'active' && 
+            $activated_license  < $activation_limit &&
+            ! in_array( $_domain = $header['host'][0], $domain)
+            ) {
+            array_push($domain, $_domain);
+            wpte_product_license_activate_update( $id, $addition, wp_json_encode($domain) );
             return true;
         }
 
@@ -151,11 +161,16 @@ class Class_api_response{
 
         $subtraction = $activated_license > 0 ? $activated_license - 1 : 0;
 
-
         $license_key = $get_license->license_key ? $get_license->license_key : (object)[];
+        $files_name   = $get_license->files_name ? $get_license->files_name : (object)[];
+        $domain   = $get_license->domain ? json_decode($get_license->domain, true) : [];
 
-        if ( $data['license'] === $license_key ) {
-           wpte_product_license_activate_update( $id, $subtraction );
+        if ( $data['license'] === $license_key && 
+            $data['files_name'] === $files_name && 
+            in_array( $_domain = $header['host'][0], $domain) ) {
+
+            $domain = array_diff($domain, array($_domain));
+            wpte_product_license_activate_update( $id, $subtraction, wp_json_encode($domain) );
             return true;
         }
 
