@@ -343,6 +343,16 @@ class Ajax{
         $token = openssl_random_pseudo_bytes(16);
         $token = bin2hex($token);
 
+        if ( isset($data['wpte_pm_license_recurring_payment']) && $data['wpte_pm_license_recurring_payment'] ) {
+            $recurring_period = $data['wpte_pm_license_recurring_period'];
+            $recurring_times = $data['wpte_pm_license_recurring_times'];
+            $timestamp = strtotime(current_time('mysql'));
+            $expired_date = strtotime("+$recurring_times $recurring_period", $timestamp); 
+            //$expired_date = date("Y-m-d h:i:s", $timestamp);
+        } else {
+            $expired_date = 'lifetime';
+        }
+
         $args = [
             'plugin_id'         => $data['wpte_pm_license_plugin_id'],
             'license_key'       => $token,
@@ -361,6 +371,7 @@ class Ajax{
             'activated'         => 0,
             'domain'            => '',
             'created_date'      => current_time('mysql'),
+            'expired_date'      => $expired_date,
     
         ];
 

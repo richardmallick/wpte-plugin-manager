@@ -117,6 +117,7 @@ class Installation{
             activated mediumint(5),
             domain varchar(250),
             created_date timestamp,
+            expired_date varchar(250),
             PRIMARY KEY  (id)
         ) $charset_collate";
 

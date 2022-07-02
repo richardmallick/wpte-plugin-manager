@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Method wpte_pm_add_plugin
  *
@@ -44,7 +43,7 @@ function wpte_pm_add_plugin( $args = [] ) {
             '%s',
             '%s',
             '%d',
-            '%d',
+            '%s',
         ]
     );
 
@@ -260,7 +259,7 @@ function wpte_pm_add_product_variation( $args = [] ) {
             '%d',
             '%s',
             '%d',
-            '%d',
+            '%s',
         ]
     );
 
@@ -339,7 +338,6 @@ function wpte_get_product_variation( $product_slug ) {
  */
 function wpte_pm_create_license( $args = [] ) {
 
-
     global $wpdb;
 
     $default = [
@@ -360,6 +358,7 @@ function wpte_pm_create_license( $args = [] ) {
         'activated'         => '',
         'domain'            => '',
         'created_date'      => current_time('mysql'),
+        'expired_date'      => '',
 
     ];
 
@@ -385,7 +384,8 @@ function wpte_pm_create_license( $args = [] ) {
             '%s',
             '%d',
             '%s',
-            '%d',
+            '%s',
+            '%s',
         ]
     );
 

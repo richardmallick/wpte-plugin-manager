@@ -13,17 +13,30 @@ $licenses = wpte_get_product_license( $plugin_id ) ? wpte_get_product_license( $
             <div class="wpte-pm-license-header-content">License Key</div>
             <div class="wpte-pm-license-header-content">Activation</div>
             <div class="wpte-pm-license-header-content">Created Date</div>
+            <div class="wpte-pm-license-header-content">Expired Date</div>
             <div class="wpte-pm-license-header-content">Status</div>
             <div class="wpte-pm-license-header-content">Edit</div>
         </div>
     </div>
     <div class="wpte-pm-license-body">
-        <?php foreach ( $licenses as $license ) :  ?>
+        <?php foreach ( $licenses as $license ) : 
+        $_created_date = $license->created_date ? strtotime($license->created_date) : ''; 
+        $created_date = $license->created_date ? date("M d, Y", $_created_date) : '';    
+        
+        if ( $license->expired_date !== 'lifetime' ) {
+            $_expired_date = $license->expired_date ? $license->expired_date : ''; 
+            $expired_date = $license->expired_date ? date("M d, Y", $_expired_date) : '';
+        } else {
+            $expired_date = 'Life Time';
+        }
+           
+        ?>
         <div class="wpte-pm-license-row">
             <div class="wpte-pm-license-row-content"><?php echo "#". intval($license->id); ?></div>
             <div class="wpte-pm-license-row-content"><code><?php echo esc_html($license->license_key); ?></code></div>
             <div class="wpte-pm-license-row-content"><span><?php echo ($license->activated ? esc_html($license->activated) : 0); ?>/<?php echo esc_html($license->activation_limit); ?></span></div>
-            <div class="wpte-pm-license-row-content"><?php echo esc_html($license->created_date); ?></div>
+            <div class="wpte-pm-license-row-content"><?php echo esc_html($created_date); ?></div>
+            <div class="wpte-pm-license-row-content"><?php echo esc_html($expired_date); ?></div>
             <div class="wpte-pm-license-row-content">
                 <?php if ( $license->is_active === 'active' ) {
                     echo '<span style="color:green">'.esc_html('Active', WPTE_PM_TEXT_DOMAIN).'</span>'; 

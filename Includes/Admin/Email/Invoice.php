@@ -12,10 +12,37 @@ trait Invoice{
   public function wpte_invoice( $id ) {
 
     $license = wpte_get_product_license_row( $id ) ? wpte_get_product_license_row( $id ) : (object)[];
+    $customer_name = $license->customer_name ? $license->customer_name : '';
+    $plugin_id  = $license->plugin_id ? $license->plugin_id : '';
     $license_key = $license->license_key ? $license->license_key : '';
     $product_name = $license->product_name ? $license->product_name : '';
+    $product_price = $license->product_price ? $license->product_price : '';
     $activation_limit = $license->activation_limit ? $license->activation_limit : '';
-    $created_date = $license->created_date ? $license->created_date : '';
+    $_created_date = $license->created_date ? strtotime($license->created_date) : '';
+    $created_date = date("M d, Y", $_created_date);
+
+    if ( $license->expired_date !== 'lifetime' ) {
+      $recurring_period = $license->recurring_period ? $license->recurring_period : '';
+      $recurring_times = $license->recurring_times ? $license->recurring_times : '';
+      if ( $recurring_period === 'years' && $recurring_times == 1 ) {
+        $renew = 'Renews every year';
+      }else {
+        $renew = 'Renews every '.$recurring_times.' '. ucfirst($recurring_period);
+      }
+      
+    } else {
+      $renew = 'Life Time';
+    }
+
+    
+
+    $_expired_date = $license->expired_date ? $license->expired_date : ''; 
+    $expired_date = $license->expired_date ? date("M d, Y", $_expired_date) : '';
+
+    $plugin = wpte_pm_get_plugin( $plugin_id ) ? wpte_pm_get_plugin( $plugin_id ) : (object)[];
+    $plugin_name = $plugin->plugin_name ? $plugin->plugin_name : '';
+    $logo = $plugin->logo_id ? wp_get_attachment_image_url($plugin->logo_id) : '';
+    $demo_url = $plugin->demo_url ? $plugin->demo_url : '';
 
     ob_start();
     ?>
@@ -28,7 +55,7 @@ trait Invoice{
                   <tbody>
                     <tr>
                       <td style="font-family: Avenir, Helvetica, sans-serif;box-sizing:border-box;padding: 25px 0;text-align: center;">
-                        <a href="https://wppool.dev/whatsapp-stock-notifier-for-woocommerce" style="text-decoration: none; " target="_blank">
+                        <a href="<?php echo esc_url($demo_url); ?>" style="text-decoration: none; " target="_blank">
                           <img alt="WPTOFFEE" height="auto" style="max-width: 180px;height: auto;max-height: 100px;" />
                         </a>
                       </td>
@@ -48,18 +75,18 @@ trait Invoice{
                                     <p style="font-family: Avenir,Helvetica, sans-serif; box-sizing: border-box;color: #74787e;font-size: 16px;line-height: 1.5em; margin-top: 0;text-align: left;margin-bottom: 8px;">
                                       Dear
                                       <strong style="font-family: Avenir, Helvetica,sans-serif;box-sizing:border-box">
-                                      Md Sajjadul Islam
+                                      <?php echo esc_html($customer_name); ?>
                                     </strong>,
                                     </p>
                                     <p style="font-family: Avenir, Helvetica, sans-serif;box-sizing: border-box;color: #74787e;font-size: 16px;line-height: 1.5em; margin-top: 0;text-align: left;margin-bottom: 0px;">
                                       Thank you for purchasing
-                                      <strong style="font-family: Avenir, Helvetica,sans-serif;box-sizing: border-box;">Stock Notifier for WooCommerce Premium</strong>. Your order details are shown below for your reference.
+                                      <strong style="font-family: Avenir, Helvetica,sans-serif;box-sizing: border-box;"><?php echo esc_html($plugin_name); ?></strong>. Your order details are shown below for your reference.
                                     </p>
                                   </div>
                                   <div style="font-family: Avenir, Helvetica, sans-serif;box-sizing:border-box;padding: 0 30px 30px 30px;">
                                     <h2 style="font-family: Avenir, Helvetica, sans-serif;box-sizing: border-box;color: #707070;font-size: 19px;font-weight: bold;margin-top: 0;margin-bottom: 3px;text-align: left;">Order Details</h2>
                                     <p style="font-family: Avenir, Helvetica, sans-serif; box-sizing:border-box;color: #74787e;line-height: 1.5em;margin-top: 0;text-align: left;font-size: 15px; margin-bottom: 15px;">Ordered on
-                                      <strong style="font-family: Avenir, Helvetica,sans-serif;box-sizing: border-box;">May 25, 2022</strong>
+                                      <strong style="font-family: Avenir, Helvetica,sans-serif;box-sizing: border-box;"><?php echo esc_html($created_date); ?></strong>
                                     </p>
                                     <table style="font-family: Avenir, Helvetica, sans-serif;box-sizing: border-box;margin: 0;width: 100%;border: 1px solid #c5d1db;padding: 4px;">
                                       <tbody>
@@ -69,16 +96,16 @@ trait Invoice{
                                               <tbody>
                                                 <tr>
                                                   <td style="font-family: Avenir,Helvetica, sans-serif;box-sizing: border-box;min-width: 50px;max-width: 60px;">
-                                                    <img alt="" style="font-family: Avenir,Helvetica, sans-serif;box-sizing: border-box;max-width: 100%;border-radius: 50%;" />
+                                                    <img alt="" src="<?php echo esc_url($logo); ?>" style="box-sizing: border-box;max-width: 100%;border-radius: 50%;" />
                                                   </td>
                                                   <td style="font-family: Avenir,Helvetica, sans-serif;box-sizing: border-box;padding-left: 8px;">
                                                     <h3 style="font-family: Avenir,Helvetica, sans-serif;box-sizing: border-box;color: #55555b;font-size: 16px;font-weight: bold;margin-top: 0;text-align: left;margin-bottom: 0px;
                                                         ">
-                                                      <a href="https://wppool.dev/whatsapp-stock-notifier-for-woocommerce"
-                                                        style="font-family: Avenir,Helvetica, sans-serif;box-sizing: border-box;text-decoration: none;color: #55555b;margin-bottom: 5px;" target="_blank" data-saferedirecturl="https://www.google.com/url?q=https://wppool.dev/whatsapp-stock-notifier-for-woocommerce&amp;source=gmail&amp;ust=1656507064627000&amp;usg=AOvVaw3YtTAmXOMk0nQn1rjmOMpK">Stock Notifier for WooCommerce Premium</a>
+                                                      <a href="<?php echo esc_url($demo_url); ?>"
+                                                        style="font-family: Avenir,Helvetica, sans-serif;box-sizing: border-box;text-decoration: none;color: #55555b;margin-bottom: 5px;"><?php echo esc_html($plugin_name); ?></a>
                                                     </h3>
                                                     <p style="font-family: Avenir,Helvetica, sans-serif;box-sizing: border-box;color: #74787e;font-size: 16px;line-height: 1.5em; margin-top: 0;text-align: left;margin-bottom: 0px;">
-                                                      SNW Pro yearly
+                                                      <?php echo esc_html($product_name); ?>
                                                     </p>
                                                   </td>
                                                 </tr>
@@ -87,10 +114,10 @@ trait Invoice{
                                           </td>
                                           <td style=" font-family: Avenir, Helvetica,sans-serif;box-sizing: border-box;width: 32%;">
                                             <h3 style="font-family: Avenir, Helvetica,sans-serif;box-sizing: border-box;color: #55555b;font-size: 16px; font-weight: bold; margin-top: 0; margin-bottom: 0px; text-align: right; ">
-                                              $99
+                                              $<?php echo esc_html($product_price); ?>
                                             </h3>
                                             <p style="font-family: Avenir, Helvetica,sans-serif; box-sizing: border-box;color: #74787e;font-size: 16px;line-height: 1.5em;margin-top: 0;margin-bottom: 0px;text-align: right;">
-                                              Renews every year
+                                              <?php echo esc_html($renew); ?>
                                             </p>
                                           </td>
                                         </tr>
@@ -104,11 +131,11 @@ trait Invoice{
                                     <p style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; color: #74787e; font-size: 16px; line-height: 1.5em; margin-top: 0; text-align: left; margin-bottom: 15px;">
                                       Here is your license information. Please use
                                       following license to activate
-                                      <strong style=" font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; ">Stock Notifier for WooCommerce	Premium</strong>
+                                      <strong style=" font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; "><?php echo esc_html($plugin_name); ?></strong>
                                       on your website.
                                     </p>
                                     <p style="font-family: Avenir, Helvetica, sans-serif;box-sizing: border-box;font-size: 16px; line-height: 1.5em;margin-top: 0; background: #f4f4f4; padding: 7px; color: #707070;text-align: center; margin-bottom: 15px;">
-                                      4aacb719-207a-4769-a9cc-<wbr />0cf9f6d341de
+                                      <?php echo esc_html($license_key); ?>
                                     </p>
                                     <table style=" font-family: Avenir, Helvetica, sans-serif;box-sizing: border-box; margin: 0;padding: 0; width: 100%;
                                         ">
@@ -119,7 +146,7 @@ trait Invoice{
                                               Activation limit
                                             </p>
                                             <h3 style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; color: #55555b;font-size: 16px;font-weight: bold;margin-top: 0;margin-bottom: 0px;text-align: center;">
-                                              5
+                                              <?php echo esc_html($activation_limit); ?>
                                             </h3>
                                           </td>
                                           <td style="font-family: Avenir, Helvetica,sans-serif; box-sizing: border-box;width: 60px;"></td>
@@ -128,7 +155,7 @@ trait Invoice{
                                               Expire Date
                                             </p>
                                             <h3 style="font-family: Avenir, Helvetica, sans-serif;box-sizing: border-box;color: #55555b;font-size: 16px;font-weight: bold; margin-top: 0;margin-bottom: 0px;text-align: center;">
-                                              May 25, 2023
+                                              <?php echo esc_html($expired_date); ?>
                                             </h3>
                                           </td>
                                         </tr>
@@ -139,15 +166,15 @@ trait Invoice{
                                       ">
                                     <p style="font-family: Avenir, Helvetica, sans-serif;box-sizing: border-box;color: #74787e;font-size: 16px; line-height: 1.5em;margin-top: 0;text-align: left; margin-bottom: 15px;">
                                       You can download the plugin files by clicking the link below. Alternatively, go	to your
-                                      <a href="https://wppool.dev/my-account/" style="font-family: Avenir, Helvetica,sans-serif;box-sizing: border-box;color: #3097d1; text-decoration: none;font-weight: bold;" target="_blank" data-saferedirecturl="https://www.google.com/url?q=https://wppool.dev/my-account/&amp;source=gmail&amp;ust=1656507064627000&amp;usg=AOvVaw2ygcinWJUG7iq6tHJCFf75">account</a>
+                                      <a href="https://wptoffee.com/my-account/" style="font-family: Avenir, Helvetica,sans-serif;box-sizing: border-box;color: #3097d1; text-decoration: none;font-weight: bold;" target="_blank" >account</a>
                                       page to download the plugin and related invoices.
                                     </p>
                                     <table style="font-family: Avenir, Helvetica, sans-serif;box-sizing: border-box;margin: 0; padding: 0;width: 100%;">
                                       <tbody>
                                         <tr>
                                           <td style="font-family: Avenir, Helvetica, sans-serif;box-sizing: border-box; text-align: center;">
-                                            <a href="https://api.appsero.com/update/a0f4d3da-e342-420b-8b38-1c2dc76aa2ee/download?key=4aacb719-207a-4769-a9cc-0cf9f6d341de&amp;validity=eyJpdiI6ImErNWpqd2FCZVpiN2F2OFZjNUdrc2c9PSIsInZhbHVlIjoiQzQ1dFpZQ0hZWWRkc0ErOW1KR3hSOFEyTmxNOXZxWGJvdEYwR0UvNmNUMD0iLCJtYWMiOiI4MjRjNjQ4MDJkZDU2ODgwZDVkODk5OGI2M2NlY2VlZTBlYmNmYjVhMmVjZGI5YWI4ZGUyOWZjMjJkNGMwNWNjIn0%3D"
-                                              style=" font-family: Avenir, Helvetica,sans-serif;box-sizing: border-box;border-radius: 3px;color: #fff; display: inline-block;text-decoration: none; font-size: 16px; background: #3097d1; border-top: 10px solid #3097d1;border-right: 18px solid #3097d1;border-bottom: 10px solid #3097d1; border-left: 18px solid #3097d1;" target="_blank" data-saferedirecturl="https://www.google.com/url?q=https://api.appsero.com/update/a0f4d3da-e342-420b-8b38-1c2dc76aa2ee/download?key%3D4aacb719-207a-4769-a9cc-0cf9f6d341de%26validity%3DeyJpdiI6ImErNWpqd2FCZVpiN2F2OFZjNUdrc2c9PSIsInZhbHVlIjoiQzQ1dFpZQ0hZWWRkc0ErOW1KR3hSOFEyTmxNOXZxWGJvdEYwR0UvNmNUMD0iLCJtYWMiOiI4MjRjNjQ4MDJkZDU2ODgwZDVkODk5OGI2M2NlY2VlZTBlYmNmYjVhMmVjZGI5YWI4ZGUyOWZjMjJkNGMwNWNjIn0%253D&amp;source=gmail&amp;ust=1656507064627000&amp;usg=AOvVaw1L6BvSWsX8U_YHblkklkei">Download</a>
+                                            <a href="<?php echo site_url().'/download/?key='.esc_html($license_key); ?>" download
+                                              style=" font-family: Avenir, Helvetica,sans-serif;box-sizing: border-box;border-radius: 3px;color: #fff; display: inline-block;text-decoration: none; font-size: 16px; background: #3097d1; border-top: 10px solid #3097d1;border-right: 18px solid #3097d1;border-bottom: 10px solid #3097d1; border-left: 18px solid #3097d1;">Download</a>
                                           </td>
                                         </tr>
                                       </tbody>
@@ -167,8 +194,8 @@ trait Invoice{
                           <tbody>
                             <tr>
                               <td align="center" style="font-family: Avenir, Helvetica, sans-serif;box-sizing: border-box; color: #999;font-size: 14px;text-align: center;padding-top: 30px;padding-bottom: 30px; ">You’re receiving this email because you made a purchase at
-                                <a href="https://wppool.dev/whatsapp-stock-notifier-for-woocommerce"
-                                  style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box;color: #3097d1; text-decoration: none;font-weight: bold;" target="_blank" data-saferedirecturl="https://www.google.com/url?q=https://wppool.dev/whatsapp-stock-notifier-for-woocommerce&amp;source=gmail&amp;ust=1656507064627000&amp;usg=AOvVaw3YtTAmXOMk0nQn1rjmOMpK">WPTOFFEE</a>,
+                                <a href="<?php echo esc_url($demo_url); ?>"
+                                  style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box;color: #3097d1; text-decoration: none;font-weight: bold;" >WPTOFFEE</a>,
                               
                               </td>
                             </tr>
@@ -182,8 +209,8 @@ trait Invoice{
             </tr>
           </tbody>
         </table>
-        <div class="yj6qo"></div>
-        <div class="adL"></div>
+        <!-- <div class="yj6qo"></div>
+        <div class="adL"></div> -->
       </div>
     <?php
     $data = ob_get_clean();
