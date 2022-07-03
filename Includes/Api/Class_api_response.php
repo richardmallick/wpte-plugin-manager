@@ -133,10 +133,10 @@ class Class_api_response{
             $data['files_name'] === $files_name && 
             $is_active          === 'active' && 
             $activated_license  < $activation_limit &&
-            ! in_array( $_domain = $header['host'][0], $domain)
+            ! in_array( $_domain = $data['domain'], $domain)
             ) {
             array_push($domain, $_domain);
-            wpte_product_license_activate_update( $id, $addition, wp_json_encode($domain) );
+            wpte_product_license_activate_update( $id, $addition, wp_json_encode($domain, JSON_UNESCAPED_SLASHES) );
             return true;
         }
 
@@ -169,7 +169,7 @@ class Class_api_response{
 
         if ( $data['license'] === $license_key && 
             $data['files_name'] === $files_name && 
-            in_array( $_domain = $header['host'][0], $domain) ) {
+            in_array( $_domain = $data['domain'], $domain) ) {
 
             $domain = array_diff($domain, array($_domain));
             wpte_product_license_activate_update( $id, $subtraction, wp_json_encode($domain) );

@@ -306,9 +306,6 @@
     background-color: #fff;
     box-shadow: 0 8px 21px 0 rgba(0,0,0,.1);  
 }
-.wpte-pm-single-plugin-tabs ul{
-   
-}
 
 .wpte-pm-single-plugin-tabs ul li{
     list-style: none;
@@ -385,9 +382,6 @@
     padding: 10px;
     border-bottom: 1px solid #ddd;
 }
-.wpte-pm-sidebar-logo{
-
-}
 .wpte-pm-sidebar-logo img{
     width: 50px;
     height: auto;
@@ -396,9 +390,7 @@
     padding: 2px;
     margin-right: 10px;
 }
-.wpte-pm-sidebar-plugin-title{
 
-}
 .wpte-pm-sidebar-plugin-title h2{
     font-size: 16px;
     font-weight: normal;
