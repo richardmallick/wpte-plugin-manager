@@ -439,11 +439,27 @@ EOT;
         $recurring_times    = isset($data['wpte_pm_license_recurring_times']) ? intval($data['wpte_pm_license_recurring_times']) : '';
         $is_active          = isset($data['wpte_pm_license_is_active']) ? esc_html($data['wpte_pm_license_is_active']) : '';
 
-
         wpte_product_license_update( $license_id, $customer_name, $customer_email, $product_name, $product_slug, $activation_limit, $product_price, $files_name, $product_file, $recurring_payment, $recurring_period, $recurring_times, $is_active );
 
         $get_license = wpte_get_product_license_row( $license_id ) ?  wpte_get_product_license_row( $license_id ) : (object)[];
-        
+        if ( $is_active === 'deactive' ){
+            $domains     = $get_license->domain ? json_decode($get_license->domain, true) : [];
+            foreach( $domains as $domain ) {
+                $url = $domain.'/wp-json/wpte/v1/deactivate';
+                $args = array(
+                    'headers' => array(
+                        'Content-Type'  => 'application/json; charset=utf-8', 
+                        'authorization' =>  'sdafdsafdsafdf' 
+                    ),
+                    'body' => json_encode([
+                        'is_active' => 'deactive'
+                    ]),
+                    'data_format' => 'body',
+                );
+                $request = wp_remote_post($url, $args);
+            }
+            wpte_product_license_deactive( $license_id );
+        }
         wp_send_json_success( [
             'added' =>  __( 'Your License has beed Updated', WPTE_PM_TEXT_DOMAIN ),
         ] );
