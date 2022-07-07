@@ -7,6 +7,30 @@
     justify-content: space-between;
     align-items: center;
 }
+.wpte-pm-edit-button-area{
+    display: flex;
+}
+.wpte-pm-edit-button button,
+.wpte-pm-action-button button{
+    background: #fff;
+    font-size: 16px;
+    border: 0;
+    border-radius: 5px;
+    padding: 8px 16px;
+    cursor: pointer;
+    border: 1px solid #ddd;
+}
+.wpte-pm-edit-button button .dashicons,
+.wpte-pm-action-button button .dashicons{
+    margin-top: 2px;
+}
+.wpte-pm-edit-button button:hover,
+.wpte-pm-action-button button:hover{
+    background: #ddd;
+}
+.wpte-pm-edit-button button{
+    margin-right: 15px;
+}
 .wpte-pm-add-new-area h2{
     font-size: 30px;
     margin: 0;
@@ -553,7 +577,7 @@
 }
 .wpte-pm-license-row{
     display: grid;
-    grid-template-columns: 60px 2fr 100px 1fr 1fr 1fr 60px;
+    grid-template-columns: 2fr 1fr 100px 1fr 1fr 1fr 60px;
 }
 .wpte-pm-license-header-content{
     font-size: 16px;
@@ -567,11 +591,6 @@
     border-bottom: 1px solid #ddd;
     padding: 16px;
 }
-
-.wpte-pm-license-edit span{
-    cursor: pointer;
-}
-
 
 /*===========================================Switch=================================================== */
 .wpte-pm-input-checkbox input[type=checkbox]{
@@ -615,4 +634,65 @@
 /* .wpte-pm-input-checkbox label:active:after {
     width: 60px;
 } */
+
+/* Single License */
+.wpte-pm-tab-license-content{
+    padding: 0;
+}
+.wpte-single-license-row{
+    display: grid;
+    align-items: center;
+    grid-template-columns: 2fr 1.5fr 1fr;
+    padding: 20px;
+    border-bottom: 1px solid #ddd;
+    grid-column-gap: 20px;
+}
+.wpte-single-license-row label{
+    display: block;
+    font-size: 18px;
+    font-weight: 600;
+}
+.wpte-single-license-row p{
+    font-size: 18px;
+    margin-top: 15px;
+    margin-bottom: 0;
+    padding: 8px 0px;
+    line-height: 1;
+}
+.wpte-single-license-key p{
+    background: #b1fdbe;
+    display: inline-block;
+    border-radius: 5px;
+    padding: 8px 15px;
+}
+
+.wpte-single-license-status p,
+.wpte-single-license-site .site-type-live span,
+.wpte-single-license-site .site-status-active span,
+.wpte-single-license-site .site-type-local span,
+.wpte-single-license-site .site-status-inactive span{
+    background: #149e2b;
+    color: #fff;
+    display: inline-block;
+    border-radius: 50px;
+    padding: 8px 15px;
+}
+
+.wpte-single-license-site .site-type-local span{
+    background: #ebab3b;
+}
+.wpte-single-license-site .site-status-inactive span{
+    background: #d74a0e;
+}
+
+.wpte-single-license-site{
+    grid-template-columns: 2fr 1.5fr 1fr 1fr 20px;
+}
+.wpte-single-license-site h2{
+    font-size: 20px;
+}
+.wpte-single-license-site .site{
+    font-size: 18px;
+}
+
 

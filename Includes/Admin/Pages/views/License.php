@@ -9,19 +9,26 @@ $licenses = wpte_get_product_license( $plugin_id ) ? wpte_get_product_license( $
 <div class="wpte-pm-license-wrapper">
     <div class="wpte-pm-license-header">
         <div class="wpte-pm-license-row">
-            <div class="wpte-pm-license-header-content">ID</div>
             <div class="wpte-pm-license-header-content">License Key</div>
-            <div class="wpte-pm-license-header-content">Activation</div>
-            <div class="wpte-pm-license-header-content">Created Date</div>
-            <div class="wpte-pm-license-header-content">Expired Date</div>
+            <div class="wpte-pm-license-header-content">Limit</div>
+            <div class="wpte-pm-license-header-content">Active</div>
+            <div class="wpte-pm-license-header-content">Customer</div>
             <div class="wpte-pm-license-header-content">Status</div>
-            <div class="wpte-pm-license-header-content">Edit</div>
+            <div class="wpte-pm-license-header-content">Expier Date</div>
+            <div class="wpte-pm-license-header-content">View</div>
         </div>
     </div>
     <div class="wpte-pm-license-body">
         <?php foreach ( $licenses as $license ) : 
-        $_created_date = $license->created_date ? strtotime($license->created_date) : ''; 
-        $created_date = $license->created_date ? date("M d, Y", $_created_date) : '';    
+        $license_key = isset($license->license_key) ? $license->license_key : '';
+        $activation_limit = isset($license->activation_limit) ? $license->activation_limit : '';
+        $active = isset($license->active) ? $license->active : '';
+        $_created_date = isset($license->created_date) ? strtotime($license->created_date) : ''; 
+        $created_date = isset($license->created_date) ? date("M d, Y", $_created_date) : '';
+        $plugin_id = isset($_GET['id']) ? $_GET['id'] : '';
+        $plugin = isset($_GET['plugin']) ? $_GET['plugin'] : '';
+        $license_id = isset($license->id) ? $license->id : '';
+        $customer_id = isset($license->customer_id) ? $license->customer_id : '';
         
         if ( $license->expired_date !== 'lifetime' ) {
             $_expired_date = $license->expired_date ? $license->expired_date : ''; 
@@ -32,19 +39,19 @@ $licenses = wpte_get_product_license( $plugin_id ) ? wpte_get_product_license( $
            
         ?>
         <div class="wpte-pm-license-row">
-            <div class="wpte-pm-license-row-content"><?php echo "#". intval($license->id); ?></div>
-            <div class="wpte-pm-license-row-content"><code><?php echo esc_html($license->license_key); ?></code></div>
-            <div class="wpte-pm-license-row-content"><span><?php echo ($license->activated ? esc_html($license->activated) : 0); ?>/<?php echo esc_html($license->activation_limit); ?></span></div>
-            <div class="wpte-pm-license-row-content"><?php echo esc_html($created_date); ?></div>
-            <div class="wpte-pm-license-row-content"><?php echo esc_html($expired_date); ?></div>
+            <div class="wpte-pm-license-row-content"><code><?php echo esc_html($license_key); ?></code></div>
+            <div class="wpte-pm-license-row-content"><span><?php echo intval($activation_limit); ?></span></div>
+            <div class="wpte-pm-license-row-content"><?php echo intval($active); ?></div>
+            <div class="wpte-pm-license-row-content"><?php echo esc_html($customer_id); ?></div>
             <div class="wpte-pm-license-row-content">
                 <?php if ( $license->is_active === 'active' ) {
                     echo '<span style="color:green">'.esc_html('Active', WPTE_PM_TEXT_DOMAIN).'</span>'; 
                 } else {
-                    echo '<span style="color:orange">'.esc_html('Deactive', WPTE_PM_TEXT_DOMAIN).'</span>'; 
+                    echo '<span style="color:orange">'.esc_html('Inactive', WPTE_PM_TEXT_DOMAIN).'</span>'; 
                 }; ?>
             </div>
-            <div class="wpte-pm-license-row-content wpte-pm-license-edit" id="wpte-pm-license-edit-<?php echo esc_html($license->id); ?>" data_id="<?php echo esc_html($license->id); ?>"><span class="dashicons dashicons-edit"></span></div>
+            <div class="wpte-pm-license-row-content"><?php echo esc_html($expired_date); ?></div>
+            <div class="wpte-pm-license-row-content" ><a href="<?php echo admin_url( "admin.php?page=wpte-plugin-manager&id=$plugin_id&plugin=$plugin&license_id=$license_id" ); ?>"><span class="dashicons dashicons-edit"></span></a></div>
         </div>
         <?php endforeach;  ?>
     </div>

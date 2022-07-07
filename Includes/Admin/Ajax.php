@@ -21,7 +21,6 @@ class Ajax{
     function __construct(){
         add_action( 'wp_ajax_wpte_add_new_plugin', [$this, 'wpte_add_new_plugin'] );
         add_action( 'wp_ajax_wpte_add_product', [$this, 'wpte_add_product'] );
-        add_action( 'wp_ajax_wpte_get_license_data', [$this, 'wpte_get_license_data'] );
         add_action( 'wp_ajax_wpte_add_license', [$this, 'wpte_add_license'] );
         add_action( 'wp_ajax_wpte_update_license', [$this, 'wpte_update_license'] );
         add_action( 'wp_ajax_wpte_license_delete', [$this, 'wpte_license_delete'] );
@@ -291,38 +290,6 @@ class Ajax{
         //         'message' => __( 'Data Insert Failed Please retry again!', WPTE_PM_TEXT_DOMAIN ),
         //     ] );
         // }
-    }
-
-    /**
-     * Get License Data for form.
-     */
-    public function wpte_get_license_data() {
-        if ( !current_user_can( 'manage_options' ) ) {
-            return;
-        }
-
-        $id = isset($_POST['id']) ? $_POST['id'] : '';
-
-        $license = wpte_get_product_license_row( $id ) ? wpte_get_product_license_row( $id ) : (object)[];
-
-        $file = wp_get_attachment_url($license->product_file);
-
-        wp_send_json_success( [
-            'customer_name'     =>  $license->customer_name,
-            'customer_email'    =>  $license->customer_email,
-            'product_name'      =>  $license->product_name,
-            'product_slug'      =>  $license->product_slug,
-            'activation_limit'  =>  $license->activation_limit,
-            'product_price'     =>  $license->product_price,
-            'recurring_payment' =>  $license->recurring_payment,
-            'recurring_period'  =>  $license->recurring_period,
-            'recurring_times'   =>  $license->recurring_times,
-            'product_file_url'  =>  $file,
-            'file_name'         =>  $license->files_name,
-            'product_file_id'   =>  $license->product_file,
-            'is_active'         =>  $license->is_active,
-        ] );
-
     }
 
     /**
