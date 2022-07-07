@@ -67,7 +67,9 @@ class Class_api_response{
 
         $product_path   = $data->events[0]->data->items[0]->product; //path  // Product 
         $customer_email = $data->events[0]->data->customer->email; //email
-        $customer_name  = $data->events[0]->data->customer->name; //name
+        $customer_frist_name  = $data->events[0]->data->customer->first; //First Name
+        $customer_last_name  = $data->events[0]->data->customer->last; //Last Name
+        $customer_phone  = $data->events[0]->data->customer->phone; //phone
 
         $product = wpte_get_product_variation( $product_path ) ? wpte_get_product_variation( $product_path ) : (object)[];
  
@@ -75,21 +77,35 @@ class Class_api_response{
         $token = openssl_random_pseudo_bytes(16);
         $token = bin2hex($token);
 
+        if ( isset($product->recurring_payment) && $product->recurring_payment ) {
+            $recurring_period = $product->recurring_period;
+            $recurring_times = $product->recurring_times;
+            $timestamp = strtotime(current_time('mysql'));
+            $expired_date = strtotime("+$recurring_times $recurring_period", $timestamp); 
+            //$expired_date = date("Y-m-d h:i:s", $timestamp);
+        } else {
+            $expired_date = 'lifetime';
+        }
+
         $args = [
             'plugin_id'         => $product->plugin_id,
             'license_key'       => $token,
-            'customer_name'     => $customer_name,
+            'customer_name'     => $customer_frist_name .' '. $customer_last_name,
             'customer_email'    => $customer_email,
             'product_name'      => $product->variation_name,
             'product_slug'      => $product->variation_slug,
             'activation_limit'  => $product->activation_limit,
             'product_price'     => $product->variation_price,
+            'files_name'        => $product->files_name,
             'product_file'      => $product->variation_file,
             'recurring_payment' => $product->recurring_payment,
             'recurring_period'  => $product->recurring_period,
             'recurring_times'   => $product->recurring_times,
+            'is_active'         => 'active',
             'activated'         => 0,
+            'domain'            => '',
             'created_date'      => current_time('mysql'),
+            'expired_date'      => $expired_date,
     
         ];
 

@@ -31,7 +31,7 @@ class Plugin_manager{
         wp_localize_script('wpte-pm-main', 'wptePlugin', [
             'ajaxUrl' => admin_url('admin-ajax.php'),
             'wpte_nonce' => wp_create_nonce('wpte-insert-nonce'),
-            'error'   => __('Something Went Wrong!', WPTE_WPL_TEXT_DOMAIN)
+            'error'   => __('Something Went Wrong!', WPTE_PM_TEXT_DOMAIN)
         ]);
         if ( ! isset($_GET['plugin']) && ! isset($_GET['id']) ) {
 

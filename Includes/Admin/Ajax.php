@@ -277,7 +277,7 @@ class Ajax{
             } elseif ( ! $product_variation_id[$i] ) {
                 wpte_pm_add_product_variation($variation);
             } else {
-                wpte_product_variation_update( $product_variation_id[$i], $variation_name[$i], $variation_slug[$i], $activation_limit[$i], $variation_price[$i], $variation_file[$i], $recurring_payment[$i], strtolower($recurring_period[$i]), $recurring_times[$i] );
+                wpte_product_variation_update( $product_variation_id[$i], $variation_name[$i], $variation_slug[$i], $activation_limit[$i], $variation_price[$i], $files_name[$i], $variation_file[$i], $recurring_payment[$i], strtolower($recurring_period[$i]), $recurring_times[$i] );
             }
             
         }
@@ -444,6 +444,8 @@ EOT;
         $get_license = wpte_get_product_license_row( $license_id ) ?  wpte_get_product_license_row( $license_id ) : (object)[];
         if ( $is_active === 'deactive' ){
             $domains     = $get_license->domain ? json_decode($get_license->domain, true) : [];
+            $activated = $get_license->activated;
+            $domain_arg = [];
             foreach( $domains as $domain ) {
                 $url = $domain.'/wp-json/wpte/v1/deactivate';
                 $args = array(
@@ -457,8 +459,14 @@ EOT;
                     'data_format' => 'body',
                 );
                 $request = wp_remote_post($url, $args);
+
+                if ( $request ) {
+                    $activated = - 1;
+                    $domain_arg = $domain;
+                }
             }
-            wpte_product_license_deactive( $license_id );
+            wpte_product_license_deactive( $license_id,  $activated, json_encode($domain_arg) );
+            
         }
         wp_send_json_success( [
             'added' =>  __( 'Your License has beed Updated', WPTE_PM_TEXT_DOMAIN ),

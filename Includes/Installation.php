@@ -55,6 +55,7 @@ class Installation{
         $product_data = $wpdb->prefix . 'wpte_product_data';
         $product_variation = $wpdb->prefix . 'wpte_product_variation';
         $product_license = $wpdb->prefix . 'wpte_product_license';
+        $product_domains = $wpdb->prefix . 'wpte_domains';
         $charset_collate = $wpdb->get_charset_collate();
 
         $wpte_sql = "CREATE TABLE $plugin_data (
@@ -121,11 +122,21 @@ class Installation{
             PRIMARY KEY  (id)
         ) $charset_collate";
 
+        $sql_five = "CREATE TABLE $product_domains (
+            id mediumint(5) NOT NULL AUTO_INCREMENT,
+            site_url varchar(250) NOT NULL,
+            site_name varchar(250) NOT NULL,
+            site_type varchar(250) NOT NULL,
+            status varchar(250) NOT NULL,
+            PRIMARY KEY  (id)
+        ) $charset_collate";
+
         require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
         dbDelta($wpte_sql);
         dbDelta($sql_two);
         dbDelta($sql_three);
         dbDelta($sql_four);
+        dbDelta($sql_five);
 
     }
     
