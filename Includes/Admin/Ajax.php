@@ -331,9 +331,6 @@ class Ajax{
         $produt_id = isset($data['wpte_pm_license_product']) && $data['wpte_pm_license_product'] ? sanitize_text_field($data['wpte_pm_license_product']) : '';
         $product = wpte_get_product_variation_by_id( $produt_id ) ? wpte_get_product_variation_by_id( $produt_id ) : (object)[];
 
-        
-        
-
         $args = [
             'plugin_id'         => $data['wpte_pm_license_plugin_id'],
             'license_key'       => $token,
@@ -353,39 +350,36 @@ class Ajax{
         // Create License
         $insert_id = wpte_pm_create_license( $args );
 
-        print_r($insert_id);
-        exit;
+        // Send Invoice to customer
+        if ( $insert_id ) {
 
-//         // Send Invoice to customer
-//         if ( $insert_id ) {
+            $to = [
+                $data['wpte_pm_license_email']
+            ];
+            $headers        = 'From: WPTOFFEE < order@wptoffee.com > ' . "\r\n";
+            $subject        = "Your order of ".$data['wpte_pm_license_product_name']." is completed";
+            $emailtemplate  = $this->wpte_invoice( $insert_id );
+            $message = <<<EOT
+                    {$emailtemplate}
+EOT;
+            add_filter(
+                'wp_mail_content_type',
+                function ( $content_type ) {
+                    return 'text/html';
+                }
+            );
+            $email_sent = wp_mail( $to, $subject, $message, $headers );
+        }
 
-//             $to = [
-//                 $data['wpte_pm_license_email']
-//             ];
-//             $headers        = 'From: WPTOFFEE < order@wptoffee.com > ' . "\r\n";
-//             $subject        = "Your order of ".$data['wpte_pm_license_product_name']." is completed";
-//             $emailtemplate  = $this->wpte_invoice( $insert_id );
-//             $message = <<<EOT
-//                     {$emailtemplate}
-// EOT;
-//             add_filter(
-//                 'wp_mail_content_type',
-//                 function ( $content_type ) {
-//                     return 'text/html';
-//                 }
-//             );
-//             $email_sent = wp_mail( $to, $subject, $message, $headers );
-//         }
+        wp_send_json_success( [
+            'added' =>  __( 'Your License has beed added', WPTE_PM_TEXT_DOMAIN ),
+        ] );
 
-//         wp_send_json_success( [
-//             'added' =>  __( 'Your License has beed added', WPTE_PM_TEXT_DOMAIN ),
-//         ] );
-
-//         if ( is_wp_error( $insert_id ) ) {
-//             wp_send_json_error( [
-//                 'message' => __( 'Data Insert Failed Please retry again!', WPTE_PM_TEXT_DOMAIN ),
-//             ] );
-//         }
+        if ( is_wp_error( $insert_id ) ) {
+            wp_send_json_error( [
+                'message' => __( 'Data Insert Failed Please retry again!', WPTE_PM_TEXT_DOMAIN ),
+            ] );
+        }
     }
 
     /**

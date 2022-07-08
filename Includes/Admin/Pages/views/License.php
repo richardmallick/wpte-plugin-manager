@@ -34,18 +34,23 @@ $variations = wpte_get_product_variations( $plugin_id ) ? wpte_get_product_varia
         } else {
             $expired_date = 'Life Time';
         }
-           
+
+        $customer = get_user_by('id', $customer_id);
+        $customer_name = $customer->first_name . ' ' . $customer->last_name;
         ?>
         <div class="wpte-pm-license-row">
-            <div class="wpte-pm-license-row-content"><code><?php echo esc_html($license_key); ?></code></div>
+            <div class="wpte-pm-license-row-content"><span class="license-key"><?php echo esc_html($license_key); ?></span></div>
             <div class="wpte-pm-license-row-content"><span><?php echo intval($activation_limit); ?></span></div>
             <div class="wpte-pm-license-row-content"><?php echo intval($active); ?></div>
-            <div class="wpte-pm-license-row-content"><?php echo esc_html($customer_id); ?></div>
             <div class="wpte-pm-license-row-content">
-                <?php if ( $license->is_active === 'active' ) {
-                    echo '<span style="color:green">'.esc_html('Active', WPTE_PM_TEXT_DOMAIN).'</span>'; 
+                <a href="#"><?php echo esc_html($customer_name); ?></a>
+                <span><?php echo esc_html($customer->user_email); ?></span>
+            </div>
+            <div class="wpte-pm-license-row-content">
+                <?php if ( $license->status === 'active' ) {
+                    echo '<span class="site-type-live">'.esc_html('Active', WPTE_PM_TEXT_DOMAIN).'</span>'; 
                 } else {
-                    echo '<span style="color:orange">'.esc_html('Inactive', WPTE_PM_TEXT_DOMAIN).'</span>'; 
+                    echo '<span class="site-type-inactive">'.esc_html('Inactive', WPTE_PM_TEXT_DOMAIN).'</span>'; 
                 }; ?>
             </div>
             <div class="wpte-pm-license-row-content"><?php echo esc_html($expired_date); ?></div>

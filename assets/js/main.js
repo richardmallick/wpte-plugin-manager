@@ -405,14 +405,11 @@
                 This.siblings('#wpte-add-plugin-loader').addClass('wpte-add-plugin-loader');
             },
             success: function (response) {
-
-                console.log(response);
-               
-                // if ( response.data.added ) {
-                //     setTimeout(function(){ 
-                //         location.reload()
-                //     }, 2000);
-                // }
+                if ( response.data.added ) {
+                    setTimeout(function(){ 
+                        location.reload()
+                    }, 2000);
+                }
 
             },
             error: function (data) {

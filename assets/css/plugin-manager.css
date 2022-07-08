@@ -580,7 +580,9 @@
 }
 .wpte-pm-license-row{
     display: grid;
-    grid-template-columns: 2fr 1fr 100px 1fr 1fr 1fr 60px;
+    grid-template-columns: 2fr 60px 70px 1.5fr 1fr 1fr 60px;
+    align-items: center;
+    border-bottom: 1px solid #ddd;
 }
 .wpte-pm-license-header-content{
     font-size: 16px;
@@ -590,9 +592,11 @@
     padding: 16px;
 }
 .wpte-pm-license-row-content{
-    font-size: 16px;
-    border-bottom: 1px solid #ddd;
+    font-size: 18px;
     padding: 16px;
+}
+.wpte-pm-license-row-content .license-key{
+    color: rgb(119, 119, 245);
 }
 
 /*===========================================Switch=================================================== */
@@ -671,6 +675,7 @@
 
 .wpte-single-license-status p,
 .wpte-single-license-site .site-type-live span,
+.site-type-live,
 .wpte-single-license-site .site-status-active span,
 .wpte-single-license-site .site-type-local span,
 .wpte-single-license-site .site-status-inactive span{
@@ -684,7 +689,9 @@
 .wpte-single-license-site .site-type-local span{
     background: #ebab3b;
 }
-.wpte-single-license-site .site-status-inactive span{
+.wpte-single-license-site .site-status-inactive span,
+.site-type-inactive 
+{
     background: #d74a0e;
 }
 
