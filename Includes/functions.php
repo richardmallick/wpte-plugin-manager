@@ -277,6 +277,20 @@ function wpte_pm_add_product_variation( $args = [] ) {
  * Fetch Product Row by Plugin ID
  * @return void
  */
+function wpte_get_product_variation_by_id( $id ) {
+    global $wpdb;
+    return $wpdb->get_row(
+        $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}wpte_product_variation WHERE id = %d", $id )
+    );
+}
+
+/**
+ * Method wpte_get_product
+ *
+ * @param $id $id [explicite description]
+ * Fetch Product Row by Plugin ID
+ * @return void
+ */
 function wpte_get_product_variations( $plugin_id ) {
     global $wpdb;
     return $wpdb->get_results(
@@ -343,21 +357,16 @@ function wpte_pm_create_license( $args = [] ) {
     $default = [
         'plugin_id'         => '',
         'license_key'       => '',
-        'customer_name'     => '',
-        'customer_email'    => '',
-        'product_name'      => '',
-        'product_slug'      => '',
         'activation_limit'  => '',
-        'product_price'     => '',
-        'files_name'        => '',
-        'product_file'      => '',
+        'active'            => '',
+        'customer_id'       => '',
+        'status'            => '',
+        'product_id'        => '',
         'recurring_payment' => '',
         'recurring_period'  => '',
         'recurring_times'   => '',
-        'is_active'         => '',
-        'activated'         => '',
-        'domain'            => '',
-        'created_date'      => current_time('mysql'),
+        'active_site'       => '',
+        'created_date'      => '',
         'expired_date'      => '',
 
     ];
@@ -370,10 +379,7 @@ function wpte_pm_create_license( $args = [] ) {
         [
             '%d',
             '%s',
-            '%s',
-            '%s',
-            '%s',
-            '%s',
+            '%d',
             '%d',
             '%d',
             '%s',
@@ -381,9 +387,7 @@ function wpte_pm_create_license( $args = [] ) {
             '%d',
             '%s',
             '%d',
-            '%s',
             '%d',
-            '%s',
             '%s',
             '%s',
         ]
@@ -486,6 +490,73 @@ function wpte_product_license_deactive( $license_id, $activated, $domain ) {
 function wpte_product_license_activate_update( $license_id, $activated, $domain = '' ) {
     global $wpdb;
     $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}wpte_product_license SET activated = %d, domain = %s WHERE id = %d", $activated, $domain, $license_id ) );
+}
+
+/**
+ * Method wpte_generate_password
+ * 
+ * Password Generator to Create New User
+ * 
+ * @return void
+ */
+function wpte_generate_password($length = 20){
+    $chars =  'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.
+              '0123456789`-=~!@#$%^&*()_+,/<>?;[]{}\|';
+  
+    $str = '';
+    $max = strlen($chars) - 1;
+  
+    for ($i=0; $i < $length; $i++)
+      $str .= $chars[mt_rand(0, $max)];
+  
+    return $str;
+  }
+
+/**
+ * Method wpte_add_new_user
+ * 
+ * Create New User
+ * 
+ * @return void
+ */
+function wpte_add_new_user($email, $password, $first_name, $last_name) {
+
+    $_username = $first_name.$last_name;
+
+    if ( username_exists( $_username ) ) {
+        $digits = 3;
+        $username = $_username.rand(pow(10, $digits-1), pow(10, $digits)-1);
+    } else {
+        $username = $_username;
+    }
+
+    $user_id      = username_exists( $username );
+    $email_exists = email_exists( $email );
+
+   
+
+    if ( $email_exists == false ) {
+        $user_id = wp_create_user( $username, $password, $email );
+        if( ! is_wp_error($user_id) ) {
+            $user = get_user_by( 'id', $user_id );
+            $user->set_role( 'subscriber' );
+
+            $metas = array( 
+                'nickname'   => $first_name,
+                'first_name' => $first_name, 
+                'last_name'  => $last_name,
+            );
+            
+            foreach($metas as $key => $value) {
+                update_user_meta( $user_id, $key, $value );
+            }
+
+            return $user_id;
+        }
+    } else {
+        $user = get_user_by( 'email', $email );
+        return $user->ID;
+    }
 }
 
 

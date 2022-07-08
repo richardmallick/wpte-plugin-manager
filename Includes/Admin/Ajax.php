@@ -296,6 +296,7 @@ class Ajax{
      * Add New License
      */
     public function wpte_add_license(){
+
         if ( !current_user_can( 'manage_options' ) ) {
             return;
         }
@@ -320,61 +321,71 @@ class Ajax{
             $expired_date = 'lifetime';
         }
 
+        $email      = isset($data['wpte_pm_license_email']) && $data['wpte_pm_license_email'] ? sanitize_email($data['wpte_pm_license_email']) : '';
+        $first_name = isset($data['wpte_pm_license_first_name']) && $data['wpte_pm_license_first_name'] ? sanitize_text_field($data['wpte_pm_license_first_name']) : '';
+        $last_name  = isset($data['wpte_pm_license_last_name']) && $data['wpte_pm_license_last_name'] ? sanitize_text_field($data['wpte_pm_license_last_name']) : '';
+        $password   = wpte_generate_password(16);
+
+        $user_id = wpte_add_new_user($email, $password, $first_name, $last_name);
+
+        $produt_id = isset($data['wpte_pm_license_product']) && $data['wpte_pm_license_product'] ? sanitize_text_field($data['wpte_pm_license_product']) : '';
+        $product = wpte_get_product_variation_by_id( $produt_id ) ? wpte_get_product_variation_by_id( $produt_id ) : (object)[];
+
+        
+        
+
         $args = [
             'plugin_id'         => $data['wpte_pm_license_plugin_id'],
             'license_key'       => $token,
-            'customer_name'     => $data['wpte_pm_license_customer_name'],
-            'customer_email'    => $data['wpte_pm_license_email'],
-            'product_name'      => $data['wpte_pm_license_product_name'],
-            'product_slug'      => $data['wpte_pm_license_product_slug'],
-            'activation_limit'  => $data['wpte_pm_license_activation_limit'],
-            'product_price'     => $data['wpte_pm_license_product_price'],
-            'files_name'        => $data['wpte_pm_license_file_name'],
-            'product_file'      => $data['wpte_pm_file_id'][0],
-            'recurring_payment' => $data['wpte_pm_license_recurring_payment'],
-            'recurring_period'  => $data['wpte_pm_license_recurring_period'],
-            'recurring_times'   => $data['wpte_pm_license_recurring_times'],
-            'is_active'         => $data['wpte_pm_license_is_active'],
-            'activated'         => 0,
-            'domain'            => '',
+            'activation_limit'  => $product->activation_limit,
+            'active'            => 0,
+            'customer_id'       => $user_id,
+            'status'            => $data['wpte_pm_license_is_active'],
+            'product_id'        => $produt_id,
+            'recurring_payment' => $product->recurring_payment,
+            'recurring_period'  => $product->recurring_period,
+            'recurring_times'   => $product->recurring_times,
+            'active_site'       => 0,
             'created_date'      => current_time('mysql'),
             'expired_date'      => $expired_date,
-    
         ];
 
         // Create License
         $insert_id = wpte_pm_create_license( $args );
 
-        // Send Invoice to customer
-        if ( $insert_id ) {
+        print_r($insert_id);
+        exit;
 
-            $to = [
-                $data['wpte_pm_license_email']
-            ];
-            $headers        = 'From: WPTOFFEE < order@wptoffee.com > ' . "\r\n";
-            $subject        = "Your order of ".$data['wpte_pm_license_product_name']." is completed";
-            $emailtemplate  = $this->wpte_invoice( $insert_id );
-            $message = <<<EOT
-                    {$emailtemplate}
-EOT;
-            add_filter(
-                'wp_mail_content_type',
-                function ( $content_type ) {
-                    return 'text/html';
-                }
-            );
-            $email_sent = wp_mail( $to, $subject, $message, $headers );
-        }
+//         // Send Invoice to customer
+//         if ( $insert_id ) {
 
-        wp_send_json_success( [
-            'added' =>  __( 'Your License has beed added', WPTE_PM_TEXT_DOMAIN ),
-        ] );
+//             $to = [
+//                 $data['wpte_pm_license_email']
+//             ];
+//             $headers        = 'From: WPTOFFEE < order@wptoffee.com > ' . "\r\n";
+//             $subject        = "Your order of ".$data['wpte_pm_license_product_name']." is completed";
+//             $emailtemplate  = $this->wpte_invoice( $insert_id );
+//             $message = <<<EOT
+//                     {$emailtemplate}
+// EOT;
+//             add_filter(
+//                 'wp_mail_content_type',
+//                 function ( $content_type ) {
+//                     return 'text/html';
+//                 }
+//             );
+//             $email_sent = wp_mail( $to, $subject, $message, $headers );
+//         }
 
-        if ( is_wp_error( $insert_id ) ) {
-            wp_send_json_error( [
-                'message' => __( 'Data Insert Failed Please retry again!', WPTE_PM_TEXT_DOMAIN ),
-            ] );
-        }
+//         wp_send_json_success( [
+//             'added' =>  __( 'Your License has beed added', WPTE_PM_TEXT_DOMAIN ),
+//         ] );
+
+//         if ( is_wp_error( $insert_id ) ) {
+//             wp_send_json_error( [
+//                 'message' => __( 'Data Insert Failed Please retry again!', WPTE_PM_TEXT_DOMAIN ),
+//             ] );
+//         }
     }
 
     /**

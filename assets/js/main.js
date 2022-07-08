@@ -381,25 +381,8 @@
     });
 
     $('.wpte-pm-add-new-linense').on('click', function(){
-        $('.wpte-pm-popup-header h1').html('Add License');
-        $('#wpte_pm_license_email').val('');
-        $('#wpte_pm_license_product_name').val('');
-        $('#wpte_pm_license_product_slug').val('');
-        $('#wpte_pm_license_activation_limit').val('');
-        $('#wpte_pm_license_product_price').val('');
-        $('#wpte_pm_license_recurring_payment').prop('checked', false);
-        $('#wpte_pm_license_recurring_period').val('Days').change();
-        $('#wpte_pm_license_recurring_times').val('');
-        $('.wpte-pm-file-id').val('');
-        $('.wpte-pm-file-url').val('');
-        
         $('.wpte-pm-popup-wrapper').addClass('wpte-pm-popup-block');
         $('.wpte-pm-popup-box').slideDown() ;
-        $('.wpte-footer-buttons').html(`
-            <span id="wpte-add-plugin-loader" class="spinner sa-spinner-open"></span>
-            <button type="button" class="wpte-popup-close-button">Close</button>
-            <input type="submit" class="wpte-popup-save-button" name="wpte_popup_licnese_submit" id="wpte_popup_licnese_submit" value="Save">
-        `);
     });
 
     /**
@@ -422,12 +405,14 @@
                 This.siblings('#wpte-add-plugin-loader').addClass('wpte-add-plugin-loader');
             },
             success: function (response) {
+
+                console.log(response);
                
-                if ( response.data.added ) {
-                    setTimeout(function(){ 
-                        location.reload()
-                    }, 2000);
-                }
+                // if ( response.data.added ) {
+                //     setTimeout(function(){ 
+                //         location.reload()
+                //     }, 2000);
+                // }
 
             },
             error: function (data) {
@@ -441,7 +426,6 @@
      */
     $(document).on('click', '#wpte_popup_licnese_submit', function(e){
         e.preventDefault();
-
         var This = $(this)
             data = $('.wpte-pm-popup-box form').serializeJSON(),
             action = "wpte_add_license";
@@ -484,7 +468,7 @@
 
                 if ( typeof(response.data.deleted) != "undefined" && response.data.deleted !== null ) {
                     setTimeout(function(){ 
-                        location.reload();
+                       location.reload();
                     }, 2000);
                 } else {
                     setTimeout(function(){ 

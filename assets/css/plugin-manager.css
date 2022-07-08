@@ -249,6 +249,7 @@
 .wpte-popup-delete-button,
 .wpte-plugin-delete-button,
 .wpte-popup-save-button,
+.wpte-popup-license-save-button,
 .wpte-plugin-update-button,
 .wpte-product-save-button{
     border: 0;
@@ -272,12 +273,14 @@
 }
 .wpte-popup-save-button,
 .wpte-plugin-update-button,
+.wpte-popup-license-save-button,
 .wpte-product-save-button{
     background-color: #428817;
     cursor: pointer;
 }
 .wpte-popup-save-button:hover,
 .wpte-plugin-update-button:hover,
+.wpte-popup-license-save-button:hover,
 .wpte-product-save-button:hover{
     background-color: #285c08;
 }
