@@ -7,6 +7,23 @@
     justify-content: space-between;
     align-items: center;
 }
+.wpte-pm-add-new-title{
+    display: flex;
+    align-items: center;
+}
+.wpte-pm-add-new-title a{
+    text-decoration: none;
+    background: #fff;
+    font-size: 16px;
+    border-radius: 5px;
+    padding: 8px 16px;
+    cursor: pointer;
+    border: 1px solid #ddd;
+    margin-left: 16px;
+}
+.wpte-pm-add-new-title a:hover{
+    background: rgb(207, 206, 206);
+}
 .wpte-pm-edit-button-area{
     display: flex;
 }
@@ -27,6 +44,51 @@
 .wpte-pm-edit-button button:hover,
 .wpte-pm-action-button button:hover{
     background: #ddd;
+}
+
+.wpte-pm-action-button{
+    position: relative;
+}
+.wpte-pm-action-button:hover .wpte-pm-action-list{
+    display: block;
+}
+
+.wpte-pm-action-button .wpte-pm-action-list{
+    display: none;
+    position: absolute;
+    background: #fff;
+    width: 140px;
+    padding: 5px;
+    font-size: 16px;
+    top: 50px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px 2px #ddd;
+    right: 0;
+    margin: 0;
+    padding: 5px;
+}
+.wpte-pm-action-button .wpte-pm-action-list::before{
+    content: '';
+    position: absolute;
+    top: -16px;
+    right: 47px;
+    border-top: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 8px solid #fff;
+    border-left: 8px solid transparent;
+}
+.wpte-pm-action-button .wpte-pm-action-list li{
+    list-style: none;
+    margin: 0;
+    padding: 10px;
+    cursor: pointer;
+    border-bottom: 1px solid #ddd;
+}
+.wpte-pm-action-button .wpte-pm-action-list li:hover{
+    background: rgb(241, 240, 240)
+}
+.wpte-pm-action-button .wpte-pm-action-list li:last-child{
+    border-bottom: 0;
 }
 .wpte-pm-edit-button button{
     margin-right: 15px;
@@ -595,8 +657,12 @@
     font-size: 18px;
     padding: 16px;
 }
-.wpte-pm-license-row-content .license-key{
+.wpte-single-license-column .license-key{
     color: rgb(119, 119, 245);
+}
+.wpte-single-license-column .customer-view{
+    color: rgb(119, 119, 245);
+    cursor: pointer;
 }
 
 /*===========================================Switch=================================================== */
@@ -675,7 +741,7 @@
 
 .wpte-single-license-status p,
 .wpte-single-license-site .site-type-live span,
-.site-type-live,
+.wpte-single-license-site .wpte-site-type-live,
 .wpte-single-license-site .site-status-active span,
 .wpte-single-license-site .site-type-local span,
 .wpte-single-license-site .site-status-inactive span{
@@ -690,7 +756,8 @@
     background: #ebab3b;
 }
 .wpte-single-license-site .site-status-inactive span,
-.site-type-inactive 
+.wpte-single-license-site .site-type-live .wpte-site-type-inactive,
+.wpte-single-license-status-inactive p
 {
     background: #d74a0e;
 }
@@ -703,6 +770,41 @@
 }
 .wpte-single-license-site .site{
     font-size: 18px;
+}
+
+.wpte-single-license-column{
+    grid-template-columns: 300px 60px 60px 90px 80px 110px 30px;
+}
+.site-customer-name{
+    position: relative;
+}
+.site-customer-name .customer-name{
+    display: none;
+    position: absolute;
+    bottom: 30px;
+    left: -50%;
+    background: #ddd;
+    padding: 10px;
+    border-radius: 5px;
+}
+.site-customer-name .customer-name::after{
+    content: '';
+    border-top: 8px solid #ddd;
+    border-right: 8px solid transparent;
+    border-bottom: 8px solid transparent;
+    border-left: 8px solid transparent;
+    position: absolute;
+    bottom: -15px;
+    left: 55px;
+}
+.site-customer-name .customer-name a{
+    text-decoration: none;
+    line-height: 1.3;
+}
+.site-customer-name .customer-name span{
+    display: block;
+    color: #8f8b8b;
+    line-height: 1.3;
 }
 
 

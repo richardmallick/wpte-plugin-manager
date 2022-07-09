@@ -4,61 +4,67 @@ $licenses = wpte_get_product_license( $plugin_id ) ? wpte_get_product_license( $
 $variations = wpte_get_product_variations( $plugin_id ) ? wpte_get_product_variations( $plugin_id ) : [];
 
 ?>
-<div class="wpte-pm-license-wrapper">
-    <div class="wpte-pm-license-header">
-        <div class="wpte-pm-license-row">
-            <div class="wpte-pm-license-header-content">License Key</div>
-            <div class="wpte-pm-license-header-content">Limit</div>
-            <div class="wpte-pm-license-header-content">Active</div>
-            <div class="wpte-pm-license-header-content">Customer</div>
-            <div class="wpte-pm-license-header-content">Status</div>
-            <div class="wpte-pm-license-header-content">Expier Date</div>
-            <div class="wpte-pm-license-header-content">View</div>
-        </div>
-    </div>
-    <div class="wpte-pm-license-body">
-        <?php foreach ( $licenses as $license ) : 
-        $license_key = isset($license->license_key) ? $license->license_key : '';
-        $activation_limit = isset($license->activation_limit) ? $license->activation_limit : '';
-        $active = isset($license->active) ? $license->active : '';
-        $_created_date = isset($license->created_date) ? strtotime($license->created_date) : ''; 
-        $created_date = isset($license->created_date) ? date("M d, Y", $_created_date) : '';
-        $plugin_id = isset($_GET['id']) ? $_GET['id'] : '';
-        $plugin = isset($_GET['plugin']) ? $_GET['plugin'] : '';
-        $license_id = isset($license->id) ? $license->id : '';
-        $customer_id = isset($license->customer_id) ? $license->customer_id : '';
-        
-        if ( $license->expired_date !== 'lifetime' ) {
-            $_expired_date = $license->expired_date ? $license->expired_date : ''; 
-            $expired_date = $license->expired_date ? date("M d, Y", $_expired_date) : '';
-        } else {
-            $expired_date = 'Life Time';
-        }
 
-        $customer = get_user_by('id', $customer_id);
-        $customer_name = $customer->first_name . ' ' . $customer->last_name;
-        ?>
-        <div class="wpte-pm-license-row">
-            <div class="wpte-pm-license-row-content"><span class="license-key"><?php echo esc_html($license_key); ?></span></div>
-            <div class="wpte-pm-license-row-content"><span><?php echo intval($activation_limit); ?></span></div>
-            <div class="wpte-pm-license-row-content"><?php echo intval($active); ?></div>
-            <div class="wpte-pm-license-row-content">
-                <a href="#"><?php echo esc_html($customer_name); ?></a>
-                <span><?php echo esc_html($customer->user_email); ?></span>
-            </div>
-            <div class="wpte-pm-license-row-content">
-                <?php if ( $license->status === 'active' ) {
-                    echo '<span class="site-type-live">'.esc_html('Active', WPTE_PM_TEXT_DOMAIN).'</span>'; 
-                } else {
-                    echo '<span class="site-type-inactive">'.esc_html('Inactive', WPTE_PM_TEXT_DOMAIN).'</span>'; 
-                }; ?>
-            </div>
-            <div class="wpte-pm-license-row-content"><?php echo esc_html($expired_date); ?></div>
-            <div class="wpte-pm-license-row-content" ><a href="<?php echo admin_url( "admin.php?page=wpte-plugin-manager&id=$plugin_id&plugin=$plugin&license_id=$license_id" ); ?>"><span class="dashicons dashicons-edit"></span></a></div>
+<div class="wpte-tab-item-card wpte-pm-tab-content wpte-pm-tab-license-content">
+    <div class="wpte-single-license-row-area">
+        <div class="wpte-single-license-row wpte-single-license-column wpte-single-license-site">
+            <h2>License Key</h2>
+            <h2>Limit</h2>
+            <h2>Active</h2>
+            <h2>Customer</h2>
+            <h2>Status</h2>
+            <h2>Expier Date</h2>
+            <h2>View</h2>
         </div>
-        <?php endforeach;  ?>
+
+        <?php 
+            foreach ( $licenses as $license ) : 
+            $license_key = isset($license->license_key) ? $license->license_key : '';
+            $activation_limit = isset($license->activation_limit) ? $license->activation_limit : '';
+            $active = isset($license->active) ? $license->active : '';
+            $_created_date = isset($license->created_date) ? strtotime($license->created_date) : ''; 
+            $created_date = isset($license->created_date) ? date("M d, Y", $_created_date) : '';
+            $plugin_id = isset($_GET['id']) ? $_GET['id'] : '';
+            $plugin = isset($_GET['plugin']) ? $_GET['plugin'] : '';
+            $license_id = isset($license->id) ? $license->id : '';
+            $customer_id = isset($license->customer_id) ? $license->customer_id : '';
+            
+            if ( $license->expired_date !== 'lifetime' ) {
+                $_expired_date = $license->expired_date ? $license->expired_date : ''; 
+                $expired_date = $license->expired_date ? date("M d, Y", $_expired_date) : '';
+            } else {
+                $expired_date = 'Lifetime';
+            }
+    
+            $customer = get_user_by('id', $customer_id);
+            $customer_name = $customer->first_name . ' ' . $customer->last_name;
+        ?>
+            <div class="wpte-single-license-row wpte-single-license-column wpte-single-license-site">
+                <div class="site site-url license-key"><?php echo esc_html($license_key); ?></div>
+                <div class="site site-url"><?php echo intval($activation_limit); ?></div>
+                <div class="site site-name"><?php echo intval($active); ?></div>
+                <div class="site site-customer-name">
+                    <span class="view-customer customer-view">View</span> 
+                    <div class="customer-name" >
+                        <a href="#"><?php echo esc_html($customer_name); ?></a>
+                        <span><?php echo esc_html($customer->user_email); ?></span>
+                    </div>
+                </div>
+                <div class="site site-type-live">
+                    <?php if ( $license->status === 'active' ) {
+                    echo '<span class="wpte-site-type-live">'.esc_html('Active', WPTE_PM_TEXT_DOMAIN).'</span>'; 
+                    } else {
+                        echo '<span class="wpte-site-type-inactive">'.esc_html('Inactive', WPTE_PM_TEXT_DOMAIN).'</span>'; 
+                    }; ?>
+                </div>
+                <div class="site site-expired-date"><?php echo esc_html($expired_date); ?></div>
+                <div class="site site-action-view"><a href="<?php echo admin_url( "admin.php?page=wpte-plugin-manager&id=$plugin_id&plugin=$plugin&license_id=$license_id" ); ?>"><span class="dashicons dashicons-edit"></span></a></div>
+            </div>
+        <?php endforeach; ?>
+
     </div>
 </div>
+
 
 <div class="wpte-pm-popup-wrapper">
     <div class="wpte-pm-popup-inner">
@@ -104,7 +110,7 @@ $variations = wpte_get_product_variations( $plugin_id ) ? wpte_get_product_varia
                         <label for='wpte_pm_license_is_active'>Is Active</label>
                         <select name="wpte_pm_license_is_active" id="wpte_pm_license_is_active">
                             <option value="active">Active</option>
-                            <option value="deactive">Deactive</option>
+                            <option value="inactive">Deactive</option>
                         </select>
                     </div>
                 </div>

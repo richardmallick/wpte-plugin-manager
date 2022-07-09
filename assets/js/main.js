@@ -505,6 +505,13 @@
         }
     });
 
+    $('.site-customer-name').on('mouseover', function(){
+        $(this).find('.customer-name').show();
+    })
+    $('.site-customer-name').on('mouseleave', function(){
+        $(this).find('.customer-name').hide();
+    })
+
 
 
 })(jQuery);

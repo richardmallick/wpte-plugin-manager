@@ -1,5 +1,7 @@
 <?php 
 $license_id  = isset($_GET['license_id']) ? $_GET['license_id'] : '';
+$plugin_id = isset($_GET['id']) ? intval($_GET['id']) : '';
+$plugin      = isset($_GET['plugin']) ? esc_html($_GET['plugin']) : '';
 $license      = wpte_get_product_license_row( $license_id ) ? wpte_get_product_license_row( $license_id ) : (object)[];
 $license_key = $license->license_key ? $license->license_key : '';
 if ( $license->expired_date !== 'lifetime' ) {
@@ -8,9 +10,36 @@ if ( $license->expired_date !== 'lifetime' ) {
 } else {
     $expired_date = 'Lifetime';
 }
-$active = isset($license->active) ? $license->active : '';
+$status = isset($license->status) ? $license->status : '';
+$inactive = $status !== 'active' ? 'wpte-single-license-status-inactive' : '';
 $activation_limit = isset($license->activation_limit) ? $license->activation_limit : '';
+$active_site = isset($license->active_site) && $license->active_site ? $license->active_site : 0;
+
+$customer_id = isset($license->customer_id) ? $license->customer_id : '';
+$customer = get_user_by('id', $customer_id);
+$customer_name = $customer->first_name . ' ' . $customer->last_name;
+$product_id = $license->product_id ? $license->product_id : '';
+$product = wpte_get_product_variation_by_id( $product_id ) ? wpte_get_product_variation_by_id( $product_id ) : (object)[];
 ?>
+<div class="wpte-pm-add-new-area">
+    <div class="wpte-pm-add-new-title">
+        <h1><?php echo  esc_html__('License Details', WPTE_PM_TEXT_DOMAIN); ?></h1>
+        <a href='<?php echo admin_url( "admin.php?page=wpte-plugin-manager&id=$plugin_id&plugin=$plugin" ); ?>'>Back</a>
+    </div>
+    <div class="wpte-pm-edit-button-area">
+        <div class="wpte-pm-edit-button">
+            <button><span class="dashicons dashicons-edit"></span> Edit</button>
+        </div>
+        <div class="wpte-pm-action-button">
+            <button>Action <span class="dashicons dashicons-arrow-down-alt2"></span></button>
+            <ul class="wpte-pm-action-list">
+                <li id="wpte-license-deactivate" dataid="<?php echo esc_attr($license_id); ?>">Deactivate</li>
+                <li id="wpte-license-inactive" dataid="<?php echo esc_attr($license_id); ?>">Inactive</li>
+                <li id="wpte-license-customer-id" dataid="<?php echo esc_attr($customer_id); ?>">Resend Email</li>
+            </ul>
+        </div>
+    </div>
+</div>
 <div class="wpte-tab-item-card wpte-pm-tab-content wpte-pm-tab-license-content">
     <div class="wpte-single-license-row-area">
         <div class="wpte-single-license-row">
@@ -22,9 +51,9 @@ $activation_limit = isset($license->activation_limit) ? $license->activation_lim
                 <label for="">Expiry Date</label>
                 <p><?php echo esc_html($expired_date);?></p>
             </div>
-            <div class="wpte-single-license-status">
+            <div class="wpte-single-license-status <?php echo esc_attr($inactive);?>">
                 <label for="">Status</label>
-                <p><?php echo esc_html($active); ?></p>
+                <p><?php echo esc_html(ucfirst($status)); ?></p>
             </div>
         </div>
         <div class="wpte-single-license-row">
@@ -34,7 +63,7 @@ $activation_limit = isset($license->activation_limit) ? $license->activation_lim
             </div>
             <div class="wpte-single-license-active">
                 <label for="">Active Site</label>
-                <p>24</p>
+                <p><?php echo intval($active_site); ?></p>
             </div>
             <div class="wpte-single-license-source">
                 <label for="">Source</label>
@@ -44,15 +73,15 @@ $activation_limit = isset($license->activation_limit) ? $license->activation_lim
         <div class="wpte-single-license-row">
             <div class="wpte-single-license-order-id">
                 <label for="">Order ID</label>
-                <p>#3424</p>
+                <p>#<?php echo intval($license_id); ?></p>
             </div>
             <div class="wpte-single-license-variations">
                 <label for="">Variations</label>
-                <p>Product Layouts Pro Lifetime</p>
+                <p><?php echo esc_html($product->variation_name); ?></p>
             </div>
             <div class="wpte-single-license-source">
                 <label for="">Customer</label>
-                <p>Richard Mallick</p>
+                <p><?php echo esc_html($customer_name); ?></p>
             </div>
         </div>
     </div>

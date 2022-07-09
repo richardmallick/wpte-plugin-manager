@@ -311,9 +311,12 @@ class Ajax{
         $token = openssl_random_pseudo_bytes(16);
         $token = bin2hex($token);
 
-        if ( isset($data['wpte_pm_license_recurring_payment']) && $data['wpte_pm_license_recurring_payment'] ) {
-            $recurring_period = $data['wpte_pm_license_recurring_period'];
-            $recurring_times = $data['wpte_pm_license_recurring_times'];
+        $produt_id = isset($data['wpte_pm_license_product']) && $data['wpte_pm_license_product'] ? sanitize_text_field($data['wpte_pm_license_product']) : '';
+        $product = wpte_get_product_variation_by_id( $produt_id ) ? wpte_get_product_variation_by_id( $produt_id ) : (object)[];
+
+        if ( isset($product->recurring_payment) && $product->recurring_payment ) {
+            $recurring_period = $product->recurring_period;
+            $recurring_times = $product->recurring_times;
             $timestamp = strtotime(current_time('mysql'));
             $expired_date = strtotime("+$recurring_times $recurring_period", $timestamp); 
             //$expired_date = date("Y-m-d h:i:s", $timestamp);
@@ -327,9 +330,6 @@ class Ajax{
         $password   = wpte_generate_password(16);
 
         $user_id = wpte_add_new_user($email, $password, $first_name, $last_name);
-
-        $produt_id = isset($data['wpte_pm_license_product']) && $data['wpte_pm_license_product'] ? sanitize_text_field($data['wpte_pm_license_product']) : '';
-        $product = wpte_get_product_variation_by_id( $produt_id ) ? wpte_get_product_variation_by_id( $produt_id ) : (object)[];
 
         $args = [
             'plugin_id'         => $data['wpte_pm_license_plugin_id'],

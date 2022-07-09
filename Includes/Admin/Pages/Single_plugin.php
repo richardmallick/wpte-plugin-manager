@@ -23,11 +23,8 @@ class Single_plugin{
      * @since 1.0.0
      */
     public function wpte_single_plugin() {
-		$plugin_id = isset($_GET['id']) ? $_GET['id'] : '';
+		$plugin_id = isset($_GET['id']) ? intval($_GET['id']) : '';
 		$plugin_data = wpte_pm_get_plugin( $plugin_id ) ? wpte_pm_get_plugin( $plugin_id ) : (object)[];
-		// echo "<pre>";
-		// 	print_r($plugin_data);
-		// echo "</pre>";
         ?>
         <div class="wpte-pm-single-plugin-tabs">
 			<aside class="wpte-pm-single-plugin-sidebar">
@@ -81,19 +78,6 @@ class Single_plugin{
 						
 							<?php
 								if ( isset($_GET['license_id'])) {
-									?>
-									<div class="wpte-pm-add-new-area">
-										<h1><?php echo  esc_html__('License Details', WPTE_PM_TEXT_DOMAIN); ?></h1>
-										<div class="wpte-pm-edit-button-area">
-											<div class="wpte-pm-edit-button">
-												<button><span class="dashicons dashicons-edit"></span> Edit</button>
-											</div>
-											<div class="wpte-pm-action-button">
-												<button>Action <span class="dashicons dashicons-arrow-down-alt2"></span></button>
-											</div>
-										</div>
-									</div>
-									<?php
 									if (file_exists(__DIR__ . "/views/Single-license.php")) {
 
 										include __DIR__ . "/views/Single-license.php";
@@ -110,16 +94,13 @@ class Single_plugin{
 										</div>
 									</div>
 									
-									<div class="wpte-tab-item-card wpte-pm-tab-content">
-										<?php
-										if (file_exists(__DIR__ . "/views/License.php")) {
-
-											include __DIR__ . "/views/License.php";
-		
-										}
-									?>
-									</div>
+									
 									<?php
+									if (file_exists(__DIR__ . "/views/License.php")) {
+
+										include __DIR__ . "/views/License.php";
+	
+									}
 								}	
 							?>
 						
