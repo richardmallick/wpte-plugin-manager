@@ -129,12 +129,13 @@ class Class_api_response{
 
         $data = json_decode($request->get_body(), true);
 
+        if ( ! $data['license'] || ! $data['domain'] || ! $data['siteip'] ) {
+            return false;
+        }
+
         $get_license = wpte_get_product_license_row_key( $data['license'] ) ? wpte_get_product_license_row_key( $data['license'] ) : (object)[];
-        
         $id = $get_license->id ? $get_license->id : (object)[];
 
-        write_log($id);
-        
         $activated_license  = $get_license->active ? $get_license->active : 0;
         $addition           = $activated_license + 1;
         $activation_limit   = $get_license->activation_limit ? $get_license->activation_limit : 0;
@@ -161,17 +162,30 @@ class Class_api_response{
             'status'        => 'active',
         ];
 
-        if ( $data['license']    === $license_key && 
+        if ( $data['license']   === $license_key && 
             $data['files_name'] === $files_name && 
             $status             === 'active' && 
             $activated_license  < $activation_limit ) {
 
-            $addSite =    wpte_pm_add_new_site( $args );
+            $is_url_exist = wpte_is_license_url_exitst( $domain, $id ) ? wpte_is_license_url_exitst( $domain, $id ) : (object)[];
 
-            if ( $addSite ) {
+            if ( !empty(get_object_vars($is_url_exist)) ) {
+                if ( isset($is_url_exist->status) && $is_url_exist->status === 'blocked' ) {
+                    return false;
+                }
                 wpte_product_license_activate_update( $id, $addition );
+                wpte_product_license_url_update( $id , $domain, 'active');
                 return true;
-            } 
+
+            } else {
+                $addSite =    wpte_pm_add_new_site( $args );
+                if ( $addSite ) {
+                    wpte_product_license_activate_update( $id, $addition );
+                    wpte_product_license_url_update( $id , $domain, 'active');
+                    return true;
+                } 
+            }
+           
             return false;
         }
 
@@ -189,21 +203,24 @@ class Class_api_response{
         $header = $request->get_headers();
 
         $data = json_decode($request->get_body(), true);
-
         $get_license = wpte_get_product_license_row_key( $data['license'] ) ? wpte_get_product_license_row_key( $data['license'] ) : (object)[];
-        
         $id = $get_license->id ? $get_license->id : (object)[];
-        
+        $domain = $data['domain'] ? sanitize_url($data['domain']) : '';
         $activated_license = $get_license->active ? $get_license->active : 0;
-
         $subtraction = $activated_license > 0 ? $activated_license - 1 : 0;
-
         $license_key = $get_license->license_key ? $get_license->license_key : (object)[];
         $files_name   = $get_license->files_name ? $get_license->files_name : (object)[];
+
+        $is_url_exist = wpte_is_license_url_exitst( $domain, $id ) ? wpte_is_license_url_exitst( $domain, $id ) : (object)[];
 
         if ( $data['license'] === $license_key && 
             $data['files_name'] === $files_name ) {
             wpte_product_license_activate_update( $id, $subtraction );
+            if ( isset($is_url_exist->status) && $is_url_exist->status === 'blocked' ) {
+                wpte_product_license_url_update( $id , $domain, 'blocked');
+            } else {
+                wpte_product_license_url_update( $id , $domain, 'inactive');
+            }
             return true;
         }
 

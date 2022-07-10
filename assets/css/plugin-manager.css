@@ -49,23 +49,34 @@
 .wpte-pm-action-button{
     position: relative;
 }
-.wpte-pm-action-button:hover .wpte-pm-action-list{
+.wpte-pm-action-button:hover .wpte-pm-action-list,
+.wpte-site-action:hover .wpte-site-actions{
     display: block;
 }
 
-.wpte-pm-action-button .wpte-pm-action-list{
+.wpte-site-action{
+    cursor: pointer;
+}
+.wpte-pm-action-button .wpte-pm-action-list,
+.wpte-site-action .wpte-site-actions{
     display: none;
     position: absolute;
     background: #fff;
     width: 140px;
     padding: 5px;
     font-size: 16px;
-    top: 50px;
     border-radius: 5px;
     box-shadow: 0 0 10px 2px #ddd;
-    right: 0;
     margin: 0;
     padding: 5px;
+}
+.wpte-pm-action-button .wpte-pm-action-list{
+    top: 50px;
+    right: 0;
+}
+.wpte-site-action .wpte-site-actions{
+    right: -10px;
+    bottom: 28px;
 }
 .wpte-pm-action-button .wpte-pm-action-list::before{
     content: '';
@@ -77,17 +88,30 @@
     border-bottom: 8px solid #fff;
     border-left: 8px solid transparent;
 }
-.wpte-pm-action-button .wpte-pm-action-list li{
+.wpte-site-action .wpte-site-actions::after{
+    content: '';
+    position: absolute;
+    bottom: -16px;
+    right: 12px;
+    border-top: 8px solid #fff;
+    border-right: 8px solid transparent;
+    border-bottom: 8px solid transparent;
+    border-left: 8px solid transparent;
+}
+.wpte-pm-action-button .wpte-pm-action-list li,
+.wpte-site-action .wpte-site-actions li{
     list-style: none;
     margin: 0;
     padding: 10px;
     cursor: pointer;
     border-bottom: 1px solid #ddd;
 }
-.wpte-pm-action-button .wpte-pm-action-list li:hover{
+.wpte-pm-action-button .wpte-pm-action-list li:hover,
+.wpte-site-action .wpte-site-actions li:hover{
     background: rgb(241, 240, 240)
 }
-.wpte-pm-action-button .wpte-pm-action-list li:last-child{
+.wpte-pm-action-button .wpte-pm-action-list li:last-child,
+.wpte-site-action .wpte-site-actions li:last-child{
     border-bottom: 0;
 }
 .wpte-pm-edit-button button{
@@ -805,6 +829,10 @@
     display: block;
     color: #8f8b8b;
     line-height: 1.3;
+}
+
+.wpte-site-action{
+    position: relative;
 }
 
 

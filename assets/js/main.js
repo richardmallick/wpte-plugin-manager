@@ -432,20 +432,6 @@
     });
 
     /**
-     * Update License
-     */
-    $(document).on('click', '#wpte_popup_license_update', function(e){
-        e.preventDefault();
-
-        var This = $(this)
-            data = $('.wpte-pm-popup-box form').serializeJSON(),
-            action = "wpte_update_license";
-
-        wpte_product_license_add_update(data, action, This);
-
-    });
-
-    /**
      * Delete License
      */
     function wpte_pm_delete( id, action, This ) {
@@ -510,8 +496,56 @@
     })
     $('.site-customer-name').on('mouseleave', function(){
         $(this).find('.customer-name').hide();
-    })
+    });
 
+    // ============================== Domain Actions ===============================
 
+    function wpte_domain_actions(id, licenseid, action) {
+
+        $.ajax({
+            type: 'POST',
+            url: wptePlugin.ajaxUrl,
+            data: {
+                action: action,
+                _nonce: wptePlugin.wpte_nonce,
+                id: id,
+                licenseid:licenseid
+            },
+            beforeSend: function () {
+              
+            },
+            success: function (response) {
+                console.log(response);
+            },
+            error: function (data) {
+                console.log('error')
+            }
+        });
+    }
+
+    $('#wpte-site-block').on('click', function(e){
+        var id = $(this).attr('dataid'),
+            licenseid = $(this).attr('licenseid'),
+            action = 'wpte_site_block';
+            wpte_domain_actions(id, licenseid, action);
+    });
+
+    $('#wpte-site-inactive').on('click', function(e){
+        var id = $(this).attr('dataid'),
+            licenseid = $(this).attr('licenseid'),
+            action = 'wpte_site_inactive';
+            wpte_domain_actions(id, licenseid, action);
+    });
+
+    $('#wpte-site-delete').on('click', function(e){
+        var id = $(this).attr('dataid'),
+            licenseid = $(this).attr('licenseid'),
+            action = 'wpte_site_delete';
+        if(confirm("Are you sure you want to delete this?")){
+            wpte_domain_actions(id, licenseid, action);
+        }else{
+            return false;
+        }     
+    });
 
 })(jQuery);

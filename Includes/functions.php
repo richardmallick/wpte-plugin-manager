@@ -121,12 +121,6 @@ function wpte_pm_get_plugin( $plugin_id ) {
  */
 function wpte_plugin_updater( $plugin_id, $plugin_name, $plugin_slug, $plugin_version, $php_version, $wordpress_version, $tested_version, $demo_url, $description, $logo_id ) {
     global $wpdb;
-
-    // echo $plugin_id;
-    // echo $plugin_name;
-    // echo $plugin_slug;
-    // echo $plugin_version;
-    // echo $wordpress_version;
    $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}wpte_plugin_data SET plugin_name = %s, plugin_slug = %s, plugin_version = %s, php_version = %s, wordpress_version = %s, tested_version = %s, demo_url = %s, description = %s, logo_id = %d WHERE id = %d", $plugin_name, $plugin_slug, $plugin_version, $php_version, $wordpress_version, $tested_version, $demo_url, $description, $logo_id, $plugin_id ) );
 }
 
@@ -458,38 +452,15 @@ function wpte_product_license_delete( $id ) {
 }
 
 /**
- * Method wpte_product_license_update
- * 
- * Update License
- * 
- * @return void
- */
-function wpte_product_license_update( $license_id, $customer_name, $customer_email, $product_name, $product_slug, $activation_limit, $product_price, $files_name, $product_file, $recurring_payment, $recurring_period, $recurring_times, $is_active ) {
-    global $wpdb;
-    $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}wpte_product_license SET customer_name = %s, customer_email = %s, product_name = %s, product_slug = %s, activation_limit = %d, product_price = %d, files_name = %s, product_file = %d, recurring_payment = %d, recurring_period = %s, recurring_times = %d, is_active = %s WHERE id = %d", $customer_name, $customer_email, $product_name, $product_slug, $activation_limit, $product_price, $files_name, $product_file, $recurring_payment, $recurring_period, $recurring_times, $is_active, $license_id ) );
-}
-/**
- * Method wpte_product_license_deactive
- * 
- * Make value 0 of activated
- * 
- * @return void
- */
-function wpte_product_license_deactive( $license_id, $activated, $domain ) {
-    global $wpdb;
-    $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}wpte_product_license SET activated = %d, domain = %s WHERE id = %d", $activated, $domain, $license_id ) );
-}
-
-/**
  * Method wpte_product_get_license_activate
  * 
  * Get Activate license count
  * 
  * @return void
  */
-function wpte_product_license_activate_update( $license_id, $activated ) {
+function wpte_product_license_activate_update( $license_id, $active ) {
     global $wpdb;
-    $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}wpte_product_license SET active = %d WHERE id = %d", $activated, $license_id ) );
+    $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}wpte_product_license SET active = %d WHERE id = %d", $active, $license_id ) );
 }
 
 /**
@@ -614,7 +585,57 @@ function wpte_get_domain_rows( $license_id ) {
     );
 }
 
+/**
+ * Method wpte_get_product_license_row
+ *
+ * @param $id $id [explicite description]
+ * Fetch Product Row by Plugin ID
+ * @return void
+ */
+function wpte_is_license_url_exitst( $site_url, $license_id ) {
+    global $wpdb;
+    return $wpdb->get_row(
+        $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}wpte_domains WHERE license_id = %d AND site_url = %s", $license_id, $site_url )
+    );
+}
 
+/**
+ * Method wpte_product_get_license_activate
+ * 
+ * Get Activate license count
+ * 
+ * @return void
+ */
+function wpte_product_license_url_update( $license_id , $site_url, $status) {
+    global $wpdb;
+    $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}wpte_domains SET status = %s WHERE license_id = %d AND site_url = %s ", $status, $license_id, $site_url ) );
+}
+/**
+ * Method wpte_product_get_license_activate
+ * 
+ * Get Activate license count
+ * 
+ * @return void
+ */
+function wpte_pm_license_url_status_updater( $id , $status) {
+    global $wpdb;
+    $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}wpte_domains SET status = %s WHERE id = %d", $status, $id) );
+}
+
+/**
+ * Method wpte_pm_license_url_delete
+ *
+ * @param $id $id [explicite description]
+ * Delete Site
+ * 
+ */
+function wpte_pm_license_url_delete( $id ) {
+    global $wpdb;
+    return $wpdb->delete(
+        $wpdb->prefix . 'wpte_domains',
+        ['id' => $id]
+    );
+}
 
 function mailtrap($phpmailer) {
     $phpmailer->isSMTP();

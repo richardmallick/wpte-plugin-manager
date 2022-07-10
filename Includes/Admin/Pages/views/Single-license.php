@@ -114,7 +114,14 @@ $product        = wpte_get_product_variation_by_id( $product_id ) ? wpte_get_pro
                 <div class="site site-name"><?php echo esc_html($site_name); ?></div>
                 <div class="site <?php echo esc_attr($site_type_class); ?>"><span><?php echo esc_html( ucfirst($site_type) );?></span></div>
                 <div class="site <?php echo esc_attr($site_status_class); ?>"><span><?php echo esc_html( ucfirst($site_status) ); ?></span></div>
-                <div class="site site-action"><span class="dashicons dashicons-ellipsis"></span></div>
+                <div class="site wpte-site-action">
+                    <span class="dashicons dashicons-ellipsis"></span>
+                    <ul class="wpte-site-actions">
+                        <li id="wpte-site-block" licenseid="<?php echo intval($site->license_id); ?>" dataid="<?php echo intval($site->id); ?>">Block</li>
+                        <li id="wpte-site-inactive" licenseid="<?php echo intval($site->license_id); ?>" dataid="<?php echo intval($site->id); ?>">Inactive</li>
+                        <li id="wpte-site-delete" licenseid="<?php echo intval($site->license_id); ?>" dataid="<?php echo intval($site->id); ?>">Delete</li>
+                    </ul>
+                </div>
             </div>
         <?php endforeach; ?>
     </div>
