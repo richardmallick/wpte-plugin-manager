@@ -111,9 +111,9 @@ class Installation{
             recurring_payment mediumint(5),
             recurring_period varchar(15),
             recurring_times mediumint(5),
-            active_site mediumint(5),
             created_date timestamp,
             expired_date varchar(250),
+            files_name varchar(250),
             PRIMARY KEY  (id)
         ) $charset_collate";
 

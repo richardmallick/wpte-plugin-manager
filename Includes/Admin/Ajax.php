@@ -342,9 +342,9 @@ class Ajax{
             'recurring_payment' => $product->recurring_payment,
             'recurring_period'  => $product->recurring_period,
             'recurring_times'   => $product->recurring_times,
-            'active_site'       => 0,
             'created_date'      => current_time('mysql'),
             'expired_date'      => $expired_date,
+            'files_name'        => $product->files_name,
         ];
 
         // Create License

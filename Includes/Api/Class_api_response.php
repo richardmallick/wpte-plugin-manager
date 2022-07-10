@@ -127,33 +127,52 @@ class Class_api_response{
 
         $header = $request->get_headers();
 
-        //write_log($header['host'][0]);
-
         $data = json_decode($request->get_body(), true);
 
         $get_license = wpte_get_product_license_row_key( $data['license'] ) ? wpte_get_product_license_row_key( $data['license'] ) : (object)[];
         
         $id = $get_license->id ? $get_license->id : (object)[];
+
+        write_log($id);
         
-        $activated_license  = $get_license->activated ? $get_license->activated : 0;
+        $activated_license  = $get_license->active ? $get_license->active : 0;
         $addition           = $activated_license + 1;
         $activation_limit   = $get_license->activation_limit ? $get_license->activation_limit : 0;
 
         $license_key = $get_license->license_key ? $get_license->license_key : (object)[];
-        $is_active   = $get_license->is_active ? $get_license->is_active : (object)[];
+        $status   = $get_license->status ? $get_license->status : (object)[];
         $files_name   = $get_license->files_name ? $get_license->files_name : (object)[];
-        $domain   = $get_license->domain ? json_decode($get_license->domain, true) : [];
 
-        if ( 
-            $data['license']    === $license_key && 
+        $domain = $data['domain'] ? sanitize_url($data['domain']) : '';
+        $site_name = $data['sitename'] ? sanitize_text_field($data['sitename']) : '';
+        $siteip = $data['siteip'] ? sanitize_text_field($data['siteip']) : '';
+
+        if ( $siteip == '127.0.0.1' ||  $siteip == '::1' ) {
+            $site_type = 'Local';
+        } else {
+            $site_type = 'Live';
+        }
+
+        $args = [
+            'license_id'    => $id,
+            'site_url'      => $domain,
+            'site_name'     => $site_name,
+            'site_type'     => $site_type,
+            'status'        => 'active',
+        ];
+
+        if ( $data['license']    === $license_key && 
             $data['files_name'] === $files_name && 
-            $is_active          === 'active' && 
-            $activated_license  < $activation_limit &&
-            ! in_array( $_domain = $data['domain'], $domain)
-            ) {
-            array_push($domain, $_domain);
-            wpte_product_license_activate_update( $id, $addition, wp_json_encode($domain, JSON_UNESCAPED_SLASHES) );
-            return true;
+            $status             === 'active' && 
+            $activated_license  < $activation_limit ) {
+
+            $addSite =    wpte_pm_add_new_site( $args );
+
+            if ( $addSite ) {
+                wpte_product_license_activate_update( $id, $addition );
+                return true;
+            } 
+            return false;
         }
 
         return false;
@@ -175,20 +194,16 @@ class Class_api_response{
         
         $id = $get_license->id ? $get_license->id : (object)[];
         
-        $activated_license = $get_license->activated ? $get_license->activated : 0;
+        $activated_license = $get_license->active ? $get_license->active : 0;
 
         $subtraction = $activated_license > 0 ? $activated_license - 1 : 0;
 
         $license_key = $get_license->license_key ? $get_license->license_key : (object)[];
         $files_name   = $get_license->files_name ? $get_license->files_name : (object)[];
-        $domain   = $get_license->domain ? json_decode($get_license->domain, true) : [];
 
         if ( $data['license'] === $license_key && 
-            $data['files_name'] === $files_name && 
-            in_array( $_domain = $data['domain'], $domain) ) {
-
-            $domain = array_diff($domain, array($_domain));
-            wpte_product_license_activate_update( $id, $subtraction, wp_json_encode($domain) );
+            $data['files_name'] === $files_name ) {
+            wpte_product_license_activate_update( $id, $subtraction );
             return true;
         }
 

@@ -86,7 +86,7 @@ class Plugin_manager{
                                             echo wp_get_attachment_image( $Plugin->logo_id, 'thumbnail' );
                                         } else {
                                             ?>
-                                                <img src="<?php echo  WPTE_PM_URL ?>/images/kd-img.png" alt="" srcset="">
+                                                <img src="<?php echo  WPTE_PM_URL ?>/Images/kd-img.png" alt="" srcset="">
                                             <?php
                                         }
                                         ?>
@@ -167,7 +167,7 @@ class Plugin_manager{
                             <div id="wpte-pm-attachment">
                                     <input type="hidden" class="wpte-pm-logo-id" name="wpte-pm-logo-id" value="">
                                     <input type="hidden" class="wpte-pm-logo-url" name="wpte-pm-logo-url" value="">
-                                    <img src="<?php echo WPTE_PM_URL ?>/images/kd-img.png" alt="">
+                                    <img src="<?php echo WPTE_PM_URL ?>/Images/kd-img.png" alt="">
                             </div>
                         </div>
                         <div class="wpte-footer-buttons">

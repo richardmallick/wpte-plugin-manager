@@ -1,25 +1,27 @@
 <?php 
-$license_id  = isset($_GET['license_id']) ? $_GET['license_id'] : '';
-$plugin_id = isset($_GET['id']) ? intval($_GET['id']) : '';
-$plugin      = isset($_GET['plugin']) ? esc_html($_GET['plugin']) : '';
-$license      = wpte_get_product_license_row( $license_id ) ? wpte_get_product_license_row( $license_id ) : (object)[];
-$license_key = $license->license_key ? $license->license_key : '';
+$license_id     = isset($_GET['license_id']) ? $_GET['license_id'] : '';
+$plugin_id      = isset($_GET['id']) ? intval($_GET['id']) : '';
+$plugin         = isset($_GET['plugin']) ? esc_html($_GET['plugin']) : '';
+$license        = wpte_get_product_license_row( $license_id ) ? wpte_get_product_license_row( $license_id ) : (object)[];
+$license_key    = $license->license_key ? $license->license_key : '';
+
 if ( $license->expired_date !== 'lifetime' ) {
-    $_expired_date = $license->expired_date ? $license->expired_date : ''; 
-    $expired_date = $license->expired_date ? date("M d, Y", $_expired_date) : '';
+    $_expired_date  = $license->expired_date ? $license->expired_date : ''; 
+    $expired_date   = $license->expired_date ? date("M d, Y", $_expired_date) : '';
 } else {
     $expired_date = 'Lifetime';
 }
-$status = isset($license->status) ? $license->status : '';
-$inactive = $status !== 'active' ? 'wpte-single-license-status-inactive' : '';
-$activation_limit = isset($license->activation_limit) ? $license->activation_limit : '';
-$active_site = isset($license->active_site) && $license->active_site ? $license->active_site : 0;
 
-$customer_id = isset($license->customer_id) ? $license->customer_id : '';
-$customer = get_user_by('id', $customer_id);
-$customer_name = $customer->first_name . ' ' . $customer->last_name;
-$product_id = $license->product_id ? $license->product_id : '';
-$product = wpte_get_product_variation_by_id( $product_id ) ? wpte_get_product_variation_by_id( $product_id ) : (object)[];
+$status             = isset($license->status) ? $license->status : '';
+$inactive = $status !== 'active' ? 'wpte-single-license-status-inactive' : '';
+$activation_limit   = isset($license->activation_limit) ? $license->activation_limit : '';
+$active_site        = isset($license->active) && $license->active ? $license->active : 0;
+
+$customer_id    = isset($license->customer_id) ? $license->customer_id : '';
+$customer       = get_user_by('id', $customer_id);
+$customer_name  = $customer->first_name . ' ' . $customer->last_name;
+$product_id     = $license->product_id ? $license->product_id : '';
+$product        = wpte_get_product_variation_by_id( $product_id ) ? wpte_get_product_variation_by_id( $product_id ) : (object)[];
 ?>
 <div class="wpte-pm-add-new-area">
     <div class="wpte-pm-add-new-title">
@@ -97,12 +99,23 @@ $product = wpte_get_product_variation_by_id( $product_id ) ? wpte_get_product_va
             <h2>Status</h2>
             <h2>-</h2>
         </div>
-        <div class="wpte-single-license-row wpte-single-license-site">
-            <div class="site site-url">wptoffee.com</div>
-            <div class="site site-name">wptoffee</div>
-            <div class="site site-type-live"><span>Live</span></div>
-            <div class="site site-status-active"><span>Active</span></div>
-            <div class="site site-action">...</div>
-        </div>
+        <?php
+            $sites = wpte_get_domain_rows( $license_id ) ? wpte_get_domain_rows( $license_id ) : [];
+            foreach( $sites as $site ) : 
+                $site_url = parse_url($site->site_url, PHP_URL_HOST);
+                $site_name = isset($site->site_name) && $site->site_name ? $site->site_name : '';
+                $site_type = isset($site->site_type) && $site->site_type ? $site->site_type : '';
+                $site_type_class = $site_type === 'Local' ? 'site-type-local' : 'site-type-live';
+                $site_status = isset($site->status) && $site->status ? $site->status : '';
+                $site_status_class = $site_status === 'active' ? 'site-status-active' : 'site-status-inactive';
+        ?>
+            <div class="wpte-single-license-row wpte-single-license-site">
+                <div class="site site-url"><?php echo esc_html($site_url); ?></div>
+                <div class="site site-name"><?php echo esc_html($site_name); ?></div>
+                <div class="site <?php echo esc_attr($site_type_class); ?>"><span><?php echo esc_html( ucfirst($site_type) );?></span></div>
+                <div class="site <?php echo esc_attr($site_status_class); ?>"><span><?php echo esc_html( ucfirst($site_status) ); ?></span></div>
+                <div class="site site-action"><span class="dashicons dashicons-ellipsis"></span></div>
+            </div>
+        <?php endforeach; ?>
     </div>
 </div>

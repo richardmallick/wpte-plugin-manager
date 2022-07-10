@@ -35,7 +35,7 @@ class Single_plugin{
 								echo wp_get_attachment_image( $plugin_data->logo_id, 'thumbnail' );
 							} else {
 								?>
-									<img src="<?php echo  WPTE_PM_URL ?>/images/kd-img.png" alt="" srcset="">
+									<img src="<?php echo  WPTE_PM_URL ?>/Images/kd-img.png" alt="" srcset="">
 								<?php
 							}
 						?>

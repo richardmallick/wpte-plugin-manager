@@ -365,9 +365,9 @@ function wpte_pm_create_license( $args = [] ) {
         'recurring_payment' => '',
         'recurring_period'  => '',
         'recurring_times'   => '',
-        'active_site'       => '',
         'created_date'      => '',
         'expired_date'      => '',
+        'files_name'        => '',
 
     ];
 
@@ -387,7 +387,7 @@ function wpte_pm_create_license( $args = [] ) {
             '%d',
             '%s',
             '%d',
-            '%d',
+            '%s',
             '%s',
             '%s',
         ]
@@ -487,9 +487,9 @@ function wpte_product_license_deactive( $license_id, $activated, $domain ) {
  * 
  * @return void
  */
-function wpte_product_license_activate_update( $license_id, $activated, $domain = '' ) {
+function wpte_product_license_activate_update( $license_id, $activated ) {
     global $wpdb;
-    $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}wpte_product_license SET activated = %d, domain = %s WHERE id = %d", $activated, $domain, $license_id ) );
+    $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}wpte_product_license SET active = %d WHERE id = %d", $activated, $license_id ) );
 }
 
 /**
@@ -533,8 +533,6 @@ function wpte_add_new_user($email, $password, $first_name, $last_name) {
     $user_id      = username_exists( $username );
     $email_exists = email_exists( $email );
 
-   
-
     if ( $email_exists == false ) {
         $user_id = wp_create_user( $username, $password, $email );
         if( ! is_wp_error($user_id) ) {
@@ -558,6 +556,64 @@ function wpte_add_new_user($email, $password, $first_name, $last_name) {
         return $user->ID;
     }
 }
+
+/**
+ * Method wpte_pm_create_license
+ *
+ * @param $args $args [explicite description]
+ * 
+ * Inser Product Variation Data to wpte_product_variation data table
+ * 
+ * @return int|WP_ERROR
+ * 
+ */
+function wpte_pm_add_new_site( $args = [] ) {
+
+    global $wpdb;
+
+    $default = [
+        'license_id'    => '',
+        'site_url'      => '',
+        'site_name'     => '',
+        'site_type'     => '',
+        'status'        => '',
+    ];
+
+    $data = wp_parse_args( $args, $default );
+
+    $inserted = $wpdb->insert(
+        "{$wpdb->prefix}wpte_domains",
+        $data,
+        [
+            '%d',
+            '%s',
+            '%s',
+            '%s',
+            '%s',
+        ]
+    );
+
+    if ( !$inserted ) {
+        return new \WP_Error( 'failed-to-insert', __( 'Failed to insert data', WPTE_PM_TEXT_DOMAIN ) );
+    }
+
+    return $wpdb->insert_id;
+}
+
+/**
+ * Method wpte_get_product_license_row
+ *
+ * @param $id $id [explicite description]
+ * Fetch Product Row by Plugin ID
+ * @return void
+ */
+function wpte_get_domain_rows( $license_id ) {
+    global $wpdb;
+    return $wpdb->get_results(
+        $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}wpte_domains WHERE license_id = %d", $license_id )
+    );
+}
+
 
 
 function mailtrap($phpmailer) {
