@@ -509,7 +509,7 @@
 
     // ============================== Domain Actions ===============================
 
-    function wpte_domain_actions(id, licenseid, action) {
+    function wpte_license_actions(id, licenseid, action) {
 
         $.ajax({
             type: 'POST',
@@ -521,16 +521,33 @@
                 licenseid:licenseid
             },
             beforeSend: function () {
-                Swal.fire({
-                  padding: '3em',
-                  timerProgressBar: true,
-                  didOpen: () => {
-                    Swal.showLoading()
-                  },
-                })
+
+                if ( action === 'wpte_license_update' ) {
+                    $('#wpte-add-singe-license-loader').addClass('wpte-add-plugin-loader');
+                } else {
+                    Swal.fire({
+                        padding: '3em',
+                        timerProgressBar: true,
+                        didOpen: () => {
+                          Swal.showLoading()
+                        },
+                      })
+                }
+               
             },
             success: function (response) {
-                if ( response.data.blocked ) {
+
+                if ( response.data.activation_updated ) {
+                    setTimeout(function(){ 
+                        location.reload()
+                    }, 2000);
+                    return;
+                }
+                if ( response.data.license_deactivate ) {
+                    var message = response.data.license_deactivate;
+                } else if( response.data.license_activate ){
+                    var message = response.data.license_activate;
+                }else if ( response.data.blocked ) {
                     var message = response.data.blocked;
                 } else if ( response.data.inactive ) {
                     var message = response.data.inactive;
@@ -563,14 +580,14 @@
         var id = $(this).attr('dataid'),
             licenseid = $(this).attr('licenseid'),
             action = 'wpte_site_block';
-            wpte_domain_actions(id, licenseid, action);
+            wpte_license_actions(id, licenseid, action);
     });
 
     $('#wpte-site-inactive').on('click', function(e){
         var id = $(this).attr('dataid'),
             licenseid = $(this).attr('licenseid'),
             action = 'wpte_site_inactive';
-            wpte_domain_actions(id, licenseid, action);
+            wpte_license_actions(id, licenseid, action);
     });
 
     $('#wpte-site-delete').on('click', function(e){
@@ -588,12 +605,12 @@
                 reverseButtons: true
             }).then((result) => {
                 if (result.isConfirmed) {
-                    wpte_domain_actions(id, licenseid, action);
+                    wpte_license_actions(id, licenseid, action);
                 } else if (
                     /* Read more about handling dismissals below */
                     result.dismiss === Swal.DismissReason.cancel
                 ) {
-                    swalWithBootstrapButtons.fire(
+                    Swal.fire(
                     'Cancelled',
                     'Your domain is safe :)',
                     'error'
@@ -603,5 +620,61 @@
     });
 
 // ============================== Edit Single License ===============================
+
+$('.wpte-pm-edit-button button').on('click', function(e){
+    $('.wpte-pm-popup-wrapper').addClass('wpte-pm-popup-block');
+    $('.wpte-pm-popup-box').slideDown() ;
+});
+
+$('#wpte_single_license_update').on('click', function(e){
+    e.preventDefault();
+    var licenseid = $('#wpte_pm_single_license_id').val(),
+        action = 'wpte_license_update',
+        data   = $('#wpte_pm_single_license_activation_limit').val();
+        wpte_license_actions(data, licenseid, action);
+});
+
+$('#wpte-license-deactivate').on('click', function(e){
+    e.preventDefault();
+    var id = $(this).attr('dataid'),
+        licenseid = $(this).attr('dataid'),
+        action = 'wpte_license_deactivate';
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "This will deactive all site license key automatically!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, deactive!',
+            cancelButtonText: 'No, cancel!',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                wpte_license_actions(id, licenseid, action);
+            } else if (
+                /* Read more about handling dismissals below */
+                result.dismiss === Swal.DismissReason.cancel
+            ) {
+                Swal.fire(
+                'Cancelled',
+                '',
+                'error'
+                )
+            }
+        }); 
+});
+
+$('#wpte-license-active').on('click', function(e){
+    e.preventDefault();
+    var id = $(this).attr('dataid'),
+        licenseid = $(this).attr('dataid'),
+        action = 'wpte_license_activate';
+
+        wpte_license_actions(id, licenseid, action);
+});
+
+
+
+
 
 })(jQuery);

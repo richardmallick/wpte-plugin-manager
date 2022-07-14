@@ -464,6 +464,30 @@ function wpte_product_license_activate_update( $license_id, $active ) {
 }
 
 /**
+ * Method wpte_product_get_license_activate
+ * 
+ * Get Activate license count
+ * 
+ * @return void
+ */
+function wpte_product_license_activation_limit_update( $license_id, $activation_limit ) {
+    global $wpdb;
+    $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}wpte_product_license SET activation_limit = %d WHERE id = %d", $activation_limit, $license_id ) );
+}
+
+/**
+ * Method wpte_product_get_license_activate
+ * 
+ * Get Activate license count
+ * 
+ * @return void
+ */
+function wpte_product_license_status_update( $license_id, $status ) {
+    global $wpdb;
+    $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}wpte_product_license SET status = %s WHERE id = %d", $status, $license_id ) );
+}
+
+/**
  * Method wpte_generate_password
  * 
  * Password Generator to Create New User

@@ -36,7 +36,7 @@ $product        = wpte_get_product_variation_by_id( $product_id ) ? wpte_get_pro
             <button>Action <span class="dashicons dashicons-arrow-down-alt2"></span></button>
             <ul class="wpte-pm-action-list">
                 <li id="wpte-license-deactivate" dataid="<?php echo esc_attr($license_id); ?>">Deactivate</li>
-                <li id="wpte-license-inactive" dataid="<?php echo esc_attr($license_id); ?>">Inactive</li>
+                <li id="wpte-license-active" dataid="<?php echo esc_attr($license_id); ?>">Active</li>
                 <li id="wpte-license-customer-id" dataid="<?php echo esc_attr($customer_id); ?>">Resend Email</li>
             </ul>
         </div>
@@ -107,7 +107,15 @@ $product        = wpte_get_product_variation_by_id( $product_id ) ? wpte_get_pro
                 $site_type = isset($site->site_type) && $site->site_type ? $site->site_type : '';
                 $site_type_class = $site_type === 'Local' ? 'site-type-local' : 'site-type-live';
                 $site_status = isset($site->status) && $site->status ? $site->status : '';
-                $site_status_class = $site_status === 'active' ? 'site-status-active' : 'site-status-inactive';
+
+                if ( $site_status === 'active' ) {
+                    $site_status_class = 'site-status-active';
+                } elseif ( $site_status === 'inactive' ) {
+                    $site_status_class =  'site-status-inactive';
+                } else {
+                    $site_status_class =  'site-status-blocked';
+                }
+                
         ?>
             <div class="wpte-single-license-row wpte-single-license-site">
                 <div class="site site-url"><?php echo esc_html($site_url); ?></div>
@@ -124,5 +132,39 @@ $product        = wpte_get_product_variation_by_id( $product_id ) ? wpte_get_pro
                 </div>
             </div>
         <?php endforeach; ?>
+    </div>
+</div>
+
+
+
+<div class="wpte-pm-popup-wrapper">
+    <div class="wpte-pm-popup-inner">
+        <div class="wpte-pm-popup-box">
+            <div class="wpte-pm-popup-header">
+                <h1>Edit License</h1>
+                <div class="wpte-pm-popup-close">╳</div>
+            </div>
+            <form action="" method="post">
+                <input type="hidden" id="wpte_pm_single_license_id" name="wpte_pm_single_license_id" value="<?php echo esc_attr($license_id); ?>">
+                
+                <div class="wpte-pm-popup-form-fields">
+                    <div class="wpte-pm-popup-form-field-left">
+                        <label for='wpte_pm_single_license_activation_limit'>Activation Limit</label>
+                        <input type="number" id="wpte_pm_single_license_activation_limit" name="wpte_pm_single_license_activation_limit" value="<?php echo esc_attr($activation_limit); ?>">
+                    </div>
+                </div>
+                <div class="wpte-pm-popup-footer">
+
+                    <div class="wpte-pm-product-attachment-area">
+                    </div>
+                    <div class="wpte-footer-buttons">
+                        <span id="wpte-add-singe-license-loader" class="spinner sa-spinner-open"></span>
+                        <button type="button" class="wpte-popup-close-button">Close</button>
+                        <input type="submit" class="wpte-popup-license-save-button" name="wpte_single_license_update" id="wpte_single_license_update" value="Update">
+                    </div>
+                </div>
+            </form>
+            
+        </div>
     </div>
 </div>

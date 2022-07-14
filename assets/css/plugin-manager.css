@@ -768,7 +768,9 @@
 .wpte-single-license-site .wpte-site-type-live,
 .wpte-single-license-site .site-status-active span,
 .wpte-single-license-site .site-type-local span,
-.wpte-single-license-site .site-status-inactive span{
+.wpte-single-license-site .site-status-inactive span,
+.wpte-single-license-site .site-status-blocked span
+{
     background: #149e2b;
     color: #fff;
     display: inline-block;
@@ -783,7 +785,10 @@
 .wpte-single-license-site .site-type-live .wpte-site-type-inactive,
 .wpte-single-license-status-inactive p
 {
-    background: #d74a0e;
+    background: #e05707;
+}
+.wpte-single-license-site .site-status-blocked span{
+    background: #fa4242;
 }
 
 .wpte-single-license-site{

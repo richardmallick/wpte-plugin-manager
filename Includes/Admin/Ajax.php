@@ -28,6 +28,9 @@ class Ajax{
         add_action( 'wp_ajax_wpte_site_block', [$this, 'wpte_site_block'] );
         add_action( 'wp_ajax_wpte_site_inactive', [$this, 'wpte_site_inactive'] );
         add_action( 'wp_ajax_wpte_site_delete', [$this, 'wpte_site_delete'] );
+        add_action( 'wp_ajax_wpte_license_update', [$this, 'wpte_license_update'] );
+        add_action( 'wp_ajax_wpte_license_deactivate', [$this, 'wpte_license_deactivate'] );
+        add_action( 'wp_ajax_wpte_license_activate', [$this, 'wpte_license_activate'] );
     }
 
     /**
@@ -515,6 +518,79 @@ EOT;
             'deleted' =>   __( 'Deleted!', WPTE_PM_TEXT_DOMAIN ),
             'deleted_des' =>   __( 'This url has beed deleted', WPTE_PM_TEXT_DOMAIN ),
         ] );
+    }
+
+    /**
+     * Update License
+     *
+     * @return void
+     */
+    public function wpte_license_update() {
+        if ( ! current_user_can( 'manage_options' ) ) {
+            return;
+        }
+
+        if ( ! wp_verify_nonce( wp_unslash( $_REQUEST['_nonce'] ), 'wpte-insert-nonce' ) ) {
+            return esc_html__( 'Nonce Varification Failed!', WPTE_PM_TEXT_DOMAIN );
+        }
+
+        $license_id = isset( $_POST['licenseid'] ) ? sanitize_text_field($_POST['licenseid']) : '';
+        $activation_limit = isset( $_POST['id'] ) ? sanitize_text_field($_POST['id']) : '';
+
+        wpte_product_license_activation_limit_update( $license_id, $activation_limit );
+
+        wp_send_json_success( [
+            'activation_updated' =>   __( 'Activation Limited Updated.', WPTE_PM_TEXT_DOMAIN ),
+        ] );
+        
+    }
+
+    /**
+     * License Deactivate
+     *
+     * @return void
+     */
+    public function wpte_license_deactivate() {
+        if ( ! current_user_can( 'manage_options' ) ) {
+            return;
+        }
+
+        if ( ! wp_verify_nonce( wp_unslash( $_REQUEST['_nonce'] ), 'wpte-insert-nonce' ) ) {
+            return esc_html__( 'Nonce Varification Failed!', WPTE_PM_TEXT_DOMAIN );
+        }
+
+        $license_id = isset( $_POST['licenseid'] ) ? sanitize_text_field($_POST['licenseid']) : '';
+
+        wpte_product_license_status_update( $license_id, 'inactive' );
+
+        wp_send_json_success( [
+            'license_deactivate' =>   __( 'License has been deactivated!', WPTE_PM_TEXT_DOMAIN ),
+        ] );
+        
+    }
+
+    /**
+     * License activate
+     *
+     * @return void
+     */
+    public function wpte_license_activate() {
+        if ( ! current_user_can( 'manage_options' ) ) {
+            return;
+        }
+
+        if ( ! wp_verify_nonce( wp_unslash( $_REQUEST['_nonce'] ), 'wpte-insert-nonce' ) ) {
+            return esc_html__( 'Nonce Varification Failed!', WPTE_PM_TEXT_DOMAIN );
+        }
+
+        $license_id = isset( $_POST['licenseid'] ) ? sanitize_text_field($_POST['licenseid']) : '';
+
+        wpte_product_license_status_update( $license_id, 'active' );
+
+        wp_send_json_success( [
+            'license_activate' =>   __( 'License has been activated :)', WPTE_PM_TEXT_DOMAIN ),
+        ] );
+        
     }
    
 }
