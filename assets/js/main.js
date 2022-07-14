@@ -356,14 +356,23 @@
                 data: data
             },
             beforeSend: function () {
-               $('#wpte-add-plugin-loader').addClass('wpte-add-plugin-loader');
+                Swal.fire({
+                    title: 'Saving...',
+                    padding: '3em',
+                    timerProgressBar: true,
+                    didOpen: () => {
+                      Swal.showLoading()
+                    },
+                  })
             },
             success: function (response) {
-                $('#wpte-add-plugin-loader').removeClass('wpte-add-plugin-loader');
-                $('#wpte_product_form_submit').val('Saved');
-                setTimeout(() =>{
-                    $('#wpte_product_form_submit').val('Save');
-                }, 3000);
+                Swal.fire(
+                    'Saved!',
+                    response.data.added,
+                    'success',
+                  ).then(() => {
+                    location.reload();
+                });
 
             },
             error: function (data) {
@@ -512,10 +521,37 @@
                 licenseid:licenseid
             },
             beforeSend: function () {
-              
+                Swal.fire({
+                  padding: '3em',
+                  timerProgressBar: true,
+                  didOpen: () => {
+                    Swal.showLoading()
+                  },
+                })
             },
             success: function (response) {
-                console.log(response);
+                if ( response.data.blocked ) {
+                    var message = response.data.blocked;
+                } else if ( response.data.inactive ) {
+                    var message = response.data.inactive;
+                } else {
+                    Swal.fire(
+                        response.data.deleted,
+                        response.data.deleted_des,
+                        'success',
+                      ).then(() => {
+                        location.reload();
+                    });
+                    return true;
+                }
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: message
+                }).then(() => {
+                    location.reload();
+                });
+                
             },
             error: function (data) {
                 console.log('error')
@@ -541,11 +577,31 @@
         var id = $(this).attr('dataid'),
             licenseid = $(this).attr('licenseid'),
             action = 'wpte_site_delete';
-        if(confirm("Are you sure you want to delete this?")){
-            wpte_domain_actions(id, licenseid, action);
-        }else{
-            return false;
-        }     
+              
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'No, cancel!',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    wpte_domain_actions(id, licenseid, action);
+                } else if (
+                    /* Read more about handling dismissals below */
+                    result.dismiss === Swal.DismissReason.cancel
+                ) {
+                    swalWithBootstrapButtons.fire(
+                    'Cancelled',
+                    'Your domain is safe :)',
+                    'error'
+                    )
+                }
+            });   
     });
+
+// ============================== Edit Single License ===============================
 
 })(jQuery);

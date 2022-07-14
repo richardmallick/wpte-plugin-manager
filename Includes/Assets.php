@@ -16,6 +16,8 @@ class Assets{
      */
     public function __construct() {
         add_action( 'admin_enqueue_scripts', [ $this, 'AdminEnqueueAssets' ] );
+        wp_enqueue_style('wpte-plugin-sweetalert2');
+        wp_enqueue_script('wpte-pm-sweetalert2');
     }
 
     /**
@@ -33,6 +35,11 @@ class Assets{
             [
                 'handler' => 'wpte-plugin-manager-style',
                 'src'     => 'css/plugin-manager.css',
+                'deps'    => null,
+            ],
+            [
+                'handler' => 'wpte-plugin-sweetalert2',
+                'src'     => 'css/sweetalert2.min.css',
                 'deps'    => null,
             ],
         ];
@@ -54,6 +61,12 @@ class Assets{
             [
                 'handler'   => 'wpte-pm-main',
                 'src'       => 'js/main.js',
+                'deps'      => ['jquery'],
+                'in_footer' => true
+            ],
+            [
+                'handler'   => 'wpte-pm-sweetalert2',
+                'src'       => 'js/sweetalert2.min.js',
                 'deps'      => ['jquery'],
                 'in_footer' => true
             ],

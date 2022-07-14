@@ -129,7 +129,7 @@ class Class_api_response{
 
         $data = json_decode($request->get_body(), true);
 
-        if ( ! $data['license'] || ! $data['domain'] || ! $data['siteip'] ) {
+        if ( ! $data['license'] || ! $data['domain'] || ! $data['siteip'] || ! $data['files_name'] ) {
             return false;
         }
 
@@ -203,6 +203,11 @@ class Class_api_response{
         $header = $request->get_headers();
 
         $data = json_decode($request->get_body(), true);
+
+        if ( ! $data['license'] || ! $data['domain'] || ! $data['files_name'] ) {
+            return false;
+        }
+
         $get_license = wpte_get_product_license_row_key( $data['license'] ) ? wpte_get_product_license_row_key( $data['license'] ) : (object)[];
         $id = $get_license->id ? $get_license->id : (object)[];
         $domain = $data['domain'] ? sanitize_url($data['domain']) : '';

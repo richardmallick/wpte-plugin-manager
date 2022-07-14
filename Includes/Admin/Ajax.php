@@ -512,7 +512,8 @@ EOT;
         wpte_pm_license_url_delete( $id );
 
         wp_send_json_success( [
-            'deleted' =>   __( 'This url has beed deleted', WPTE_PM_TEXT_DOMAIN ),
+            'deleted' =>   __( 'Deleted!', WPTE_PM_TEXT_DOMAIN ),
+            'deleted_des' =>   __( 'This url has beed deleted', WPTE_PM_TEXT_DOMAIN ),
         ] );
     }
    
