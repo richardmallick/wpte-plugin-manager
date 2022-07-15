@@ -192,8 +192,7 @@ class Ajax{
         wpte_plugin_updater( $plugin_id, $plugin_name, $plugin_slug, $plugin_version, $php_version, $wordpress_version, $tested_version, $demo_url, $description, $logo_id );
 
         wp_send_json_success( [
-            'update' =>  __( 'Update', WPTE_PM_TEXT_DOMAIN ),
-            'updated' =>  __( 'Updated', WPTE_PM_TEXT_DOMAIN ),
+            'updated' =>  __( 'Plugin has been updated :)', WPTE_PM_TEXT_DOMAIN ),
         ] );
 
     }
@@ -400,10 +399,12 @@ EOT;
         }
 
         $id = isset( $_POST['id'] ) ? sanitize_text_field($_POST['id']) : '';
+        $pluginid = isset( $_POST['pluginid'] ) ? sanitize_text_field($_POST['pluginid']) : '';
 
         wpte_product_license_delete( $id );
 
         wp_send_json_success( [
+            'license_url' =>  admin_url( 'admin.php?page=wpte-plugin-manager&id='.$pluginid.'&plugin=' ),
             'deleted' =>  __( 'Your License has beed Deleted', WPTE_PM_TEXT_DOMAIN ),
         ] );
     }
@@ -428,6 +429,7 @@ EOT;
 
         wp_send_json_success( [
             'plugin_url' =>  admin_url( 'admin.php?page=wpte-plugin-manager' ),
+            'plugin_delete' =>  esc_html__( 'This plugin has been deleted', WPTE_PM_TEXT_DOMAIN ),
         ] );
     }
 

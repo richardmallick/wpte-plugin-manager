@@ -11,10 +11,10 @@ $variations = wpte_get_product_variations( $plugin_id ) ? wpte_get_product_varia
             <h2>License Key</h2>
             <h2>Limit</h2>
             <h2>Active</h2>
-            <h2>Customer</h2>
+            <h2>User</h2>
             <h2>Status</h2>
             <h2>Expier Date</h2>
-            <h2>View</h2>
+            <h2>╺</h2>
         </div>
 
         <?php 
@@ -40,7 +40,7 @@ $variations = wpte_get_product_variations( $plugin_id ) ? wpte_get_product_varia
             $customer_name = $customer->first_name . ' ' . $customer->last_name;
         ?>
             <div class="wpte-single-license-row wpte-single-license-column wpte-single-license-site">
-                <div class="site site-url license-key"><?php echo esc_html($license_key); ?></div>
+                <div class="site site-url license-key"><a href="<?php echo admin_url( "admin.php?page=wpte-plugin-manager&id=$plugin_id&plugin=$plugin&license_id=$license_id" ); ?>"><?php echo esc_html($license_key); ?></a></div>
                 <div class="site site-url"><?php echo intval($activation_limit); ?></div>
                 <div class="site site-name"><?php echo intval($active); ?></div>
                 <div class="site site-customer-name">
@@ -58,7 +58,7 @@ $variations = wpte_get_product_variations( $plugin_id ) ? wpte_get_product_varia
                     }; ?>
                 </div>
                 <div class="site site-expired-date"><?php echo esc_html($expired_date); ?></div>
-                <div class="site site-action-view"><a href="<?php echo admin_url( "admin.php?page=wpte-plugin-manager&id=$plugin_id&plugin=$plugin&license_id=$license_id" ); ?>"><span class="dashicons dashicons-edit"></span></a></div>
+                <div class="site site-action-view"><a href="<?php echo admin_url( "admin.php?page=wpte-plugin-manager&id=$plugin_id&plugin=$plugin&license_id=$license_id" ); ?>">👁</a></div>
             </div>
         <?php endforeach; ?>
 
@@ -120,7 +120,7 @@ $variations = wpte_get_product_variations( $plugin_id ) ? wpte_get_product_varia
                     </div>
                     <div class="wpte-footer-buttons">
                         <span id="wpte-add-plugin-loader" class="spinner sa-spinner-open"></span>
-                        <button type="button" class="wpte-popup-delete-button">Delete</button>
+                        <button type="button" class="wpte-popup-close-button">Close</button>
                         <input type="submit" class="wpte-popup-license-save-button" name="wpte_popup_licnese_submit" id="wpte_popup_licnese_submit" value="Save">
                     </div>
                 </div>

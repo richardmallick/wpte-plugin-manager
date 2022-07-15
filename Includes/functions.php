@@ -680,11 +680,6 @@ function wpte_pm_get_data_for_invoice( $licese_id ) {
     );
 }
 
-// echo "<pre>";
-//     print_r(wpte_pm_get_data_for_invoice( 1 ));
-// echo "</pre>";
-// die;
-
 function mailtrap($phpmailer) {
     $phpmailer->isSMTP();
     $phpmailer->Host = 'smtp.mailtrap.io';

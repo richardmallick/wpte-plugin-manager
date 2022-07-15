@@ -38,6 +38,7 @@ $product        = wpte_get_product_variation_by_id( $product_id ) ? wpte_get_pro
                 <li id="wpte-license-deactivate" dataid="<?php echo esc_attr($license_id); ?>">Deactivate</li>
                 <li id="wpte-license-active" dataid="<?php echo esc_attr($license_id); ?>">Active</li>
                 <li id="wpte-license-customer-id" dataid="<?php echo esc_attr($customer_id); ?>">Resend Email</li>
+                <li id="wpte-license-delete" pluginid="<?php echo esc_attr($plugin_id); ?>" dataid="<?php echo esc_attr($license_id); ?>">Delete</li>
             </ul>
         </div>
     </div>

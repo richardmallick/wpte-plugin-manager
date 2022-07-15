@@ -66,11 +66,14 @@
                         location.reload()
                     }, 2000);
                 } else {
-                    $('#wpte_plugin_update').val(response.data.updated);
                     $('#wpte-add-plugin-loaders').removeClass('wpte-add-plugin-loader');
-                    setTimeout(function(){ 
-                        $('#wpte_plugin_update').val(response.data.update);
-                    }, 3000);
+                    Swal.fire({
+                        icon: 'success',
+                        title: response.data.updated,
+                        showConfirmButton: false,
+                        timer: 2000,
+                        padding: '2em',
+                    })
                 }
 
             },
@@ -443,29 +446,50 @@
     /**
      * Delete License
      */
-    function wpte_pm_delete( id, action, This ) {
+    function wpte_pm_delete( id, pluginid, action, This ) {
         $.ajax({
             type: 'POST',
             url: wptePlugin.ajaxUrl,
             data: {
                 action: action,
                 _nonce: wptePlugin.wpte_nonce,
-                id: id
+                id: id,
+                pluginid: pluginid,
             },
             beforeSend: function () {
-                This.siblings('#wpte-add-plugin-loader').addClass('wpte-add-plugin-loader');
-                This.siblings('#wpte-add-plugin-loaders').addClass('wpte-add-plugin-loader');
+
+                if ( action === 'wpte_plugin_delete' ) {
+                    This.siblings('#wpte-add-plugin-loaders').addClass('wpte-add-plugin-loader');
+                } else {
+                    Swal.fire({
+                        padding: '3em',
+                        timerProgressBar: true,
+                        didOpen: () => {
+                          Swal.showLoading()
+                        },
+                      })
+                }
+                
             },
             success: function (response) {
 
                 if ( typeof(response.data.deleted) != "undefined" && response.data.deleted !== null ) {
-                    setTimeout(function(){ 
-                       location.reload();
-                    }, 2000);
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'success',
+                        title: response.data.deleted
+                    }).then(() => {
+                        $(location).attr('href', response.data.license_url);
+                    });
                 } else {
-                    setTimeout(function(){ 
+                    This.siblings('#wpte-add-plugin-loaders').removeClass('wpte-add-plugin-loader');
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'success',
+                        title: response.data.plugin_delete
+                    }).then(() => {
                         $(location).attr('href', response.data.plugin_url);
-                    }, 2000);
+                    });
                 }
 
             },
@@ -475,16 +499,35 @@
         });
     }
 
-    $(document).on('click', '.wpte-popup-delete-button', function(){
-        var id = $('#wpte_pm_license_id').val();
+    $(document).on('click', '#wpte-license-delete', function(){
+        var id = $(this).attr('dataid');
+        var pluginid = $(this).attr('pluginid');
         var action = 'wpte_license_delete';
         var This = $(this);
 
-        if(confirm("Are you sure you want to delete this?")){
-            wpte_pm_delete( id, action,  This);
-        }else{
-            return false;
-        }
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You can't revert it!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete!',
+            cancelButtonText: 'No, cancel!',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                wpte_pm_delete( id, pluginid, action,  This);
+            } else if (
+                /* Read more about handling dismissals below */
+                result.dismiss === Swal.DismissReason.cancel
+            ) {
+                Swal.fire(
+                'Cancelled',
+                '',
+                'error'
+                )
+            }
+        }); 
+
     });
 
     // Plugin Delete
@@ -493,11 +536,28 @@
         var action = 'wpte_plugin_delete';
         var This = $(this);
 
-        if(confirm("Are you sure you want to delete this?")){
-            wpte_pm_delete( id, action,  This);
-        }else{
-            return false;
-        }
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You can't revert it!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete!',
+            cancelButtonText: 'No, cancel!',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                wpte_pm_delete( id, '', action,  This);
+            } else if (
+                /* Read more about handling dismissals below */
+                result.dismiss === Swal.DismissReason.cancel
+            ) {
+                Swal.fire(
+                'Cancelled',
+                '',
+                'error'
+                )
+            }
+        }); 
     });
 
     $('.site-customer-name').on('mouseover', function(){

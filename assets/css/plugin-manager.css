@@ -684,6 +684,9 @@
 .wpte-single-license-column .license-key{
     color: rgb(119, 119, 245);
 }
+.wpte-single-license-column .license-key a{
+    text-decoration: none;
+}
 .wpte-single-license-column .customer-view{
     color: rgb(119, 119, 245);
     cursor: pointer;
@@ -802,7 +805,7 @@
 }
 
 .wpte-single-license-column{
-    grid-template-columns: 300px 60px 60px 90px 80px 110px 30px;
+    grid-template-columns: 340px 58px 60px 50px 98px 110px 20px;
 }
 .site-customer-name{
     position: relative;
@@ -810,8 +813,8 @@
 .site-customer-name .customer-name{
     display: none;
     position: absolute;
-    bottom: 30px;
-    left: -50%;
+    bottom: 26px;
+    left: -86%;
     background: #ddd;
     padding: 10px;
     border-radius: 5px;
@@ -838,6 +841,16 @@
 
 .wpte-site-action{
     position: relative;
+}
+
+#wpte-license-delete{
+    color: #fff;
+    background: rgb(238, 18, 18);
+    text-align: center;
+    border-radius: 0 0 5px 5px;
+}
+#wpte-license-delete:hover{
+    background: rgb(194, 20, 20);
 }
 
 
