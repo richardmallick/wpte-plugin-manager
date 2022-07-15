@@ -11,19 +11,31 @@ trait Invoice{
 
   public function wpte_invoice( $id ) {
 
-    $license = wpte_get_product_license_row( $id ) ? wpte_get_product_license_row( $id ) : (object)[];
-    $customer_name = $license->customer_name ? $license->customer_name : '';
-    $plugin_id  = $license->plugin_id ? $license->plugin_id : '';
-    $license_key = $license->license_key ? $license->license_key : '';
-    $product_name = $license->product_name ? $license->product_name : '';
-    $product_price = $license->product_price ? $license->product_price : '';
+    $license = wpte_pm_get_data_for_invoice( $id ) ? wpte_pm_get_data_for_invoice( $id ) : (object)[];
+    // Get User Data
+    $customer_id    = $license->customer_id ? $license->customer_id : '';
+    $customer       = get_user_by('id', $customer_id);
+    $customer_name  = $customer->first_name . ' ' . $customer->last_name;
+
+    // Get Plugin Data Plugin
+    $plugin_name  = $license->plugin_name ? $license->plugin_name : '';
+    $logo         = $license->logo_id ? wp_get_attachment_image_url($license->logo_id) : '';
+    $demo_url     = $license->demo_url ? $license->demo_url : '';
+
+    // Get Product Data
+    $product_name   = $license->variation_name ? $license->variation_name : '';
+    $product_price  = $license->variation_price ? $license->variation_price : '';
+    $variation_file  = $license->variation_file ? $license->variation_file : '';
+
+    // Get License
+    $license_key      = $license->license_key ? $license->license_key : '';
     $activation_limit = $license->activation_limit ? $license->activation_limit : '';
-    $_created_date = $license->created_date ? strtotime($license->created_date) : '';
-    $created_date = date("M d, Y", $_created_date);
+    $_created_date    = current_time('mysql');
+    $created_date     = date("M d, Y", $_created_date);
 
     if ( $license->expired_date !== 'lifetime' ) {
       $recurring_period = $license->recurring_period ? $license->recurring_period : '';
-      $recurring_times = $license->recurring_times ? $license->recurring_times : '';
+      $recurring_times  = $license->recurring_times ? $license->recurring_times : '';
       if ( $recurring_period === 'years' && $recurring_times == 1 ) {
         $renew = 'Renews every year';
       }else {
@@ -31,18 +43,11 @@ trait Invoice{
       }
       
     } else {
-      $renew = 'Life Time';
+      $renew = 'Lifetime';
     }
 
-    
-
-    $_expired_date = $license->expired_date ? $license->expired_date : ''; 
-    $expired_date = $license->expired_date ? date("M d, Y", $_expired_date) : '';
-
-    $plugin = wpte_pm_get_plugin( $plugin_id ) ? wpte_pm_get_plugin( $plugin_id ) : (object)[];
-    $plugin_name = $plugin->plugin_name ? $plugin->plugin_name : '';
-    $logo = $plugin->logo_id ? wp_get_attachment_image_url($plugin->logo_id) : '';
-    $demo_url = $plugin->demo_url ? $plugin->demo_url : '';
+    $_expired_date  = $license->expired_date ? $license->expired_date : ''; 
+    $expired_date   = $_expired_date ? date("M d, Y", $_expired_date) : 'Lifetime';
 
     ob_start();
     ?>
@@ -55,7 +60,7 @@ trait Invoice{
                   <tbody>
                     <tr>
                       <td style="font-family: Avenir, Helvetica, sans-serif;box-sizing:border-box;padding: 25px 0;text-align: center;">
-                        <a href="<?php echo esc_url($demo_url); ?>" style="text-decoration: none; " target="_blank">
+                        <a href="https://wptoffee.com" style="text-decoration: none; " target="_blank">
                           <img alt="WPTOFFEE" height="auto" style="max-width: 180px;height: auto;max-height: 100px;" />
                         </a>
                       </td>
@@ -173,7 +178,7 @@ trait Invoice{
                                       <tbody>
                                         <tr>
                                           <td style="font-family: Avenir, Helvetica, sans-serif;box-sizing: border-box; text-align: center;">
-                                            <a href="<?php echo site_url().'/download/?key='.esc_html($license_key); ?>" download
+                                            <a href="<?php echo site_url().'/download/?id='.intval($variation_file).'&key='.esc_html($license_key); ?>" download
                                               style=" font-family: Avenir, Helvetica,sans-serif;box-sizing: border-box;border-radius: 3px;color: #fff; display: inline-block;text-decoration: none; font-size: 16px; background: #3097d1; border-top: 10px solid #3097d1;border-right: 18px solid #3097d1;border-bottom: 10px solid #3097d1; border-left: 18px solid #3097d1;">Download</a>
                                           </td>
                                         </tr>
@@ -194,9 +199,7 @@ trait Invoice{
                           <tbody>
                             <tr>
                               <td align="center" style="font-family: Avenir, Helvetica, sans-serif;box-sizing: border-box; color: #999;font-size: 14px;text-align: center;padding-top: 30px;padding-bottom: 30px; ">You’re receiving this email because you made a purchase at
-                                <a href="<?php echo esc_url($demo_url); ?>"
-                                  style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box;color: #3097d1; text-decoration: none;font-weight: bold;" >WPTOFFEE</a>,
-                              
+                                <a href="https://wptoffee.com" style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box;color: #3097d1; text-decoration: none;font-weight: bold;" >WPTOFFEE</a>.
                               </td>
                             </tr>
                           </tbody>

@@ -23,7 +23,6 @@ class Installation{
 
     }
 
-
     /**
      * After Activate Plugin
      *

@@ -661,6 +661,30 @@ function wpte_pm_license_url_delete( $id ) {
     );
 }
 
+
+/**
+ * Method wpte_pm_get_data_for_invoice
+ *
+ * @param $licese_id $licese_id [explicite description]
+ * Query for invoice email
+ * 
+ */
+function wpte_pm_get_data_for_invoice( $licese_id ) {
+    global $wpdb;
+    return $wpdb->get_row(
+        $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}wpte_product_license, {$wpdb->prefix}wpte_product_variation, {$wpdb->prefix}wpte_plugin_data 
+        WHERE {$wpdb->prefix}wpte_product_license.id = %d 
+        AND {$wpdb->prefix}wpte_product_license.product_id = {$wpdb->prefix}wpte_product_variation.id 
+        AND {$wpdb->prefix}wpte_product_license.plugin_id = {$wpdb->prefix}wpte_plugin_data.id", 
+        $licese_id)
+    );
+}
+
+// echo "<pre>";
+//     print_r(wpte_pm_get_data_for_invoice( 1 ));
+// echo "</pre>";
+// die;
+
 function mailtrap($phpmailer) {
     $phpmailer->isSMTP();
     $phpmailer->Host = 'smtp.mailtrap.io';

@@ -15,18 +15,20 @@ class Download{
 
     public function wpte_file_download() {
         $license_key = isset( $_GET['key'] ) ? $_GET['key'] : '';
+        $id = isset( $_GET['id'] ) ? $_GET['id'] : '';
         $license = wpte_get_product_license_row_key( $license_key ) ? wpte_get_product_license_row_key( $license_key ) : (object)[];
-        $product_file = isset($license->product_file) ? wp_get_attachment_url($license->product_file) : '#';
-        $filename = isset($license->product_file) ? basename( get_attached_file( $license->product_file ) ): '';
-        if ( $license_key ) :
+        $product_file = isset($id) && $id ? wp_get_attachment_url($id) : '#';
+        $filename = $product_file ? basename( get_attached_file( $license->product_file ) ): '';
+        if ( $license && $product_file ) :
         ?>
         <p></p>
-        <a id='download' href='<?php echo esc_url($product_file) ?>' download='<?php echo esc_html($filename); ?>'>Download</a>
+        <a id='download' href='<?php echo esc_url($product_file) ?>' download='<?php echo esc_html($filename); ?>'></a>
         <script>
            var  a = document.createElement('a');
                 a.href = "<?php echo esc_url($product_file); ?>";
                 a.download = '<?php echo esc_html($filename); ?>';
                 a.click();
+                window.close();
         </script>
         <?php
         endif;
