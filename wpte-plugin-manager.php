@@ -134,6 +134,8 @@ if ( ! class_exists( 'wpte_plugin_manager' ) ) {
             if ( is_admin() ) {
                 new WPTE_PM_MANAGER\Includes\Admin();
                 new WPTE_PM_MANAGER\Includes\Assets();
+                wp_enqueue_style('wpte-plugin-sweetalert2');
+                wp_enqueue_script('wpte-pm-sweetalert2');
             }
             new WPTE_PM_MANAGER\Includes\Api();
             new WPTE_PM_MANAGER\Includes\Frontend();

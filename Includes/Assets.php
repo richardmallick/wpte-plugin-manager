@@ -16,8 +16,6 @@ class Assets{
      */
     public function __construct() {
         add_action( 'admin_enqueue_scripts', [ $this, 'AdminEnqueueAssets' ] );
-        wp_enqueue_style('wpte-plugin-sweetalert2');
-        wp_enqueue_script('wpte-pm-sweetalert2');
     }
 
     /**
