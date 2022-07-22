@@ -42,6 +42,8 @@ class Class_menu{
         add_submenu_page('wpte-plugin-manager', __('Plugins', WPTE_PM_TEXT_DOMAIN), __('Plugins', WPTE_PM_TEXT_DOMAIN), $user, 'wpte-plugin-manager', [$this, 'wpte_plugins_page']);
         add_submenu_page('wpte-plugin-manager',  __('License', WPTE_PM_TEXT_DOMAIN),  __('License', WPTE_PM_TEXT_DOMAIN), $user, 'wpte-plugin-manager-license', [$this, 'Plugins_license']);
         add_submenu_page('wpte-plugin-manager', __('Settings', WPTE_PM_TEXT_DOMAIN), __('Settings', WPTE_PM_TEXT_DOMAIN), $user, 'wpte-plugin-manager-settings', [$this, 'Plugins_Settings']);
+        wp_enqueue_style('wpte-plugin-sweetalert2');
+        wp_enqueue_script('wpte-pm-sweetalert2');
     }
 
     /**
