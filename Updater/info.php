@@ -2,8 +2,8 @@
 
 
 $update = array(
-	'name' => 'Product Layouts Pro',
-	'slug' => 'product-layouts-pro',
+	"name" => "Product Layouts Pro",
+	"slug" => "product-layouts-pro",
     "author"  => "<a href='https://wptoffee.com</a>",
 	"author_profile"  => "https://wptoffee.com",
 	"version"  => "2.0",
