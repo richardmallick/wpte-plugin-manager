@@ -54,6 +54,16 @@ class Class_api_response{
                 'permission_callback' => '__return_true'
             ]
         );
+
+        register_rest_route(
+            'wpte/v1', 
+            '/update/werewr/check', 
+            [
+                'methods' => 'POST',
+                'callback' => [$this, 'wpte_plugin_update_response'],
+                'permission_callback' => '__return_true'
+            ]
+        );
     }
 
     /**
@@ -230,6 +240,47 @@ class Class_api_response{
         }
 
         return false;
+    }
+
+    /**
+     * Plugin Update Response
+     * 
+     * @since 1.0.0
+     */
+    public function wpte_plugin_update_response( $request ) {
+
+        // $update = array(
+        //     "name" => "Product Layouts Pro",
+        //     "slug" => "product-layouts-pro",
+        //     "plugin" => "",
+        //     "url" => "",
+        //     "icons" => [
+        //         '1x' => '',
+        //         '2x' => '',
+        //     ],
+        //     "banners"  => [
+        //         "low"  => "",
+        //         "high"  => ""
+        //     ],
+        //     "tested"  => "6.0",
+        //     "requires_php"  => "5.6",
+        //     "requires"  => "5.4",
+        //     "download_url"  => "http://myplugin.test/wp-content/uploads/2022/07/product-layouts-pro.zip",
+        //     "sections"  => [
+        //         "description"  => "This is woocommerce product layout plugin. you can design product using this plugin for your woocommerce store.",
+        //         "installation"  => "Click the activate button and that's it.",
+        //         "changelog"  => "<h3>1.0 –  1 august 2021</h3><ul><li>Bug fixes.</li><li>Initital release.</li></ul>"
+        //     ],
+        //     'new_version' => '2.0.3',
+        //     "last_updated"  => "2022-06-30 02:10:00",
+            
+        // );
+
+        $header = $request->get_headers();
+
+        $data = json_decode($request->get_body(), true);
+
+        return true;
     }
 
 }
