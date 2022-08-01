@@ -279,8 +279,8 @@ class Class_api_response{
         $header = $request->get_headers();
 
         $data = json_decode($request->get_body(), true);
-
-        return json_encode($update);
+        header( 'Content-Type: application/json' );
+        return $request->get_body();
     }
 
 }
