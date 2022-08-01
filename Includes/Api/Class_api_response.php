@@ -265,7 +265,6 @@ class Class_api_response{
             "tested"  => "6.0",
             "requires_php"  => "5.6",
             "requires"  => "5.4",
-            "download_url"  => "http://myplugin.test/wp-content/uploads/2022/07/product-layouts-pro.zip",
             "sections"  => [
                 "description"  => "This is woocommerce product layout plugin. you can design product using this plugin for your woocommerce store.",
                 "installation"  => "Click the activate button and that's it.",
@@ -273,6 +272,8 @@ class Class_api_response{
             ],
             'new_version' => '2.0.3',
             "last_updated"  => "2022-06-30 02:10:00",
+            "package"       => '',
+            "download_link"  => "http://myplugin.test/wp-content/uploads/2022/07/product-layouts-pro.zip",
             
         );
 
