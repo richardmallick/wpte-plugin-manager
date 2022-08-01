@@ -280,7 +280,7 @@ class Class_api_response{
 
         $data = json_decode($request->get_body(), true);
         header( 'Content-Type: application/json' );
-        return $request->get_body();
+        return json_encode($update);
     }
 
 }
