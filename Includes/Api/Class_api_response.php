@@ -280,7 +280,7 @@ class Class_api_response{
 
         $data = json_decode($request->get_body(), true);
         header( 'Content-Type: application/json' );
-        return json_encode($update);
+        wp_send_json($update);
     }
 
 }
