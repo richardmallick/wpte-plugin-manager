@@ -272,7 +272,7 @@ class Class_api_response{
             ],
             'new_version' => '2.0.3',
             "last_updated"  => "2022-06-30 02:10:00",
-            "package"       => '',
+            "package"       => 'http://myplugin.test/wp-content/uploads/2022/07/product-layouts-pro.zip',
             "download_url"  => "http://myplugin.test/wp-content/uploads/2022/07/product-layouts-pro.zip",
             "download_link"  => "http://myplugin.test/wp-content/uploads/2022/07/product-layouts-pro.zip",
             
