@@ -94,19 +94,24 @@ class Ajax{
             ] );
             return false;
         }
+
+        // This code for create License
+        $token = openssl_random_pseudo_bytes(16);
+        $token = bin2hex($token);
         
 
         $insert_id = wpte_pm_add_plugin( [
-            'plugin_name'  => $plugin_name,
-            'plugin_slug'  => $plugin_slug,
-            'plugin_version'=> $plugin_version,
-            'php_version'  => $php_version,
+            'plugin_name'       => $plugin_name,
+            'plugin_slug'       => $plugin_slug,
+            'plugin_version'    => $plugin_version,
+            'php_version'       => $php_version,
             'wordpress_version' => $wordpress_version,
-            'tested_version' => $tested_version,
-            'demo_url' => $demo_url,
-            'description' => $description,
-            'logo_id' => $logo_id,
-            'created_date' => current_time('mysql'),
+            'tested_version'    => $tested_version,
+            'demo_url'          => $demo_url,
+            'description'       => $description,
+            'created_date'      => current_time('mysql'),
+            'logo_id'           => $logo_id,
+            'plugin_key'        => $token,
 
         ] );
 

@@ -15,16 +15,17 @@ function wpte_pm_add_plugin( $args = [] ) {
     global $wpdb;
 
     $default = [
-        'plugin_name'  => '',
-        'plugin_slug'  => '',
-        'plugin_version'=> '',
-        'php_version'  => '',
+        'plugin_name'       => '',
+        'plugin_slug'       => '',
+        'plugin_version'    => '',
+        'php_version'       => '',
         'wordpress_version' => '',
-        'tested_version' => '',
-        'demo_url' => '',
-        'description' => '',
-        'logo_id' => '',
-        'created_date' => current_time('mysql'),
+        'tested_version'    => '',
+        'demo_url'          => '',
+        'description'       => '',
+        'created_date'      => current_time('mysql'),
+        'logo_id'           => '',
+        'plugin_key'        => '',
 
     ];
 
@@ -34,6 +35,7 @@ function wpte_pm_add_plugin( $args = [] ) {
         "{$wpdb->prefix}wpte_plugin_data",
         $data,
         [
+            '%s',
             '%s',
             '%s',
             '%s',

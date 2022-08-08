@@ -249,6 +249,12 @@ class Class_api_response{
      */
     public function wpte_plugin_update_response( $request ) {
 
+        $header = $request->get_headers();
+
+        $data = json_decode($request->get_body(), true);
+
+        write_log($data);
+
         $update = array(
             "name" => "Product Layouts Pro",
             "slug" => "product-layouts-pro",
@@ -277,9 +283,6 @@ class Class_api_response{
             
         );
 
-        $header = $request->get_headers();
-
-        $data = json_decode($request->get_body(), true);
         header( 'Content-Type: application/json' );
         wp_send_json($update);
     }
