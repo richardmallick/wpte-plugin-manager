@@ -58,13 +58,23 @@
                     <p></p>
                 </div>
             </div>
+            <div class="wpte-pm-popup-form-fields">
+                <div class="wpte-pm-popup-form-field">
+                    <label for='wpte_pm_plugin_change_log'>Change Log</label>
+                    <textarea name="wpte_pm_plugin_change_log" id="wpte_pm_plugin_change_log" cols="150" rows="4"><?php echo $plugin->change_log; ?></textarea>
+                </div>
+            </div>
             <div class="wpte-pm-popup-footer">
                 <div class="wpte-pm-footer-attachment">
                     <label for="">Logo</label>
                     <div id="wpte-pm-attachment">
-                            <input type="hidden" class="wpte-pm-logo-id" name="wpte-pm-logo-id" value="<?php echo esc_html($plugin->logo_id); ?>">
-                            <input type="hidden" class="wpte-pm-logo-url" name="wpte-pm-logo-url" value="<?php echo esc_url($image_url); ?>">
+                        <input type="hidden" class="wpte-pm-logo-id" name="wpte-pm-logo-id" value="<?php echo esc_html($plugin->logo_id); ?>">
+                        <input type="hidden" class="wpte-pm-logo-url" name="wpte-pm-logo-url" value="<?php echo esc_url($image_url); ?>">
+                        <?php if ( $image_url ) {?>
                             <img src="<?php echo esc_url($image_url); ?>" alt="">
+                        <?php } else { ?>
+                            <img src="<?php echo WPTE_PM_URL ?>/Images/kd-img.png" alt="">
+                        <?php } ?>
                     </div>
                 </div>
                 <div class="wpte-footer-buttons">

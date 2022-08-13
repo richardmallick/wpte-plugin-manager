@@ -26,6 +26,8 @@ function wpte_pm_add_plugin( $args = [] ) {
         'created_date'      => current_time('mysql'),
         'logo_id'           => '',
         'plugin_key'        => '',
+        'last_update'       => current_time('mysql'),
+        'change_log'        => ''
 
     ];
 
@@ -45,6 +47,8 @@ function wpte_pm_add_plugin( $args = [] ) {
             '%s',
             '%s',
             '%d',
+            '%s',
+            '%s',
             '%s',
         ]
     );
@@ -121,9 +125,9 @@ function wpte_pm_get_plugin( $plugin_id ) {
  * 
  * @return void
  */
-function wpte_plugin_updater( $plugin_id, $plugin_name, $plugin_slug, $plugin_version, $php_version, $wordpress_version, $tested_version, $demo_url, $description, $logo_id ) {
+function wpte_plugin_updater( $plugin_id, $plugin_name, $plugin_slug, $plugin_version, $php_version, $wordpress_version, $tested_version, $demo_url, $description, $logo_id, $last_update, $change_log ) {
     global $wpdb;
-   $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}wpte_plugin_data SET plugin_name = %s, plugin_slug = %s, plugin_version = %s, php_version = %s, wordpress_version = %s, tested_version = %s, demo_url = %s, description = %s, logo_id = %d WHERE id = %d", $plugin_name, $plugin_slug, $plugin_version, $php_version, $wordpress_version, $tested_version, $demo_url, $description, $logo_id, $plugin_id ) );
+   $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}wpte_plugin_data SET plugin_name = %s, plugin_slug = %s, plugin_version = %s, php_version = %s, wordpress_version = %s, tested_version = %s, demo_url = %s, description = %s, logo_id = %d, last_update = %s, change_log = %s WHERE id = %d", $plugin_name, $plugin_slug, $plugin_version, $php_version, $wordpress_version, $tested_version, $demo_url, $description, $logo_id, $last_update, $change_log, $plugin_id ) );
 }
 
 /**
@@ -679,6 +683,21 @@ function wpte_pm_get_data_for_invoice( $licese_id ) {
         AND {$wpdb->prefix}wpte_product_license.product_id = {$wpdb->prefix}wpte_product_variation.id 
         AND {$wpdb->prefix}wpte_product_license.plugin_id = {$wpdb->prefix}wpte_plugin_data.id", 
         $licese_id)
+    );
+}
+
+/**
+ * Method wpte_pm_get_data_for_invoice
+ *
+ * @param $licese_id $licese_id [explicite description]
+ * Query for invoice email
+ * 
+ */
+
+function wpte_pm_get_data_for_plugin_update( $license_key ) {
+    global $wpdb;
+    return $wpdb->get_row(
+        $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}wpte_plugin_data WHERE plugin_key = %s", $license_key )
     );
 }
 

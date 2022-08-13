@@ -251,14 +251,22 @@ class Class_api_response{
 
         $header = $request->get_headers();
 
-        $data = json_decode($request->get_body(), true);
+        $data = $request->get_params();
 
-        write_log($data);
+        $id          = isset($data['id']) && $data['id'] ? esc_html($data['id']) : '';
+        $version     = isset($data['version']) && $data['version'] ? esc_html($data['version']) : '';
+        $name        = isset($data['name']) && $data['name'] ? esc_html($data['name']) : '';
+        $slug        = isset($data['slug']) && $data['slug'] ? esc_html($data['slug']) : '';
+        $basename    = isset($data['basename']) && $data['basename'] ? esc_html($data['basename']) : '';
+        $license_key = isset($data['license_key']) && $data['license_key'] ? esc_html($data['license_key']) : '';
+
+        $plugin_data = wpte_pm_get_data_for_plugin_update( $id );
 
         $update = array(
-            "name" => "Product Layouts Pro",
-            "slug" => "product-layouts-pro",
-            "plugin" => "product-layouts-pro/product-layouts-pro.php",
+            "id"   => $plugin_data->plugin_key,
+            "name" => $plugin_data->plugin_name,
+            "slug" => $plugin_data->plugin_slug,
+            "plugin" => $plugin_data->plugin_slug."/".$plugin_data->plugin_slug."php",
             "url" => "",
             "icons" => [
                 '1x' => '',
@@ -268,20 +276,21 @@ class Class_api_response{
                 "low"  => "",
                 "high"  => ""
             ],
-            "tested"  => "6.0",
-            "requires_php"  => "5.6",
-            "requires"  => "5.4",
+            "tested"  => $plugin_data->tested_version,
+            "requires_php"  => $plugin_data->php_version,
+            "requires"  => $plugin_data->wordpress_version,
             "sections"  => [
-                "description"  => "This is woocommerce product layout plugin. you can design product using this plugin for your woocommerce store.",
+                "description"  => $plugin_data->description,
                 "installation"  => "Click the activate button and that's it.",
-                "changelog"  => "<h3>1.0 –  1 august 2021</h3><ul><li>Bug fixes.</li><li>Initital release.</li></ul>"
+                "changelog"  => $plugin_data->change_log
             ],
-            'new_version' => '2.0.3',
-            "last_updated"  => "2022-06-30 02:10:00",
-            "package"       => 'http://myplugin.test/wp-content/uploads/2022/07/product-layouts-pro.zip',
-            "download_link"  => "http://myplugin.test/wp-content/uploads/2022/07/product-layouts-pro.zip",
+            'new_version' => $plugin_data->plugin_version,
+            "last_updated"  => $plugin_data->last_update,
             
         );
+
+        $update["package"] = 'http://myplugin.test/wp-content/uploads/2022/07/product-layouts-pro.zip';
+        $update["download_link"] = 'http://myplugin.test/wp-content/uploads/2022/07/product-layouts-pro.zip';
 
         header( 'Content-Type: application/json' );
         wp_send_json($update);

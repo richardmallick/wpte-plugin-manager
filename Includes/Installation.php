@@ -70,6 +70,8 @@ class Installation{
             created_date timestamp,
             logo_id mediumint(10),
             plugin_key varchar(50) NOT NULL,
+            last_update timestamp,
+            change_log longtext,
             PRIMARY KEY  (id)
         ) $charset_collate";
 

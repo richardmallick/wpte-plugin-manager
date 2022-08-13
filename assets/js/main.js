@@ -96,6 +96,7 @@
             demo_url: $('#wpte_pm_plugin_demo_url').val(),
             description: $('#wpte_pm_plugin_description').val(),
             logo_id: $('.wpte-pm-logo-id').val(),
+            change_log: $('#wpte_pm_plugin_change_log').val(),
         }
         wpte_insert_data( data, action );
     });
@@ -114,6 +115,7 @@
             demo_url: $('#wpte_pm_plugin_demo_url').val(),
             description: $('#wpte_pm_plugin_description').val(),
             logo_id: $('.wpte-pm-logo-id').val(),
+            change_log: $('#wpte_pm_plugin_change_log').val(),
         }
         wpte_insert_data( data, action );
     });
@@ -636,21 +638,21 @@
         });
     }
 
-    $('#wpte-site-block').on('click', function(e){
+    $('.wpte-site-block').on('click', function(e){
         var id = $(this).attr('dataid'),
             licenseid = $(this).attr('licenseid'),
             action = 'wpte_site_block';
             wpte_license_actions(id, licenseid, action);
     });
 
-    $('#wpte-site-inactive').on('click', function(e){
+    $('.wpte-site-inactive').on('click', function(e){
         var id = $(this).attr('dataid'),
             licenseid = $(this).attr('licenseid'),
             action = 'wpte_site_inactive';
             wpte_license_actions(id, licenseid, action);
     });
 
-    $('#wpte-site-delete').on('click', function(e){
+    $('.wpte-site-delete').on('click', function(e){
         var id = $(this).attr('dataid'),
             licenseid = $(this).attr('licenseid'),
             action = 'wpte_site_delete';

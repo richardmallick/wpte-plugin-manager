@@ -161,6 +161,12 @@ class Plugin_manager{
                             <input type="text" id='wpte_pm_plugin_description' name='wpte_pm_plugin_description'>
                         </div>
                     </div>
+                    <div class="wpte-pm-popup-form-fields">
+                        <div class="wpte-pm-popup-form-field">
+                            <label for='wpte_pm_plugin_change_log'>Change Log</label>
+                            <textarea name="wpte_pm_plugin_change_log" id="wpte_pm_plugin_change_log" cols="81" rows="2"></textarea>
+                        </div>
+                    </div>
                     <div class="wpte-pm-popup-footer">
                         <div class="wpte-pm-footer-attachment">
                             <label for=''>Logo</label>

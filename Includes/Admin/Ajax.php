@@ -59,6 +59,7 @@ class Ajax{
         $demo_url = $args['demo_url'] ? sanitize_url($args['demo_url']) : '';
         $description = $args['description'] ? sanitize_text_field($args['description']) : '';
         $logo_id = $args['logo_id'] ? sanitize_text_field($args['logo_id']) : '';
+        $change_log = $args['change_log'] ? $args['change_log'] : '';
 
         if ( empty( $plugin_name ) ) {
             $this->errors['plugin_name'] = __("Plugin Name field is required!", WPTE_PM_TEXT_DOMAIN);
@@ -112,6 +113,8 @@ class Ajax{
             'created_date'      => current_time('mysql'),
             'logo_id'           => $logo_id,
             'plugin_key'        => $token,
+            'last_update'        => current_time('mysql'),
+            'change_log'        => $change_log,
 
         ] );
 
@@ -158,6 +161,7 @@ class Ajax{
         $demo_url = $args['demo_url'] ? sanitize_url($args['demo_url']) : '';
         $description = $args['description'] ? sanitize_text_field($args['description']) : '';
         $logo_id = $args['logo_id'] ? sanitize_text_field($args['logo_id']) : '';
+        $change_log = $args['change_log'] ? $args['change_log'] : '';
 
         if ( empty( $plugin_name ) ) {
             $this->errors['plugin_name'] = __("Plugin Name field is required!", WPTE_PM_TEXT_DOMAIN);
@@ -193,8 +197,8 @@ class Ajax{
             ] );
             return false;
         }
-        
-        wpte_plugin_updater( $plugin_id, $plugin_name, $plugin_slug, $plugin_version, $php_version, $wordpress_version, $tested_version, $demo_url, $description, $logo_id );
+        $last_update = current_time('mysql');
+        wpte_plugin_updater( $plugin_id, $plugin_name, $plugin_slug, $plugin_version, $php_version, $wordpress_version, $tested_version, $demo_url, $description, $logo_id, $last_update, $change_log );
 
         wp_send_json_success( [
             'updated' =>  __( 'Plugin has been updated :)', WPTE_PM_TEXT_DOMAIN ),
