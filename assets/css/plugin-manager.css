@@ -264,6 +264,7 @@
     display: block;
 }
 .wpte-pm-popup-form-fields input,
+.wpte-pm-popup-form-fields textarea,
 .wpte-pm-popup-form-fields select{
     width: 100%;
     border: 1px solid #ddd;
@@ -281,9 +282,13 @@
     margin-top: 6px;
     padding: 18px 0px 12px 4px!important;
 }
-.wpte-pm-form-fields input{
+.wpte-pm-form-fields input,
+.wpte-pm-form-fields textarea {
     background: transparent;
     border-radius: 5px;
+}
+.wpte-pm-form-fields textarea{
+    height: 100px;
 }
 .wpte-pm-popup-form-fields input:focus,
 .wpte-pm-popup-form-fields input:active
@@ -291,6 +296,10 @@
     border: 1px solid #b163f540;
     box-shadow: 0px 0px 2px 1px #b163f540;
     outline: none;
+}
+
+.wpte-pm-popup-form-field{
+    width: 100%;
 }
 .wpte-pm-popup-form-field-left{
     width: 50%;

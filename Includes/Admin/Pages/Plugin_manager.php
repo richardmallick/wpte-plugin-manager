@@ -163,8 +163,9 @@ class Plugin_manager{
                     </div>
                     <div class="wpte-pm-popup-form-fields">
                         <div class="wpte-pm-popup-form-field">
+                            <p></p>
                             <label for='wpte_pm_plugin_change_log'>Change Log</label>
-                            <textarea name="wpte_pm_plugin_change_log" id="wpte_pm_plugin_change_log" cols="81" rows="2"></textarea>
+                            <textarea name="wpte_pm_plugin_change_log" id="wpte_pm_plugin_change_log"></textarea>
                         </div>
                     </div>
                     <div class="wpte-pm-popup-footer">

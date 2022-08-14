@@ -58,10 +58,10 @@
                     <p></p>
                 </div>
             </div>
-            <div class="wpte-pm-popup-form-fields">
+            <div class="wpte-pm-popup-form-fields wpte-pm-form-fields">
                 <div class="wpte-pm-popup-form-field">
                     <label for='wpte_pm_plugin_change_log'>Change Log</label>
-                    <textarea name="wpte_pm_plugin_change_log" id="wpte_pm_plugin_change_log" cols="150" rows="4"><?php echo $plugin->change_log; ?></textarea>
+                    <textarea name="wpte_pm_plugin_change_log" id="wpte_pm_plugin_change_log"><?php echo $plugin->change_log; ?></textarea>
                 </div>
             </div>
             <div class="wpte-pm-popup-footer">
