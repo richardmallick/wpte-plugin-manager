@@ -97,6 +97,8 @@
             description: $('#wpte_pm_plugin_description').val(),
             logo_id: $('.wpte-pm-logo-id').val(),
             change_log: $('#wpte_pm_plugin_change_log').val(),
+            file_id: $('.wpte-pm-file-id').val(),
+            file_url: $('.wpte-pm-file-url').val(),
         }
         wpte_insert_data( data, action );
     });
@@ -116,6 +118,8 @@
             description: $('#wpte_pm_plugin_description').val(),
             logo_id: $('.wpte-pm-logo-id').val(),
             change_log: $('#wpte_pm_plugin_change_log').val(),
+            file_id: $('.wpte-pm-file-id').val(),
+            file_url: $('.wpte-pm-file-url').val(),
         }
         wpte_insert_data( data, action );
     });
@@ -293,19 +297,6 @@
                             <input type="number" id="wpte_pm_variation_activation_limit" name="wpte_pm_variation_activation_limit[]" value="0">
                         </div>
 
-                        <div>
-                            <label for="wpte_pm_files_name">File Name *</label>
-                            <input type="text" id="wpte_pm_files_name" name="wpte_pm_files_name[]" value="">
-                        </div>
-
-                        <div>
-                            <div id="wpte-pm-product-attachment-area">
-                                <label for="wpte-pm-file-url">File:</label>
-                                <input type="hidden" class="wpte-pm-file-id" name="wpte_pm_file_id[]" value="0">
-                                <input type="text" class="wpte-pm-file-url" name="wpte_pm_file_url[]" value="">
-                                <button id="wpte-pm-product-attachment" data-id="${i}"><span class="dashicons dashicons-media-document"></span></button>
-                            </div>
-                        </div>
                     </div>
                     
                     <div class="wpte-pm-input-wrapper">

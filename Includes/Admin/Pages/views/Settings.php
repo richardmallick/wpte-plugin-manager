@@ -60,6 +60,17 @@
             </div>
             <div class="wpte-pm-popup-form-fields wpte-pm-form-fields">
                 <div class="wpte-pm-popup-form-field">
+                    <div class="wpte-pm-product-attachment-area wpte-pm-input-fluwidth">
+                        <label for="wpte-pm-file-url">File *</label>
+                        <input type="hidden" class="wpte-pm-file-id" name="wpte_pm_file_id" value="<?php echo $plugin->file_id; ?>">
+                        <input type="text" class="wpte-pm-file-url" name="wpte_pm_file_url" value="<?php echo $plugin->file_url; ?>">
+                        <button id="wpte-pm-product-attachment" data-id="0"><span class="dashicons dashicons-media-document"></span></button>
+                    </div>
+                    <p></p>
+                </div>
+            </div>
+            <div class="wpte-pm-popup-form-fields wpte-pm-form-fields">
+                <div class="wpte-pm-popup-form-field">
                     <label for='wpte_pm_plugin_change_log'>Change Log</label>
                     <textarea name="wpte_pm_plugin_change_log" id="wpte_pm_plugin_change_log"><?php echo $plugin->change_log; ?></textarea>
                 </div>

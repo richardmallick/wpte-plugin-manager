@@ -18,18 +18,6 @@
         <form id="wpte-pm-product-form" action="" method="post">
             <input type="hidden" id="wpte_plugin_id" name="wpte_plugin_id" value="<?php echo intval($plugin_id); ?>">
             <input type="hidden" id="wpte_plugin_name_count" value="<?php echo intval($variation_name_count); ?>">
-            <div class="wpte-pm-popup-form-fields wpte-pm-form-fields">
-                <div class="wpte-pm-popup-form-field-left">
-                    <label for="wpte_product_name">Product Name *</label>
-                    <input type="text" id="wpte_product_name" name="wpte_product_name" value="<?php echo esc_html($product->product_name); ?>">
-                    <p id="plugin-name"></p>
-                </div>
-                <div class="wpte-pm-popup-form-field-right">
-                    <label for="wpte_product_slug">Product Slug *</label>
-                    <input type="text" id="wpte_product_slug" name="wpte_product_slug" value="<?php echo esc_html($product->product_slug); ?>">
-                    <p id="plugin-slug"></p>
-                </div>
-            </div>
             <p class="wpte-pm-input-checkbox wpte-pm-input-checkbox-inline">
                 <?php 
                 $is_variation_checked = $product->is_variation ? 'checked' : '';
@@ -89,19 +77,6 @@
                                                             <input type="number" id="wpte_pm_variation_activation_limit" name="wpte_pm_variation_activation_limit[]" value="<?php echo esc_attr($variation->activation_limit); ?>">
                                                         </div>
 
-                                                        <div>
-                                                            <label for="wpte_pm_files_name">File Name *</label>
-                                                            <input type="text" id="wpte_pm_files_name" name="wpte_pm_files_name[]" value="<?php echo esc_attr($variation->files_name); ?>">
-                                                        </div>
-
-                                                        <div>
-                                                            <div id="wpte-pm-product-attachment-area">
-                                                                <label for="wpte-pm-file-url">File *</label>
-                                                                <input type="hidden" class="wpte-pm-file-id" name="wpte_pm_file_id[]" value="<?php echo esc_attr($variation->variation_file); ?>">
-                                                                <input type="text" class="wpte-pm-file-url" name="wpte_pm_file_url[]" value="<?php echo esc_url($atchment); ?>">
-                                                                <button id="wpte-pm-product-attachment" data-id="<?php echo $i; ?>"><span class="dashicons dashicons-media-document"></span></button>
-                                                            </div>
-                                                        </div>
                                                     </div>
                                                     
                                                     <div class="wpte-pm-input-wrapper">

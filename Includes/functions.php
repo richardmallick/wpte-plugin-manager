@@ -27,7 +27,9 @@ function wpte_pm_add_plugin( $args = [] ) {
         'logo_id'           => '',
         'plugin_key'        => '',
         'last_update'       => current_time('mysql'),
-        'change_log'        => ''
+        'change_log'        => '',
+        'file_id'           => '',
+        'file_url'          => ''
 
     ];
 
@@ -49,6 +51,8 @@ function wpte_pm_add_plugin( $args = [] ) {
             '%d',
             '%s',
             '%s',
+            '%s',
+            '%d',
             '%s',
         ]
     );
@@ -125,9 +129,9 @@ function wpte_pm_get_plugin( $plugin_id ) {
  * 
  * @return void
  */
-function wpte_plugin_updater( $plugin_id, $plugin_name, $plugin_slug, $plugin_version, $php_version, $wordpress_version, $tested_version, $demo_url, $description, $logo_id, $last_update, $change_log ) {
+function wpte_plugin_updater( $plugin_id, $plugin_name, $plugin_slug, $plugin_version, $php_version, $wordpress_version, $tested_version, $demo_url, $description, $logo_id, $last_update, $change_log, $file_id, $file_url ) {
     global $wpdb;
-   $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}wpte_plugin_data SET plugin_name = %s, plugin_slug = %s, plugin_version = %s, php_version = %s, wordpress_version = %s, tested_version = %s, demo_url = %s, description = %s, logo_id = %d, last_update = %s, change_log = %s WHERE id = %d", $plugin_name, $plugin_slug, $plugin_version, $php_version, $wordpress_version, $tested_version, $demo_url, $description, $logo_id, $last_update, $change_log, $plugin_id ) );
+   $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}wpte_plugin_data SET plugin_name = %s, plugin_slug = %s, plugin_version = %s, php_version = %s, wordpress_version = %s, tested_version = %s, demo_url = %s, description = %s, logo_id = %d, last_update = %s, change_log = %s, file_id = %d, file_url = %s WHERE id = %d", $plugin_name, $plugin_slug, $plugin_version, $php_version, $wordpress_version, $tested_version, $demo_url, $description, $logo_id, $last_update, $change_log, $file_id, $file_url, $plugin_id ) );
 }
 
 /**
@@ -208,9 +212,9 @@ function wpte_get_product( $plugin_id ) {
  * 
  * @return void
  */
-function wpte_product_update( $plugin_id, $product_name, $product_slug, $is_variation) {
+function wpte_product_update( $plugin_id, $is_variation) {
     global $wpdb;
-    $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}wpte_product_data SET product_name = %s, product_slug = %s, is_variation = %s WHERE plugin_id = %d", $product_name, $product_slug, $is_variation, $plugin_id ) );
+    $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}wpte_product_data SET is_variation = %s WHERE plugin_id = %d", $is_variation, $plugin_id ) );
 }
 
 /**
@@ -234,8 +238,6 @@ function wpte_pm_add_product_variation( $args = [] ) {
         'variation_slug'    => '',
         'activation_limit'  => '',
         'variation_price'   => '',
-        'files_name'        => '',
-        'variation_file'    => '',
         'recurring_payment' => '',
         'recurring_period'  => '',
         'recurring_times'   => '',
@@ -253,8 +255,6 @@ function wpte_pm_add_product_variation( $args = [] ) {
             '%s',
             '%s',
             '%d',
-            '%d',
-            '%s',
             '%d',
             '%d',
             '%s',
@@ -305,9 +305,9 @@ function wpte_get_product_variations( $plugin_id ) {
  * 
  * @return void
  */
-function wpte_product_variation_update( $product_variation_id, $variation_name, $variation_slug, $activation_limit, $variation_price, $files_name, $variation_file, $recurring_payment, $recurring_period, $recurring_times ) {
+function wpte_product_variation_update( $product_variation_id, $variation_name, $variation_slug, $activation_limit, $variation_price, $recurring_payment, $recurring_period, $recurring_times ) {
     global $wpdb;
-    $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}wpte_product_variation SET variation_name = %s, variation_slug = %s, activation_limit = %d, variation_price = %d, files_name = %s, variation_file = %d, recurring_payment = %d, recurring_period = %s, recurring_times = %d WHERE id = %d", $variation_name, $variation_slug, $activation_limit, $variation_price, $files_name, $variation_file, $recurring_payment, $recurring_period, $recurring_times, $product_variation_id) );
+    $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}wpte_product_variation SET variation_name = %s, variation_slug = %s, activation_limit = %d, variation_price = %d, recurring_payment = %d, recurring_period = %s, recurring_times = %d WHERE id = %d", $variation_name, $variation_slug, $activation_limit, $variation_price, $recurring_payment, $recurring_period, $recurring_times, $product_variation_id) );
 
 }
 
@@ -367,7 +367,6 @@ function wpte_pm_create_license( $args = [] ) {
         'recurring_times'   => '',
         'created_date'      => '',
         'expired_date'      => '',
-        'files_name'        => '',
 
     ];
 
@@ -387,7 +386,6 @@ function wpte_pm_create_license( $args = [] ) {
             '%d',
             '%s',
             '%d',
-            '%s',
             '%s',
             '%s',
         ]

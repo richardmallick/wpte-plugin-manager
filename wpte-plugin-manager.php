@@ -137,6 +137,7 @@ if ( ! class_exists( 'wpte_plugin_manager' ) ) {
             }
             new WPTE_PM_MANAGER\Includes\Api();
             new WPTE_PM_MANAGER\Includes\Frontend();
+            new WPTE_PM_MANAGER\Includes\Plugin_updater();
         }
 
         /**

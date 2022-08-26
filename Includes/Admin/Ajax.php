@@ -60,6 +60,8 @@ class Ajax{
         $description = $args['description'] ? sanitize_text_field($args['description']) : '';
         $logo_id = $args['logo_id'] ? sanitize_text_field($args['logo_id']) : '';
         $change_log = $args['change_log'] ? $args['change_log'] : '';
+        $file_id = $args['file_id'] ? $args['file_id'] : '';
+        $file_url = $args['file_url'] ? $args['file_url'] : '';
 
         if ( empty( $plugin_name ) ) {
             $this->errors['plugin_name'] = __("Plugin Name field is required!", WPTE_PM_TEXT_DOMAIN);
@@ -113,8 +115,10 @@ class Ajax{
             'created_date'      => current_time('mysql'),
             'logo_id'           => $logo_id,
             'plugin_key'        => $token,
-            'last_update'        => current_time('mysql'),
+            'last_update'       => current_time('mysql'),
             'change_log'        => $change_log,
+            'file_id'           => $file_id,
+            'file_url'          => $file_url,
 
         ] );
 
@@ -162,6 +166,8 @@ class Ajax{
         $description = $args['description'] ? sanitize_text_field($args['description']) : '';
         $logo_id = $args['logo_id'] ? sanitize_text_field($args['logo_id']) : '';
         $change_log = $args['change_log'] ? $args['change_log'] : '';
+        $file_id = $args['file_id'] ? $args['file_id'] : '';
+        $file_url = $args['file_url'] ? $args['file_url'] : '';
 
         if ( empty( $plugin_name ) ) {
             $this->errors['plugin_name'] = __("Plugin Name field is required!", WPTE_PM_TEXT_DOMAIN);
@@ -198,7 +204,7 @@ class Ajax{
             return false;
         }
         $last_update = current_time('mysql');
-        wpte_plugin_updater( $plugin_id, $plugin_name, $plugin_slug, $plugin_version, $php_version, $wordpress_version, $tested_version, $demo_url, $description, $logo_id, $last_update, $change_log );
+        wpte_plugin_updater( $plugin_id, $plugin_name, $plugin_slug, $plugin_version, $php_version, $wordpress_version, $tested_version, $demo_url, $description, $logo_id, $last_update, $change_log, $file_id, $file_url );
 
         wp_send_json_success( [
             'updated' =>  __( 'Plugin has been updated :)', WPTE_PM_TEXT_DOMAIN ),
@@ -254,15 +260,13 @@ class Ajax{
         $product_slug   = isset($data['wpte_product_slug']) ? sanitize_text_field($data['wpte_product_slug']) : '';
         $is_variation   = isset($data['wpte_pm_is_variation']) ? sanitize_text_field($data['wpte_pm_is_variation']) : '';
         
-        wpte_product_update( $plugin_id, $product_name, $product_slug, $is_variation);
+        wpte_product_update( $plugin_id, $is_variation);
 
         // Variation Products
         $variation_name     = isset($data['wpte_pm_variation_name']) ? $data['wpte_pm_variation_name'] : '';
         $variation_slug     = isset($data['wpte_pm_variation_path']) ? $data['wpte_pm_variation_path'] : '';
         $activation_limit   = isset($data['wpte_pm_variation_activation_limit']) ? $data['wpte_pm_variation_activation_limit'] : '';
         $variation_price    = isset($data['wpte_pm_variation_price']) ? $data['wpte_pm_variation_price'] : '';
-        $files_name         = isset($data['wpte_pm_files_name']) ? $data['wpte_pm_files_name'] : '';
-        $variation_file     = isset($data['wpte_pm_file_id']) ? $data['wpte_pm_file_id'] : '';
         $recurring_payment  = $this->get_variation_recurring_payment($data['wpte_pm_variation_recurring_payment']);
         $recurring_period   = isset($data['wpte_pm_variation_recurring_period']) ? $data['wpte_pm_variation_recurring_period'] : '';
         $recurring_times    = isset($data['wpte_pm_variation_recurring_times']) ? $data['wpte_pm_variation_recurring_times'] : '';
@@ -277,8 +281,6 @@ class Ajax{
                 'variation_slug'    => $variation_slug[$i],
                 'activation_limit'  => $activation_limit[$i],
                 'variation_price'   => $variation_price[$i],
-                'files_name'        => $files_name[$i],
-                'variation_file'    => $variation_file[$i],
                 'recurring_payment' => $recurring_payment[$i],
                 'recurring_period'  => strtolower($recurring_period[$i]),
                 'recurring_times'   => $recurring_times[$i],
@@ -289,7 +291,7 @@ class Ajax{
             } elseif ( ! $product_variation_id[$i] ) {
                 wpte_pm_add_product_variation($variation);
             } else {
-                wpte_product_variation_update( $product_variation_id[$i], $variation_name[$i], $variation_slug[$i], $activation_limit[$i], $variation_price[$i], $files_name[$i], $variation_file[$i], $recurring_payment[$i], strtolower($recurring_period[$i]), $recurring_times[$i] );
+                wpte_product_variation_update( $product_variation_id[$i], $variation_name[$i], $variation_slug[$i], $activation_limit[$i], $variation_price[$i], $recurring_payment[$i], strtolower($recurring_period[$i]), $recurring_times[$i] );
             }
             
         }
@@ -357,7 +359,6 @@ class Ajax{
             'recurring_times'   => $product->recurring_times,
             'created_date'      => current_time('mysql'),
             'expired_date'      => $expired_date,
-            'files_name'        => $product->files_name,
         ];
 
         // Create License

@@ -164,6 +164,17 @@ class Plugin_manager{
                     <div class="wpte-pm-popup-form-fields">
                         <div class="wpte-pm-popup-form-field">
                             <p></p>
+                            <div class="wpte-pm-product-attachment-area">
+                                <label for="wpte-pm-file-url">File *</label>
+                                <input type="hidden" class="wpte-pm-file-id" name="wpte_pm_file_id">
+                                <input type="text" class="wpte-pm-file-url" name="wpte_pm_file_url">
+                                <button id="wpte-pm-product-attachment" data-id="0"><span class="dashicons dashicons-media-document"></span></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="wpte-pm-popup-form-fields">
+                        <div class="wpte-pm-popup-form-field">
+                            <p></p>
                             <label for='wpte_pm_plugin_change_log'>Change Log</label>
                             <textarea name="wpte_pm_plugin_change_log" id="wpte_pm_plugin_change_log"></textarea>
                         </div>

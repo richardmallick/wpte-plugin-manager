@@ -189,7 +189,7 @@
 
 /* Popup */
 .wpte-pm-popup-wrapper{
-   position: fixed;
+   position: absolute;
    width: 100%;
    left: 0;
    top: 0;
@@ -593,29 +593,34 @@
 .wpte-pm-product-attachment-area{
     position: relative;
 }
-.wpte-pm-variable #wpte-pm-product-attachment-area input{
+.wpte-pm-variable #wpte-pm-product-attachment-area input,
+.wpte-pm-product-attachment-area input {
     width: 86%;
 }
+
+.wpte-pm-input-fluwidth input {
+    width: 91%;
+}
+
 .wpte-pm-variable #wpte-pm-product-attachment-area button,
 .wpte-pm-product-attachment-area button{
     background: #f15f64;
     color: #fff;
     position: absolute;
     right: 0;
-    width: 62px;
-    height: 35px;
+    width: 80px;
+    height: 42px;
     border: 2px solid #f15f64;
     border-radius: 0 5px 5px 0;
     cursor: pointer;
 }
 
 .wpte-pm-product-attachment-area{
-    width: 266px;
+    width: 100%;
 }
 
 .wpte-pm-product-attachment-area button {
-    right: 4px;
-    height: 31px;
+    height: 42px;
 }
 
 .wpte-pm-variable div label{

@@ -106,7 +106,6 @@ class Class_api_response{
             'product_slug'      => $product->variation_slug,
             'activation_limit'  => $product->activation_limit,
             'product_price'     => $product->variation_price,
-            'files_name'        => $product->files_name,
             'product_file'      => $product->variation_file,
             'recurring_payment' => $product->recurring_payment,
             'recurring_period'  => $product->recurring_period,
@@ -139,7 +138,7 @@ class Class_api_response{
 
         $data = json_decode($request->get_body(), true);
 
-        if ( ! $data['license'] || ! $data['domain'] || ! $data['siteip'] || ! $data['files_name'] ) {
+        if ( ! $data['license'] || ! $data['domain'] || ! $data['siteip'] ) {
             return false;
         }
 
@@ -152,7 +151,6 @@ class Class_api_response{
 
         $license_key = $get_license->license_key ? $get_license->license_key : (object)[];
         $status   = $get_license->status ? $get_license->status : (object)[];
-        $files_name   = $get_license->files_name ? $get_license->files_name : (object)[];
 
         $domain = $data['domain'] ? sanitize_url($data['domain']) : '';
         $site_name = $data['sitename'] ? sanitize_text_field($data['sitename']) : '';
@@ -172,8 +170,7 @@ class Class_api_response{
             'status'        => 'active',
         ];
 
-        if ( $data['license']   === $license_key && 
-            $data['files_name'] === $files_name && 
+        if ( $data['license']   === $license_key &&
             $status             === 'active' && 
             $activated_license  < $activation_limit ) {
 
@@ -214,7 +211,7 @@ class Class_api_response{
 
         $data = json_decode($request->get_body(), true);
 
-        if ( ! $data['license'] || ! $data['domain'] || ! $data['files_name'] ) {
+        if ( ! $data['license'] || ! $data['domain'] ) {
             return false;
         }
 
@@ -224,12 +221,10 @@ class Class_api_response{
         $activated_license = $get_license->active ? $get_license->active : 0;
         $subtraction = $activated_license > 0 ? $activated_license - 1 : 0;
         $license_key = $get_license->license_key ? $get_license->license_key : (object)[];
-        $files_name   = $get_license->files_name ? $get_license->files_name : (object)[];
 
         $is_url_exist = wpte_is_license_url_exitst( $domain, $id ) ? wpte_is_license_url_exitst( $domain, $id ) : (object)[];
 
-        if ( $data['license'] === $license_key && 
-            $data['files_name'] === $files_name ) {
+        if ( $data['license'] === $license_key ) {
             wpte_product_license_activate_update( $id, $subtraction );
             if ( isset($is_url_exist->status) && $is_url_exist->status === 'blocked' ) {
                 wpte_product_license_url_update( $id , $domain, 'blocked');

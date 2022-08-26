@@ -72,14 +72,14 @@ class Installation{
             plugin_key varchar(50) NOT NULL,
             last_update timestamp,
             change_log longtext,
+            file_id mediumint(10) NOT NULL,
+            file_url varchar(550) NOT NULL,
             PRIMARY KEY  (id)
         ) $charset_collate";
 
         $sql_two = "CREATE TABLE $product_data (
             id mediumint(5) NOT NULL AUTO_INCREMENT,
             plugin_id mediumint(5) NOT NULL,
-            product_name varchar(50) NOT NULL,
-            product_slug varchar(50) NOT NULL,
             is_variation varchar(10),
             created_date timestamp,
             PRIMARY KEY  (id)
@@ -92,8 +92,6 @@ class Installation{
             variation_slug varchar(50) NOT NULL,
             activation_limit mediumint(5) NOT NULL,
             variation_price mediumint(5) NOT NULL,
-            files_name varchar(250),
-            variation_file mediumint(10) NOT NULL,
             recurring_payment mediumint(5) NOT NULL,
             recurring_period varchar(15) NOT NULL,
             recurring_times mediumint(5) NOT NULL,
@@ -115,7 +113,6 @@ class Installation{
             recurring_times mediumint(5),
             created_date timestamp,
             expired_date varchar(250),
-            files_name varchar(250),
             PRIMARY KEY  (id)
         ) $charset_collate";
 
