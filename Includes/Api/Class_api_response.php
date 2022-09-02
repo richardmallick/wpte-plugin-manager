@@ -37,20 +37,20 @@ class Class_api_response{
 
         register_rest_route(
             'wpte/v1', 
-            '/active-license', 
+            '/plugin/license/check', 
             [
                 'methods' => 'POST',
-                'callback' => [$this, 'wpte_get_active_license_response'],
+                'callback' => [$this, 'wpte_get_license_response'],
                 'permission_callback' => '__return_true'
             ]
         );
 
         register_rest_route(
             'wpte/v1', 
-            '/deactive-license', 
+            '/plugin/license/deactivate', 
             [
                 'methods' => 'POST',
-                'callback' => [$this, 'wpte_get_deactive_license_response'],
+                'callback' => [$this, 'wpte_license_deactivate'],
                 'permission_callback' => '__return_true'
             ]
         );
@@ -128,113 +128,196 @@ class Class_api_response{
     }
 
     /**
-     * Get Active License Response
+     * Get License Response
      * 
      * @since 1.0.0
      */
-    public function wpte_get_active_license_response($request) {
-
+    public function wpte_get_license_response($request) {
+        // TODO: Make header secure
         $header = $request->get_headers();
 
-        $data = json_decode($request->get_body(), true);
+        $data = $request->get_params();
 
-        if ( ! $data['license'] || ! $data['domain'] || ! $data['siteip'] ) {
+        if ( ! $data['license_key'] || ! $data['url'] ) {
             return false;
         }
 
-        $get_license = wpte_get_product_license_row_key( $data['license'] ) ? wpte_get_product_license_row_key( $data['license'] ) : (object)[];
-        $id = $get_license->id ? $get_license->id : (object)[];
+        $get_license = wpte_get_product_license_row_key( $data['license_key'] ) ? wpte_get_product_license_row_key( $data['license_key'] ) : (object)[];
 
-        $activated_license  = $get_license->active ? $get_license->active : 0;
-        $addition           = $activated_license + 1;
-        $activation_limit   = $get_license->activation_limit ? $get_license->activation_limit : 0;
-
-        $license_key = $get_license->license_key ? $get_license->license_key : (object)[];
-        $status   = $get_license->status ? $get_license->status : (object)[];
-
-        $domain = $data['domain'] ? sanitize_url($data['domain']) : '';
-        $site_name = $data['sitename'] ? sanitize_text_field($data['sitename']) : '';
-        $siteip = $data['siteip'] ? sanitize_text_field($data['siteip']) : '';
-
-        if ( $siteip == '127.0.0.1' ||  $siteip == '::1' ) {
-            $site_type = 'Local';
+        if ( $get_license->license_key !== $data['license_key'] ) {
+            $send_data = [
+                'error' => 'Invalid License Key',
+                'success' => false
+            ];
+        } elseif ( ! ($get_license->activation_limit > $get_license->active) ) {
+            $send_data = [
+                'error' => 'Out of Activation Limit',
+                'success' => false
+            ];
+        } elseif ( $get_license->expired_date < time() ) {
+            $send_data = [
+                'error' => 'License Key has been expired',
+                'success' => false
+            ];
+        } elseif ( $get_license->status == 'inactive' ) {
+            $send_data = [
+                'error' => 'Inactive License Key',
+                'success' => false
+            ];
         } else {
-            $site_type = 'Live';
-        }
+            $activated_license  = $get_license->active ? $get_license->active : 0;
+            $addition           = $activated_license + 1;
+           
 
-        $args = [
-            'license_id'    => $id,
-            'site_url'      => $domain,
-            'site_name'     => $site_name,
-            'site_type'     => $site_type,
-            'status'        => 'active',
-        ];
+            if ( $data['is_local'] ) {
+                $site_type = 'Local';
+            } else {
+                $site_type = 'Live';
+            }
 
-        if ( $data['license']   === $license_key &&
-            $status             === 'active' && 
-            $activated_license  < $activation_limit ) {
+            $url = explode('.', parse_url($data['url'], PHP_URL_HOST));
 
-            $is_url_exist = wpte_is_license_url_exitst( $domain, $id ) ? wpte_is_license_url_exitst( $domain, $id ) : (object)[];
+            $args = [
+                'license_id'    => $get_license->id,
+                'site_url'      => $data['url'],
+                'site_name'     => $url[0],
+                'site_type'     => $site_type,
+                'status'        => 'active',
+            ];
+
+            $is_url_exist = wpte_is_license_url_exitst( $data['url'], $get_license->id ) ? wpte_is_license_url_exitst( $data['url'], $get_license->id  ) : (object)[];
 
             if ( !empty(get_object_vars($is_url_exist)) ) {
                 if ( isset($is_url_exist->status) && $is_url_exist->status === 'blocked' ) {
+                    $send_data = [
+                        'error' => 'This URL has been Blocked',
+                        'success' => false
+                    ];
+                    header( 'Content-Type: application/json' );
+                    wp_send_json($send_data);
                     return false;
                 }
-                wpte_product_license_activate_update( $id, $addition );
-                wpte_product_license_url_update( $id , $domain, 'active');
-                return true;
-
+                wpte_product_license_activate_update( $get_license->id, $addition );
+                wpte_product_license_url_update( $get_license->id , $data['url'], 'active');
             } else {
                 $addSite =    wpte_pm_add_new_site( $args );
                 if ( $addSite ) {
-                    wpte_product_license_activate_update( $id, $addition );
-                    wpte_product_license_url_update( $id , $domain, 'active');
-                    return true;
+                    wpte_product_license_activate_update( $get_license->id, $addition );
+                    wpte_product_license_url_update( $get_license->id , $data['url'], 'active');
                 } 
             }
-           
-            return false;
+
+            $get_license = wpte_get_product_license_row_key( $data['license_key'] ) ? wpte_get_product_license_row_key( $data['license_key'] ) : (object)[];
+            $send_data = [
+                'success' => true,
+                'remaining'        => $get_license->active,
+                'activation_limit' => $get_license->activation_limit,
+                'expiry_days'      => $get_license->expired_date,
+                'recurring'        => $get_license->recurring_payment,
+            ];
+  
         }
 
-        return false;
+        // TODO: Add domain after activate license
+        
+        header( 'Content-Type: application/json' );
+        wp_send_json($send_data);
+
+        // $id = $get_license->id ? $get_license->id : (object)[];
+
+        // $activated_license  = $get_license->active ? $get_license->active : 0;
+        // $addition           = $activated_license + 1;
+        // $activation_limit   = $get_license->activation_limit ? $get_license->activation_limit : 0;
+
+        // $license_key = $get_license->license_key ? $get_license->license_key : (object)[];
+        // $status   = $get_license->status ? $get_license->status : (object)[];
+
+        // $domain = $data['domain'] ? sanitize_url($data['domain']) : '';
+        // $site_name = $data['sitename'] ? sanitize_text_field($data['sitename']) : '';
+        // $siteip = $data['siteip'] ? sanitize_text_field($data['siteip']) : '';
+
+        // if ( $siteip == '127.0.0.1' ||  $siteip == '::1' ) {
+        //     $site_type = 'Local';
+        // } else {
+        //     $site_type = 'Live';
+        // }
+
+        // $args = [
+        //     'license_id'    => $id,
+        //     'site_url'      => $domain,
+        //     'site_name'     => $site_name,
+        //     'site_type'     => $site_type,
+        //     'status'        => 'active',
+        // ];
+
+        // if ( $data['license']   === $license_key &&
+        //     $status             === 'active' && 
+        //     $activated_license  < $activation_limit ) {
+
+        //     $is_url_exist = wpte_is_license_url_exitst( $domain, $id ) ? wpte_is_license_url_exitst( $domain, $id ) : (object)[];
+
+        //     if ( !empty(get_object_vars($is_url_exist)) ) {
+        //         if ( isset($is_url_exist->status) && $is_url_exist->status === 'blocked' ) {
+        //             return false;
+        //         }
+        //         wpte_product_license_activate_update( $id, $addition );
+        //         wpte_product_license_url_update( $id , $domain, 'active');
+        //         return true;
+
+        //     } else {
+        //         $addSite =    wpte_pm_add_new_site( $args );
+        //         if ( $addSite ) {
+        //             wpte_product_license_activate_update( $id, $addition );
+        //             wpte_product_license_url_update( $id , $domain, 'active');
+        //             return true;
+        //         } 
+        //     }
+           
+        //     return false;
+        // }
+
+        // return false;
         
     }
 
     /**
-     * Get Deactive License Response
+     * License Deactivate
      * 
      * @since 1.0.0
      */
-    public function wpte_get_deactive_license_response($request) {
-
+    public function wpte_license_deactivate( $request ) {
+        // TODO: Make header secure
         $header = $request->get_headers();
 
-        $data = json_decode($request->get_body(), true);
+        $data = $request->get_params();
 
-        if ( ! $data['license'] || ! $data['domain'] ) {
+        if ( ! $data['license_key'] ) {
             return false;
         }
 
-        $get_license = wpte_get_product_license_row_key( $data['license'] ) ? wpte_get_product_license_row_key( $data['license'] ) : (object)[];
-        $id = $get_license->id ? $get_license->id : (object)[];
-        $domain = $data['domain'] ? sanitize_url($data['domain']) : '';
-        $activated_license = $get_license->active ? $get_license->active : 0;
-        $subtraction = $activated_license > 0 ? $activated_license - 1 : 0;
-        $license_key = $get_license->license_key ? $get_license->license_key : (object)[];
-
-        $is_url_exist = wpte_is_license_url_exitst( $domain, $id ) ? wpte_is_license_url_exitst( $domain, $id ) : (object)[];
-
-        if ( $data['license'] === $license_key ) {
-            wpte_product_license_activate_update( $id, $subtraction );
-            if ( isset($is_url_exist->status) && $is_url_exist->status === 'blocked' ) {
-                wpte_product_license_url_update( $id , $domain, 'blocked');
-            } else {
-                wpte_product_license_url_update( $id , $domain, 'inactive');
+        $get_license = wpte_get_product_license_row_key( $data['license_key'] ) ? wpte_get_product_license_row_key( $data['license_key'] ) : (object)[];
+        
+        $is_url_exist = wpte_is_license_url_exitst( $data['url'], $get_license->id ) ? wpte_is_license_url_exitst( $data['url'], $get_license->id  ) : (object)[];
+        
+        if ( $get_license->license_key !== $data['license_key'] ) {
+            $send_data = [
+                'error' => 'Invalid License Key',
+                'success' => false
+            ];
+        } else {
+            $send_data = [
+                'success' => true,
+            ];
+            $activated_license  = $get_license->active ? $get_license->active : 0;
+            $addition           = $activated_license - 1;
+            if ( !empty(get_object_vars($is_url_exist)) && $is_url_exist->status !== 'blocked' && $is_url_exist->status !== 'inactive' ) {
+                wpte_product_license_activate_update( $get_license->id, $addition );
+                wpte_product_license_url_update( $get_license->id , $data['url'], 'inactive');
             }
-            return true;
         }
 
-        return false;
+        header( 'Content-Type: application/json' );
+        wp_send_json($send_data);
     }
 
     /**
