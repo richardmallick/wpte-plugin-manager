@@ -12,6 +12,7 @@ trait Invoice{
   public function wpte_invoice( $id ) {
 
     $license = wpte_pm_get_data_for_invoice( $id ) ? wpte_pm_get_data_for_invoice( $id ) : (object)[];
+    write_log($license);
     // Get User Data
     $customer_id    = $license->customer_id ? $license->customer_id : '';
     $customer       = get_user_by('id', $customer_id);
@@ -25,7 +26,7 @@ trait Invoice{
     // Get Product Data
     $product_name   = $license->variation_name ? $license->variation_name : '';
     $product_price  = $license->variation_price ? $license->variation_price : '';
-    $variation_file  = $license->variation_file ? $license->variation_file : '';
+    $file_id  = $license->file_id ? $license->file_id : '';
 
     // Get License
     $license_key      = $license->license_key ? $license->license_key : '';
@@ -178,7 +179,7 @@ trait Invoice{
                                       <tbody>
                                         <tr>
                                           <td style="font-family: Avenir, Helvetica, sans-serif;box-sizing: border-box; text-align: center;">
-                                            <a href="<?php echo site_url().'/download/?id='.intval($variation_file).'&key='.esc_html($license_key); ?>" download
+                                            <a href="<?php echo site_url().'/download/?id='.intval($file_id).'&key='.esc_html($license_key); ?>" download
                                               style=" font-family: Avenir, Helvetica,sans-serif;box-sizing: border-box;border-radius: 3px;color: #fff; display: inline-block;text-decoration: none; font-size: 16px; background: #3097d1; border-top: 10px solid #3097d1;border-right: 18px solid #3097d1;border-bottom: 10px solid #3097d1; border-left: 18px solid #3097d1;">Download</a>
                                           </td>
                                         </tr>

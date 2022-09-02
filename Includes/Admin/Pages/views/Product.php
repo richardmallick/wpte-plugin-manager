@@ -35,8 +35,6 @@
                             $i = 0;
                             foreach ( $variations as $variation) {
 
-                                $atchment = $variation->variation_file ? wp_get_attachment_url($variation->variation_file) : '';
-
                                 $active = $i == 0 ? 'wpte-pm-active' : '';
                                 $variation_id = $variation->id ? $variation->id : '';
                                 ?>
