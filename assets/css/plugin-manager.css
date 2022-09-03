@@ -819,7 +819,7 @@
 }
 
 .wpte-single-license-column{
-    grid-template-columns: 340px 58px 60px 50px 98px 110px 20px;
+    grid-template-columns: 1fr 58px 60px 50px 98px 110px 20px;
 }
 .site-customer-name{
     position: relative;

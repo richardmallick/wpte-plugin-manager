@@ -456,9 +456,9 @@ function wpte_product_license_delete( $id ) {
 }
 
 /**
- * Method wpte_product_get_license_activate
+ * Method wpte_product_license_activate_update
  * 
- * Get Activate license count
+ * License activeate update
  * 
  * @return void
  */
@@ -468,9 +468,9 @@ function wpte_product_license_activate_update( $license_id, $active ) {
 }
 
 /**
- * Method wpte_product_get_license_activate
+ * Method wpte_product_license_activation_limit_update
  * 
- * Get Activate license count
+ * License Activation limit update
  * 
  * @return void
  */
@@ -480,15 +480,27 @@ function wpte_product_license_activation_limit_update( $license_id, $activation_
 }
 
 /**
- * Method wpte_product_get_license_activate
+ * Method wpte_product_license_status_update
  * 
- * Get Activate license count
+ * License Status Update
  * 
  * @return void
  */
 function wpte_product_license_status_update( $license_id, $status ) {
     global $wpdb;
     $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}wpte_product_license SET status = %s WHERE id = %d", $status, $license_id ) );
+}
+
+/**
+ * Method wpte_product_license_status_active_update
+ * 
+ * License status & active update
+ * 
+ * @return void
+ */
+function wpte_product_license_status_active_update( $license_id, $status, $active ) {
+    global $wpdb;
+    $wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->prefix}wpte_product_license SET status = %s, active = %d WHERE id = %d", $status, $active, $license_id ) );
 }
 
 /**

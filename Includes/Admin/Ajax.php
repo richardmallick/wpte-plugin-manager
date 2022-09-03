@@ -573,7 +573,7 @@ EOT;
 
         $license_id = isset( $_POST['licenseid'] ) ? sanitize_text_field($_POST['licenseid']) : '';
 
-        wpte_product_license_status_update( $license_id, 'inactive' );
+        wpte_product_license_status_active_update( $license_id, 'inactive', 0 );
 
         wp_send_json_success( [
             'license_deactivate' =>   __( 'License has been deactivated!', WPTE_PM_TEXT_DOMAIN ),
