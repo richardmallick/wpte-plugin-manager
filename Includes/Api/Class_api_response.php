@@ -340,7 +340,8 @@ class Class_api_response{
         $basename    = isset($data['basename']) && $data['basename'] ? esc_html($data['basename']) : '';
         $license_key = isset($data['license_key']) && $data['license_key'] ? esc_html($data['license_key']) : '';
 
-        $plugin_data = wpte_pm_get_data_for_plugin_update( $id );
+        $plugin_data    = wpte_pm_get_data_for_plugin_update( $id );
+        $get_license_db = wpte_get_product_license_row_key( $license_key ) ? wpte_get_product_license_row_key( $license_key ) : (object)[];
 
         $update = array(
             "id"   => $plugin_data->plugin_key,
@@ -368,9 +369,11 @@ class Class_api_response{
             "last_updated"  => $plugin_data->last_update,
             
         );
-
-        $update["package"] = 'http://myplugin.test/wp-content/uploads/2022/07/product-layouts-pro.zip';
-        $update["download_link"] = 'http://myplugin.test/wp-content/uploads/2022/07/product-layouts-pro.zip';
+        if ( $license_key === $get_license_db->license_key ) {
+            $update["package"] = 'http://myplugin.test/wp-content/uploads/2022/07/product-layouts-pro.zip';
+            $update["download_link"] = 'http://myplugin.test/wp-content/uploads/2022/07/product-layouts-pro.zip';
+        }
+       
 
         header( 'Content-Type: application/json' );
         wp_send_json($update);
