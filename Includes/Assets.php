@@ -16,6 +16,7 @@ class Assets{
      */
     public function __construct() {
         add_action( 'admin_enqueue_scripts', [ $this, 'AdminEnqueueAssets' ] );
+        add_action( 'wp_enqueue_scripts', [ $this, 'PublicEnqueueAssets' ] );
     }
 
     /**
@@ -92,6 +93,59 @@ class Assets{
         foreach( $assetJS as $jsList ) {
             wp_register_script($jsList['handler'], WPTE_PM_ASSETS. $jsList['src'], $jsList['deps'], filemtime(WPTE_PM_PATH."assets/".$jsList['src']), $jsList['in_footer']);
         }
+    }
+
+    /**
+     * Public Css List
+     * 
+     * @since 1.0.0
+     */
+    public function PublicAssetsCss() {
+        return [
+            [
+                'handler' => 'wpte-pm-my-account',
+                'src'     => 'css/my-account.css',
+                'deps'    => null,
+            ],
+        ];
+    }
+
+    /**
+     * Admin JS List
+     * 
+     * @since 1.0.0
+     */
+    public function PublicAssetsJS() {
+        return [
+            [
+                'handler'   => 'wpte-pm-my-account',
+                'src'       => 'js/my-account.js',
+                'deps'      => ['jquery'],
+                'in_footer' => true
+            ]
+        ];
+    }
+
+    /**
+     * Public Assets Loader
+     * 
+     * @since 1.0.0
+     */
+    public function PublicEnqueueAssets() {
+
+        $assetCss = $this->PublicAssetsCss();
+        $assetJS  = $this->PublicAssetsJS();
+        
+        // Register Public CSS
+        foreach( $assetCss as $cssList ) {
+            wp_register_style($cssList['handler'], WPTE_PM_ASSETS. $cssList['src'],  $cssList['deps'], filemtime(WPTE_PM_PATH."assets/".$cssList['src']));
+        }
+
+        // Enqueue Admin Js
+        foreach( $assetJS as $jsList ) {
+            wp_register_script($jsList['handler'], WPTE_PM_ASSETS. $jsList['src'], $jsList['deps'], filemtime(WPTE_PM_PATH."assets/".$jsList['src']), $jsList['in_footer']);
+        }
+       
     }
 
 }

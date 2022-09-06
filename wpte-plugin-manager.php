@@ -133,8 +133,8 @@ if ( ! class_exists( 'wpte_plugin_manager' ) ) {
         public function init_plugin() {
             if ( is_admin() ) {
                 new WPTE_PM_MANAGER\Includes\Admin();
-                new WPTE_PM_MANAGER\Includes\Assets();
             }
+            new WPTE_PM_MANAGER\Includes\Assets();
             new WPTE_PM_MANAGER\Includes\Api();
             new WPTE_PM_MANAGER\Includes\Frontend();
         }

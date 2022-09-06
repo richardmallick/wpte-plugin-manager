@@ -19,6 +19,7 @@ class Frontend{
         add_filter('generate_rewrite_rules', [$this, 'wpte_rewrite_rules'] );
         add_filter('query_vars', [$this, 'wpte_query_vars'] );
         add_action('template_redirect', [$this, 'wpte_template_redirect'] );
+        new Frontend\Shortcodes();
     }
 
     public function wpte_rewrite_rules( $wp_rewrite ) {

@@ -697,6 +697,44 @@ function wpte_pm_get_data_for_invoice( $licese_id ) {
 }
 
 /**
+ * Method wpte_get_license_by_user_id
+ *
+ * @param $id $id [explicite description]
+ * Fetch License Rows by User ID
+ * @return void
+ */
+function wpte_get_data_by_user_id( $user_id ) {
+    global $wpdb;
+    return $wpdb->get_results(
+        $wpdb->prepare( "SELECT plugin_name, plugin_version, last_update, file_url, variation_name 
+        FROM {$wpdb->prefix}wpte_product_license, {$wpdb->prefix}wpte_product_variation, {$wpdb->prefix}wpte_plugin_data
+        WHERE {$wpdb->prefix}wpte_product_license.customer_id = %d
+        AND {$wpdb->prefix}wpte_product_license.product_id = {$wpdb->prefix}wpte_product_variation.id
+        AND {$wpdb->prefix}wpte_product_license.plugin_id = {$wpdb->prefix}wpte_plugin_data.id",  
+        $user_id )
+    );
+}
+
+/**
+ * Method wpte_get_license_by_user_id
+ *
+ * @param $id $id [explicite description]
+ * Fetch License Rows by User ID
+ * @return void
+ */
+function wpte_get_data_for_license_by_user_id( $user_id ) {
+    global $wpdb;
+    return $wpdb->get_results(
+        $wpdb->prepare( "SELECT {$wpdb->prefix}wpte_product_license.id, plugin_name, variation_name, expired_date, {$wpdb->prefix}wpte_product_license.activation_limit, active, license_key, file_url 
+        FROM {$wpdb->prefix}wpte_product_license, {$wpdb->prefix}wpte_product_variation, {$wpdb->prefix}wpte_plugin_data
+        WHERE {$wpdb->prefix}wpte_product_license.customer_id = %d
+        AND {$wpdb->prefix}wpte_product_license.product_id = {$wpdb->prefix}wpte_product_variation.id
+        AND {$wpdb->prefix}wpte_product_license.plugin_id = {$wpdb->prefix}wpte_plugin_data.id", 
+        $user_id )
+    );
+}
+
+/**
  * Method wpte_pm_get_data_for_invoice
  *
  * @param $licese_id $licese_id [explicite description]

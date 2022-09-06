@@ -1,0 +1,283 @@
+.entry .entry-content .wpte-licenses,
+.wpte-licenses {
+    max-width: initial;
+}
+.wpte-license {
+    border: 1px solid #E1DDE0;
+    margin-bottom: 30px;
+}
+.license-product-info{
+    padding: 15px 20px;
+    width: calc(100% - 80px);
+    display: flex;
+    border-right: 1px solid #E1DDE0;
+}
+.license-product-info h2:after,
+.license-product-info h2:before {
+    display: none;
+}
+.license-product-info h2 {
+    color: #A04E8C;
+    font-size: 22px;
+    margin: 0 0 7px 0;
+    font-weight: 600;
+}
+.license-product-info p {
+    margin: 0;
+    color: #555555;
+}
+.license-product-info p.h3 {
+    font-size: 17px;
+}
+.license-product-info h4 {
+    font-size: 15px;
+    text-transform: capitalize;
+    color: #5B5B5B;
+    font-weight: 600;
+    margin: 0 0 8px 0;
+}
+.license-header {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+}
+.license-toggle-info {
+    width: 80px;
+    display: -ms-flexbox;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 25px;
+    cursor: pointer;
+}
+.license-toggle-info svg {
+    width: 25px;
+    height: 25px;
+    fill: #333333;
+}
+.license-toggle-info.license-button-toggled svg {
+    -webkit-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+    transform: rotate(180deg);
+}
+.license-product-title {
+    width: 50%;
+}
+.license-product-expire,
+.license-product-activation {
+    width: 25%;
+}
+.license-key-activations {
+    border-top: 1px solid #E1DDE0;
+    padding: 20px 20px 15px 20px;
+    display: none;
+}
+.wpte-license-key {
+    padding-bottom: 20px;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #E1DDE0;
+}
+.wpte-license-key p {
+    margin: 0;
+}
+.wpte-license-key strong {
+    font-weight: 600;
+    font-size: 17px;
+    color: #5B5B5B;
+}
+.license-key-code {
+    background-color: #E3E1E3;
+    color: #4D4D4D;
+    padding: 0px 8px;
+    display: inline-block;
+    margin-left: 10px;
+    letter-spacing: 1px;
+    cursor: pointer;
+}
+.wpte-activations h4 {
+    font-size: 19px;
+    color: #5B5B5B;
+    font-weight: 600;
+    margin: 0 0 7px 0;
+}
+.wpte-activation-item {
+    display: -ms-flexbox;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: #A04E8C;
+}
+.wpte-activation-item + .wpte-activation-item {
+    border-top: 1px solid #E1DDE0;
+    margin-top: 6px;
+    padding-top: 6px;
+}
+.wpte-activation-item span {
+    font-weight: 600;
+    font-size: 16px;
+}
+.hentry .entry-content .wpte-activation-item a,
+.wpte-activation-item a {
+    text-decoration: none;
+    font-size: 16px;
+}
+.wpte-notice {
+    padding: 15px;
+    margin-bottom: 30px;
+    border-left: 8px solid rgba(0, 0, 0, .15);
+    color: #fff;
+}
+.wpte-notice.notice-info {
+    background-color: #3d9cd2;
+}
+.wpte-notice.notice-error {
+    background-color: #e2401c;
+}
+
+/* Orders */
+table.wpte-order-table  {
+    font-size: 17px;
+    border-spacing: 0;
+    width: 100%;
+    border-collapse: separate;
+}
+table.wpte-order-table thead th {
+    padding: 1.4em;
+}
+table.wpte-order-table tbody td {
+    background-color: #fdfdfd;
+}
+table.wpte-order-table tbody tr:nth-child(2n) td {
+    background-color: #fbfbfb;
+}
+table.wpte-order-table a {
+    color: #96588a;
+}
+table.wpte-order-table td, table.wpte-order-table th {
+    padding: 1em 1.4em;
+    text-align: left;
+    vertical-align: middle;
+}
+
+small.license-status {
+    color: #212529;
+    background-color: #ffc107;
+    display: inline-block;
+    padding: .3em .5em;
+    font-size: 66%;
+    font-weight: 600;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    border-radius: .25em;
+    margin-left: 5px;
+}
+
+/* My Account Page */
+.wpte-login-form form {
+    max-width: 550px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}
+.wpte-login-form form .login-submit {
+    margin: 0;
+}
+.wpte-my-account {
+    padding: 50px 35px;
+    display: flex;
+    flex-wrap: wrap;
+}
+.wpte-my-account-sidebar {
+    width: 27%;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.wpte-my-account-content {
+    width: 73%;
+    padding-left: 30px;
+}
+.wpte-my-account-sidebar li {
+    margin: 0;
+}
+.wpte-my-account-sidebar li a {
+    color: #333538;
+    padding: 12px 20px;
+    display: block;
+    border-radius: 30px;
+    text-decoration: none;
+}
+.wpte-my-account-sidebar li a.ama-active-tab {
+    color: #fff;
+    background-color: #6B4FF4;
+}
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 140px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px;
+    position: absolute;
+    z-index: 1;
+    bottom: 150%;
+    left: 50%;
+    margin-left: -75px;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.tooltip .tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+}
+
+a.download-btn {
+    margin-left: 10px;
+    padding: 4px 10px;
+    background-color: #4A5568;
+    color: #fff;
+    border-radius: 5px;
+    text-decoration: none;
+}
+a.download-btn:active, a.download-btn:link {
+    text-decoration: none;
+}
+.badge {
+    background: #EFF6FF;
+    color: #3B82F6;
+    border-radius: 3px;
+    padding: 2px 8px;
+    vertical-align: middle;
+}
+.as-icon-info {
+    padding: 0 3px;
+    vertical-align: middle;
+    content: url("data:image/svg+xml,%3Csvg width='12' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' viewBox='0 0 490 490' style='enable-background:new 0 0 490 490;' xml:space='preserve'%3E%3Cg id='bold_copy_37_'%3E%3Cpath fill='currentColor' d='M245,0C109.684,0,0,109.684,0,245s109.684,245,245,245s245-109.684,245-245S380.316,0,245,0z M245,459.375 c-118.213,0-214.375-96.163-214.375-214.375S126.787,30.625,245,30.625S459.375,126.787,459.375,245S363.212,459.375,245,459.375z'/%3E%3Cpolygon points='266.836,286.987 275.196,114.874 214.788,114.874 223.532,286.987 '/%3E%3Cpath fill='currentColor' d='M245.184,305.974c-20.136,0-34.178,14.424-34.178,34.576c0,19.738,13.674,34.576,34.178,34.576 c20.503,0,33.825-14.823,33.825-34.576C278.611,320.399,265.304,305.974,245.184,305.974z'/%3E%3C/g%3E%3C/svg%3E");
+}
+ svg {
+    fill: #3B82F6;
+}
+.text-normal {
+    font-weight: normal;
+}

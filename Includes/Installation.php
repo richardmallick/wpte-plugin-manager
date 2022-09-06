@@ -136,8 +136,3 @@ class Installation{
     }
     
 }
-
-
-// Domain
-// Is active
-// Plugin Path
