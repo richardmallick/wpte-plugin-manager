@@ -18,26 +18,24 @@ jQuery( document ).ready( function () {
     jQuery( 'a.remove-activation-button' ).click( function ( event ) {
         event.preventDefault();
         var aTag = jQuery( this );
-        var licenseParent = aTag.parents('.wpte-license');
         var isRemove = confirm("Are you want to remove this activation?");
 
         var data = {
-            action: "wpte_remove_activation",
-            activation_id: aTag.data('activationid'),
-            source_id: licenseParent.data('sourceid'),
-            product_id: licenseParent.data('productid'),
-            security: wpteHelper.ajaxNonce,
+            action: "wpte_remove_domain",
+            domain_id: aTag.data('activationid'),
+            license_id: aTag.data('licenseid'),
+            security: wpteMyAc.ajaxNonce,
         };
 
         if ( isRemove ) {
             jQuery.ajax({
                 method: "POST",
                 data: data,
-                url: wpteHelper.ajaxUrl,
+                url: wpteMyAc.ajaxUrl,
                 success: function ( response ) {
                     if ( response.success ) {
                         aTag.parents('.wpte-activation-item').hide();
-                        alert("Site has been removed.");
+                        alert(response.data.success);
                     } else {
                         alert("Unable to remove site.");
                     }

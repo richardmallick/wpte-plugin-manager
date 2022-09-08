@@ -206,17 +206,21 @@ class Class_api_response{
                     wp_send_json($send_data);
                     return false;
                 }
-                $active_sites = wpte_get_domain_status_by_license_id( $get_license->id ) ? wpte_get_domain_status_by_license_id( $get_license->id ) : [];
-                $active = count($active_sites) + 1;
-                wpte_product_license_activate_update( $get_license->id, $active );
+               
                 wpte_product_license_url_update( $get_license->id , $data['url'], 'active');
+                
+                $active_sites = wpte_get_domain_status_by_license_id( $get_license->id ) ? wpte_get_domain_status_by_license_id( $get_license->id ) : [];
+                $active = count($active_sites);
+                wpte_product_license_activate_update( $get_license->id, $active );
+           
             } else {
                 $addSite = wpte_pm_add_new_site( $args );
                 if ( $addSite ) {
-                    $active_sites = wpte_get_domain_status_by_license_id( $get_license->id ) ? wpte_get_domain_status_by_license_id( $get_license->id ) : [];
-                    $active = count($active_sites) + 1;
-                    wpte_product_license_activate_update( $get_license->id, $active );
                     wpte_product_license_url_update( $get_license->id , $data['url'], 'active');
+                   
+                    $active_sites = wpte_get_domain_status_by_license_id( $get_license->id ) ? wpte_get_domain_status_by_license_id( $get_license->id ) : [];
+                    $active = count($active_sites);
+                    wpte_product_license_activate_update( $get_license->id, $active );
                 } 
             }
 
@@ -280,6 +284,8 @@ class Class_api_response{
                 'expiry_days'      => $get_license->expired_date,
                 'recurring'        => $get_license->recurring_payment,
             ];
+
+            wpte_product_license_activate_update( $get_license->id, $active_sites );           
   
         }
         
@@ -316,14 +322,15 @@ class Class_api_response{
             $send_data = [
                 'success' => true,
             ];
-            
-            $active_sites = wpte_get_domain_status_by_license_id( $get_license->id ) ? wpte_get_domain_status_by_license_id( $get_license->id ) : [];
-            $active = count($active_sites) ? count($active_sites) - 1 : 0;
-            wpte_product_license_activate_update( $get_license->id, $active );
+
 
             if ( !empty(get_object_vars($is_url_exist)) && $is_url_exist->status !== 'blocked' && $is_url_exist->status !== 'inactive' ) {
                 wpte_product_license_url_update( $get_license->id , $data['url'], 'inactive');
             }
+
+            $active_sites = wpte_get_domain_status_by_license_id( $get_license->id ) ? wpte_get_domain_status_by_license_id( $get_license->id ) : [];
+            $active = count($active_sites) ? count($active_sites) : 0;
+            wpte_product_license_activate_update( $get_license->id, $active );
             
         }
 

@@ -56,16 +56,17 @@ class OrdersRenderer {
      * Single order row
      */
     private function single_order_output( $order ) {
+        $order_at = $order->created_date ? date('M d, Y', strtotime($order->created_date)) : '';
         ?>
         <tr>
-            <td>#<?php echo $order['id']; ?></td>
-            <td><?php echo $order['ordered_at']; ?></td>
-            <td><?php echo $order['status']; ?></td>
+            <td>#<?php echo intval($order->id); ?></td>
+            <td><?php echo esc_html($order_at); ?></td>
+            <td><?php echo esc_html($order->status); ?></td>
             <td><?php
-                echo isset( $order['currency'] ) ? $order['currency'] : '';
-                echo $order['total'];
+                echo '$';
+                echo '99';
             ?></td>
-            <td><a href="<?php echo $order['invoice_url']; ?>">View Invoice</a></td>
+            <td><a href="#">View Invoice</a></td>
         </tr>
         <?php
     }
@@ -75,17 +76,7 @@ class OrdersRenderer {
      */
     private function get_orders() {
         $user_id = get_current_user_id();
-        $route   = 'public/users/' . $user_id . '/orders';
-
-        // Send request to wpte server
-        $response = wpte_helper_remote_get( $route );
-
-        if ( wp_remote_retrieve_response_code( $response ) != 200 ) {
-            return [];
-        }
-
-        $body = json_decode( wp_remote_retrieve_body( $response ), true );
-
-        return isset( $body['data'] ) ? $body['data'] : [];
+        $licenses = wpte_get_data_for_order_list_by_user_id( $user_id );
+        return $licenses ? $licenses : [];
     }
 }

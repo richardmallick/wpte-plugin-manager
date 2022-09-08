@@ -313,6 +313,21 @@ function wpte_get_domain_status_by_license_id( $license_id ) {
 }
 
 /**
+ * Method wpte_domain_remove
+ *
+ * @param $id $id [explicite description]
+ * Delete Domain
+ * 
+ */
+function wpte_domain_remove( $id ) {
+    global $wpdb;
+    return $wpdb->delete(
+        $wpdb->prefix . 'wpte_domains',
+        ['id' => $id]
+    );
+}
+
+/**
  * Method wpte_get_product
  *
  * @param $id $id [explicite description]
@@ -772,6 +787,24 @@ function wpte_get_data_for_license_by_user_id( $user_id ) {
         WHERE {$wpdb->prefix}wpte_product_license.customer_id = %d
         AND {$wpdb->prefix}wpte_product_license.product_id = {$wpdb->prefix}wpte_product_variation.id
         AND {$wpdb->prefix}wpte_product_license.plugin_id = {$wpdb->prefix}wpte_plugin_data.id", 
+        $user_id )
+    );
+}
+
+/**
+ * Method wpte_get_data_for_order_list_by_user_id
+ *
+ * @param $id $id [explicite description]
+ * Fetch License Rows by User ID
+ * @return void
+ */
+function wpte_get_data_for_order_list_by_user_id( $user_id ) {
+    global $wpdb;
+    return $wpdb->get_results(
+        $wpdb->prepare( "SELECT {$wpdb->prefix}wpte_product_license.id, {$wpdb->prefix}wpte_product_license.created_date, status, variation_price 
+        FROM {$wpdb->prefix}wpte_product_license, {$wpdb->prefix}wpte_product_variation
+        WHERE {$wpdb->prefix}wpte_product_license.customer_id = %d
+        AND {$wpdb->prefix}wpte_product_license.product_id = {$wpdb->prefix}wpte_product_variation.id", 
         $user_id )
     );
 }

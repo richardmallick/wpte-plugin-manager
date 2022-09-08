@@ -12,7 +12,7 @@ trait Invoice{
   public function wpte_invoice( $id ) {
 
     $license = wpte_pm_get_data_for_invoice( $id ) ? wpte_pm_get_data_for_invoice( $id ) : (object)[];
-    write_log($license);
+
     // Get User Data
     $customer_id    = $license->customer_id ? $license->customer_id : '';
     $customer       = get_user_by('id', $customer_id);

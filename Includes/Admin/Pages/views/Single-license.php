@@ -13,7 +13,7 @@ if ( $license->expired_date !== 'lifetime' ) {
 }
 
 $status             = isset($license->status) ? $license->status : '';
-$inactive = $status !== 'active' ? 'wpte-single-license-status-inactive' : '';
+$inactive           = $status !== 'active' ? 'wpte-single-license-status-inactive' : '';
 $activation_limit   = isset($license->activation_limit) ? $license->activation_limit : '';
 $variation_status   = wpte_get_domain_status_by_license_id( $license_id );
 $active_site        = $variation_status ? $variation_status : [];

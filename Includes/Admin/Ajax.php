@@ -31,6 +31,7 @@ class Ajax{
         add_action( 'wp_ajax_wpte_license_update', [$this, 'wpte_license_update'] );
         add_action( 'wp_ajax_wpte_license_deactivate', [$this, 'wpte_license_deactivate'] );
         add_action( 'wp_ajax_wpte_license_activate', [$this, 'wpte_license_activate'] );
+        add_action( 'wp_ajax_wpte_remove_domain', [$this, 'wpte_remove_domain'] );
     }
 
     /**
@@ -597,6 +598,34 @@ EOT;
         wp_send_json_success( [
             'license_activate' =>   __( 'License has been activated :)', WPTE_PM_TEXT_DOMAIN ),
         ] );
+        
+    }
+
+    public function wpte_remove_domain() {
+
+        if ( ! current_user_can( 'manage_options' ) ) {
+            return;
+        }
+
+        if ( ! wp_verify_nonce( wp_unslash( $_REQUEST['security'] ), 'wpte-myac-nonce' ) ) {
+            return esc_html__( 'Nonce Varification Failed!', WPTE_PM_TEXT_DOMAIN );
+        }
+
+        $id         = isset( $_POST['domain_id'] ) ? sanitize_text_field($_POST['domain_id']) : '';
+        $license_id = isset( $_POST['license_id'] ) ? sanitize_text_field($_POST['license_id']) : '';
+
+        $result = wpte_domain_remove($id);
+
+        if ( $result ) {
+            $active_sites = wpte_get_domain_status_by_license_id( $license_id ) ? wpte_get_domain_status_by_license_id( $license_id ) : [];
+            $active = count($active_sites) ? count($active_sites) : 0;
+            wpte_product_license_activate_update( $license_id, $active );
+            wp_send_json_success( [
+                'success' =>   __( 'Site has been removed.', WPTE_PM_TEXT_DOMAIN ),
+            ] );
+        } else {
+            exit;
+        }
         
     }
    

@@ -10,6 +10,13 @@ class LicensesRenderer {
      */
     public function show() {
         wp_enqueue_style( 'wpte-pm-my-account' );
+        wp_enqueue_script( 'wpte-pm-my-account-js' );
+
+        wp_localize_script('wpte-pm-my-account-js', 'wpteMyAc', [
+            'ajaxUrl' => admin_url('admin-ajax.php'),
+            'ajaxNonce' => wp_create_nonce('wpte-myac-nonce'),
+            'error'   => __('Something Went Wrong!', WPTE_PM_TEXT_DOMAIN)
+        ]);
 
         // If user not logged in
         if ( ! is_user_logged_in() ) {
@@ -74,13 +81,13 @@ class LicensesRenderer {
 
                         <?php if ( $activation->site_type == 'Local' ) : ?>
                             <small class="badge text-normal" style="margin-left: 5px">Local</small>
-                            <span class="tooltip">
+                            <!-- <span class="tooltip">
                                 <i class="as-icon-info"></i>
                                 <small class="tooltiptext text-normal" style="min-width: 260px; margin-left: -130px">Local sites are whitelisted and they do not increase the number of your total activated sites</small>
-                            </span>
+                            </span> -->
                         <?php endif; ?>
                     </span>
-                    <a href="#" data-activationid="<?php echo $activation->id; ?>" class="remove-activation-button">Remove</a>
+                    <a href="#" data-activationid="<?php echo $activation->id; ?>" data-licenseid="<?php echo $license->id; ?>" class="remove-activation-button">Remove</a>
                 </div>
                 <?php endforeach; ?>
 
