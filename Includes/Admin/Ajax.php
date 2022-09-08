@@ -458,13 +458,13 @@ EOT;
             return esc_html__( 'Nonce Varification Failed!', WPTE_PM_TEXT_DOMAIN );
         }
 
-        $id = isset( $_POST['id'] ) ? sanitize_text_field($_POST['id']) : '';
+        $id        = isset( $_POST['id'] ) ? sanitize_text_field($_POST['id']) : '';
         $licenseid = isset( $_POST['licenseid'] ) ? sanitize_text_field($_POST['licenseid']) : '';
         
-        $get_license = wpte_get_product_license_row( $licenseid ) ? wpte_get_product_license_row( $licenseid ) : (object)[];
-        $activated_license = $get_license->active ? $get_license->active : 0;
-        $subtraction = $activated_license > 0 ? $activated_license - 1 : 0;
-        wpte_product_license_activate_update( $licenseid, $subtraction );
+        $active_sites = wpte_get_domain_status_by_license_id( $licenseid ) ? wpte_get_domain_status_by_license_id( $licenseid ) : [];
+        $active       = count($active_sites) ? count($active_sites) - 1 : 0;
+        
+        wpte_product_license_activate_update( $licenseid, $active );
         wpte_pm_license_url_status_updater( $id , 'blocked');
 
         wp_send_json_success( [
@@ -488,13 +488,14 @@ EOT;
             return esc_html__( 'Nonce Varification Failed!', WPTE_PM_TEXT_DOMAIN );
         }
 
-        $id = isset( $_POST['id'] ) ? sanitize_text_field($_POST['id']) : '';
+        $id        = isset( $_POST['id'] ) ? sanitize_text_field($_POST['id']) : '';
         $licenseid = isset( $_POST['licenseid'] ) ? sanitize_text_field($_POST['licenseid']) : '';
         
-        $get_license = wpte_get_product_license_row( $licenseid ) ? wpte_get_product_license_row( $licenseid ) : (object)[];
-        $activated_license = $get_license->active ? $get_license->active : 0;
-        $subtraction = $activated_license > 0 ? $activated_license - 1 : 0;
-        wpte_product_license_activate_update( $licenseid, $subtraction );
+        $active_sites = wpte_get_domain_status_by_license_id( $licenseid ) ? wpte_get_domain_status_by_license_id( $licenseid ) : [];
+
+        $active = count($active_sites) ? count($active_sites) - 1 : 0;
+        
+        wpte_product_license_activate_update( $licenseid, $active );
         wpte_pm_license_url_status_updater( $id , 'inactive');
 
         wp_send_json_success( [
@@ -518,12 +519,6 @@ EOT;
         }
 
         $id = isset( $_POST['id'] ) ? sanitize_text_field($_POST['id']) : '';
-        $licenseid = isset( $_POST['licenseid'] ) ? sanitize_text_field($_POST['licenseid']) : '';
-        
-        $get_license = wpte_get_product_license_row( $licenseid ) ? wpte_get_product_license_row( $licenseid ) : (object)[];
-        $activated_license = $get_license->active ? $get_license->active : 0;
-        $subtraction = $activated_license > 0 ? $activated_license - 1 : 0;
-        wpte_product_license_activate_update( $licenseid, $subtraction );
         wpte_pm_license_url_delete( $id );
 
         wp_send_json_success( [

@@ -15,7 +15,8 @@ if ( $license->expired_date !== 'lifetime' ) {
 $status             = isset($license->status) ? $license->status : '';
 $inactive = $status !== 'active' ? 'wpte-single-license-status-inactive' : '';
 $activation_limit   = isset($license->activation_limit) ? $license->activation_limit : '';
-$active_site        = isset($license->active) && $license->active ? $license->active : 0;
+$variation_status   = wpte_get_domain_status_by_license_id( $license_id );
+$active_site        = $variation_status ? $variation_status : [];
 
 $customer_id    = isset($license->customer_id) ? $license->customer_id : '';
 $customer       = get_user_by('id', $customer_id);
@@ -66,7 +67,7 @@ $product        = wpte_get_product_variation_by_id( $product_id ) ? wpte_get_pro
             </div>
             <div class="wpte-single-license-active">
                 <label for="">Active Site</label>
-                <p><?php echo intval($active_site); ?></p>
+                <p><?php echo intval(count($active_site)); ?></p>
             </div>
             <div class="wpte-single-license-source">
                 <label for="">Source</label>

@@ -118,7 +118,7 @@ class Assets{
     public function PublicAssetsJS() {
         return [
             [
-                'handler'   => 'wpte-pm-my-account',
+                'handler'   => 'wpte-pm-my-account-js',
                 'src'       => 'js/my-account.js',
                 'deps'      => ['jquery'],
                 'in_footer' => true

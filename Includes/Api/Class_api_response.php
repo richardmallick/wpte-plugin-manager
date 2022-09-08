@@ -152,33 +152,32 @@ class Class_api_response{
             return false;
         }
 
-        $get_license = wpte_get_product_license_row_key( $data['license_key'] ) ? wpte_get_product_license_row_key( $data['license_key'] ) : (object)[];
-
-        if ( $get_license->license_key !== $data['license_key'] ) {
+        $get_license        = wpte_get_product_license_row_and_plugin_slug( $data['license_key'] ) ? wpte_get_product_license_row_and_plugin_slug( $data['license_key'] ) : (object)[];
+        $variation_status   = wpte_get_domain_status_by_license_id( $get_license->id ) ? wpte_get_domain_status_by_license_id( $get_license->id ) : [];
+        $active_sites       = count($variation_status);
+        
+        if ( $get_license->license_key !== $data['license_key'] || $data['slug'] !== $get_license->plugin_slug ) {
             $send_data = [
-                'error' => 'Invalid License Key',
-                'success' => false
+                'error'     => 'Invalid License Key',
+                'success'   => false
             ];
-        } elseif ( ! ($get_license->activation_limit > $get_license->active) ) {
+        } elseif ( ! ( $get_license->activation_limit > $active_sites ) ) {
             $send_data = [
-                'error' => 'Out of Activation Limit',
-                'success' => false
+                'error'     => 'Out of Activation Limit',
+                'success'   => false
             ];
-        } elseif ( $get_license->expired_date < time() ) {
+        } elseif ( $get_license->expired_date < time() && $get_license->expired_date !== 'lifetime' ) {
             $send_data = [
-                'error' => 'License Key has been expired',
-                'success' => false
+                'error'     => 'License Key has been expired',
+                'success'   => false
             ];
         } elseif ( $get_license->status == 'inactive' ) {
             $send_data = [
-                'error' => 'Inactive License Key',
-                'success' => false
+                'error'     => 'Inactive License Key',
+                'success'   => false
             ];
         } else {
-            $activated_license  = $get_license->active ? $get_license->active : 0;
-            $addition           = $activated_license + 1;
-           
-
+            
             if ( $data['is_local'] ) {
                 $site_type = 'Local';
             } else {
@@ -200,27 +199,32 @@ class Class_api_response{
             if ( !empty(get_object_vars($is_url_exist)) ) {
                 if ( isset($is_url_exist->status) && $is_url_exist->status === 'blocked' ) {
                     $send_data = [
-                        'error' => 'This URL has been Blocked',
-                        'success' => false
+                        'error'     => 'This URL has been Blocked',
+                        'success'   => false
                     ];
                     header( 'Content-Type: application/json' );
                     wp_send_json($send_data);
                     return false;
                 }
-                wpte_product_license_activate_update( $get_license->id, $addition );
+                $active_sites = wpte_get_domain_status_by_license_id( $get_license->id ) ? wpte_get_domain_status_by_license_id( $get_license->id ) : [];
+                $active = count($active_sites) + 1;
+                wpte_product_license_activate_update( $get_license->id, $active );
                 wpte_product_license_url_update( $get_license->id , $data['url'], 'active');
             } else {
-                $addSite =    wpte_pm_add_new_site( $args );
+                $addSite = wpte_pm_add_new_site( $args );
                 if ( $addSite ) {
-                    wpte_product_license_activate_update( $get_license->id, $addition );
+                    $active_sites = wpte_get_domain_status_by_license_id( $get_license->id ) ? wpte_get_domain_status_by_license_id( $get_license->id ) : [];
+                    $active = count($active_sites) + 1;
+                    wpte_product_license_activate_update( $get_license->id, $active );
                     wpte_product_license_url_update( $get_license->id , $data['url'], 'active');
                 } 
             }
 
-            $get_license = wpte_get_product_license_row_key( $data['license_key'] ) ? wpte_get_product_license_row_key( $data['license_key'] ) : (object)[];
+            $variation_status   = wpte_get_domain_status_by_license_id( $get_license->id ) ? wpte_get_domain_status_by_license_id( $get_license->id ) : [];
+            $active_sites = count($variation_status);
             $send_data = [
-                'success' => true,
-                'remaining'        => $get_license->active,
+                'success'          => true,
+                'remaining'        => $active_sites,
                 'activation_limit' => $get_license->activation_limit,
                 'expiry_days'      => $get_license->expired_date,
                 'recurring'        => $get_license->recurring_payment,
@@ -248,28 +252,30 @@ class Class_api_response{
             return false;
         }
 
-        $get_license = wpte_get_product_license_row_key( $data['license_key'] ) ? wpte_get_product_license_row_key( $data['license_key'] ) : (object)[];
+        $get_license        = wpte_get_product_license_row_and_plugin_slug( $data['license_key'] ) ? wpte_get_product_license_row_key( $data['license_key'] ) : (object)[];
+        $variation_status   = wpte_get_domain_status_by_license_id( $get_license->id ) ? wpte_get_domain_status_by_license_id( $get_license->id ) : [];
+        $active_sites       = count($variation_status);
 
-        if ( $get_license->license_key !== $data['license_key'] ) {
+        if ( $get_license->license_key !== $data['license_key'] || $data['slug'] !== $get_license->plugin_slug ) {
             $send_data = [
-                'error' => 'Invalid License Key',
-                'success' => false
+                'error'     => 'Invalid License Key',
+                'success'   => false
             ];
         }elseif ( $get_license->expired_date < time() ) {
             $send_data = [
-                'error' => 'License Key has been expired',
-                'success' => false
+                'error'     => 'License Key has been expired',
+                'success'   => false
             ];
         } elseif ( $get_license->status === 'inactive' ) {
             $send_data = [
-                'error' => 'Inactive License Key',
-                'success' => false
+                'error'     => 'Inactive License Key',
+                'success'   => false
             ];
         } else {
 
             $send_data = [
                 'success'          => true,
-                'remaining'        => $get_license->active,
+                'remaining'        => $active_sites,
                 'activation_limit' => $get_license->activation_limit,
                 'expiry_days'      => $get_license->expired_date,
                 'recurring'        => $get_license->recurring_payment,
@@ -291,31 +297,34 @@ class Class_api_response{
         // TODO: Make header secure
         $header = $request->get_headers();
 
-        $data = $request->get_params();
+        $data   = $request->get_params();
 
         if ( ! $data['license_key'] ) {
             return false;
         }
 
-        $get_license = wpte_get_product_license_row_key( $data['license_key'] ) ? wpte_get_product_license_row_key( $data['license_key'] ) : (object)[];
+        $get_license  = wpte_get_product_license_row_key( $data['license_key'] ) ? wpte_get_product_license_row_key( $data['license_key'] ) : (object)[];
         
         $is_url_exist = wpte_is_license_url_exitst( $data['url'], $get_license->id ) ? wpte_is_license_url_exitst( $data['url'], $get_license->id  ) : (object)[];
         
         if ( $get_license->license_key !== $data['license_key'] ) {
             $send_data = [
-                'error' => 'Invalid License Key',
-                'success' => false
+                'error'     => 'Invalid License Key',
+                'success'   => false
             ];
         } else {
             $send_data = [
                 'success' => true,
             ];
-            $activated_license  = $get_license->active ? $get_license->active : 0;
-            $addition           = $activated_license - 1;
+            
+            $active_sites = wpte_get_domain_status_by_license_id( $get_license->id ) ? wpte_get_domain_status_by_license_id( $get_license->id ) : [];
+            $active = count($active_sites) ? count($active_sites) - 1 : 0;
+            wpte_product_license_activate_update( $get_license->id, $active );
+
             if ( !empty(get_object_vars($is_url_exist)) && $is_url_exist->status !== 'blocked' && $is_url_exist->status !== 'inactive' ) {
-                wpte_product_license_activate_update( $get_license->id, $addition );
                 wpte_product_license_url_update( $get_license->id , $data['url'], 'inactive');
             }
+            
         }
 
         header( 'Content-Type: application/json' );
@@ -334,10 +343,10 @@ class Class_api_response{
         $data = $request->get_params();
 
         $id          = isset($data['id']) && $data['id'] ? esc_html($data['id']) : '';
-        $version     = isset($data['version']) && $data['version'] ? esc_html($data['version']) : '';
-        $name        = isset($data['name']) && $data['name'] ? esc_html($data['name']) : '';
-        $slug        = isset($data['slug']) && $data['slug'] ? esc_html($data['slug']) : '';
-        $basename    = isset($data['basename']) && $data['basename'] ? esc_html($data['basename']) : '';
+        // $version     = isset($data['version']) && $data['version'] ? esc_html($data['version']) : '';
+        // $name        = isset($data['name']) && $data['name'] ? esc_html($data['name']) : '';
+        // $slug        = isset($data['slug']) && $data['slug'] ? esc_html($data['slug']) : '';
+        // $basename    = isset($data['basename']) && $data['basename'] ? esc_html($data['basename']) : '';
         $license_key = isset($data['license_key']) && $data['license_key'] ? esc_html($data['license_key']) : '';
 
         $plugin_data    = wpte_pm_get_data_for_plugin_update( $id );
@@ -374,7 +383,6 @@ class Class_api_response{
             $update["download_link"] = 'http://myplugin.test/wp-content/uploads/2022/07/product-layouts-pro.zip';
         }
        
-
         header( 'Content-Type: application/json' );
         wp_send_json($update);
     }

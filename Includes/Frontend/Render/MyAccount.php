@@ -9,6 +9,7 @@ class MyAccount {
      */
     public function show() {
         wp_enqueue_style( 'wpte-pm-my-account' );
+        wp_enqueue_script( 'wpte-pm-my-account-js' );
 
         // If user not logged in
         if ( ! is_user_logged_in() ) {

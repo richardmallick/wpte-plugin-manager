@@ -1,6 +1,6 @@
 <?php 
-$plugin_id = isset( $_GET['id'] ) ? intval($_GET['id']) : '';
-$licenses = wpte_get_product_license( $plugin_id ) ? wpte_get_product_license( $plugin_id ) : [];
+$plugin_id  = isset( $_GET['id'] ) ? intval($_GET['id']) : '';
+$licenses   = wpte_get_product_license( $plugin_id ) ? wpte_get_product_license( $plugin_id ) : [];
 $variations = wpte_get_product_variations( $plugin_id ) ? wpte_get_product_variations( $plugin_id ) : [];
 
 ?>
@@ -19,30 +19,31 @@ $variations = wpte_get_product_variations( $plugin_id ) ? wpte_get_product_varia
 
         <?php 
             foreach ( $licenses as $license ) : 
-            $license_key = isset($license->license_key) ? $license->license_key : '';
-            $activation_limit = isset($license->activation_limit) ? $license->activation_limit : '';
-            $active = isset($license->active) ? $license->active : '';
-            $_created_date = isset($license->created_date) ? strtotime($license->created_date) : ''; 
-            $created_date = isset($license->created_date) ? date("M d, Y", $_created_date) : '';
-            $plugin_id = isset($_GET['id']) ? $_GET['id'] : '';
-            $plugin = isset($_GET['plugin']) ? $_GET['plugin'] : '';
-            $license_id = isset($license->id) ? $license->id : '';
-            $customer_id = isset($license->customer_id) ? $license->customer_id : '';
+            $variation_status   = wpte_get_domain_status_by_license_id( $license->id );
+            $license_key        = isset($license->license_key) ? $license->license_key : '';
+            $activation_limit   = isset($license->activation_limit) ? $license->activation_limit : '';
+            $active             = $variation_status ? $variation_status : [];
+            $_created_date      = isset($license->created_date) ? strtotime($license->created_date) : ''; 
+            $created_date       = isset($license->created_date) ? date("M d, Y", $_created_date) : '';
+            $plugin_id          = isset($_GET['id']) ? $_GET['id'] : '';
+            $plugin             = isset($_GET['plugin']) ? $_GET['plugin'] : '';
+            $license_id         = isset($license->id) ? $license->id : '';
+            $customer_id        = isset($license->customer_id) ? $license->customer_id : '';
             
             if ( $license->expired_date !== 'lifetime' ) {
-                $_expired_date = $license->expired_date ? $license->expired_date : ''; 
-                $expired_date = $license->expired_date ? date("M d, Y", $_expired_date) : '';
+                $_expired_date  = $license->expired_date ? $license->expired_date : ''; 
+                $expired_date   = $license->expired_date ? date("M d, Y", $_expired_date) : '';
             } else {
                 $expired_date = 'Lifetime';
             }
     
-            $customer = get_user_by('id', $customer_id);
-            $customer_name = $customer->first_name . ' ' . $customer->last_name;
+            $customer       = get_user_by('id', $customer_id);
+            $customer_name  = $customer->first_name . ' ' . $customer->last_name;
         ?>
             <div class="wpte-single-license-row wpte-single-license-column wpte-single-license-site">
                 <div class="site site-url license-key"><a href="<?php echo admin_url( "admin.php?page=wpte-plugin-manager&id=$plugin_id&plugin=$plugin&license_id=$license_id" ); ?>"><?php echo esc_html($license_key); ?></a></div>
                 <div class="site site-url"><?php echo intval($activation_limit); ?></div>
-                <div class="site site-name"><?php echo intval($active); ?></div>
+                <div class="site site-name"><?php echo intval(count($active)); ?></div>
                 <div class="site site-customer-name">
                     <span class="view-customer customer-view">View</span> 
                     <div class="customer-name" >

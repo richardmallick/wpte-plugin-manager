@@ -299,6 +299,34 @@ function wpte_get_product_variations( $plugin_id ) {
 }
 
 /**
+ * Method wpte_get_product
+ *
+ * @param $id $id [explicite description]
+ * Fetch Product Row by Plugin ID
+ * @return void
+ */
+function wpte_get_domain_status_by_license_id( $license_id ) {
+    global $wpdb;
+    return $wpdb->get_results(
+        $wpdb->prepare( "SELECT status FROM {$wpdb->prefix}wpte_domains WHERE {$wpdb->prefix}wpte_domains.status IN ('active') AND license_id = %d", $license_id )
+    );
+}
+
+/**
+ * Method wpte_get_product
+ *
+ * @param $id $id [explicite description]
+ * Fetch Product Row by Plugin ID
+ * @return void
+ */
+function wpte_get_domain_by_license_id( $license_id ) {
+    global $wpdb;
+    return $wpdb->get_results(
+        $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}wpte_domains WHERE license_id = %d", $license_id )
+    );
+}
+
+/**
  * Method wpte_product_variation_update
  * 
  * Update Variations
@@ -437,6 +465,20 @@ function wpte_get_product_license_row_key( $license_key ) {
     global $wpdb;
     return $wpdb->get_row(
         $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}wpte_product_license WHERE license_key = %s", $license_key )
+    );
+}
+
+/**
+ * Method wpte_get_product_license_row
+ *
+ * @param $id $id [explicite description]
+ * Fetch Product Row by Plugin ID
+ * @return void
+ */
+function wpte_get_product_license_row_and_plugin_slug( $license_key ) {
+    global $wpdb;
+    return $wpdb->get_row(
+        $wpdb->prepare( "SELECT {$wpdb->prefix}wpte_product_license.*, plugin_slug FROM {$wpdb->prefix}wpte_product_license, {$wpdb->prefix}wpte_plugin_data  WHERE {$wpdb->prefix}wpte_product_license.plugin_id = {$wpdb->prefix}wpte_plugin_data.id AND license_key = %s", $license_key )
     );
 }
 
