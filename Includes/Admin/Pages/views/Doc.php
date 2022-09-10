@@ -14,6 +14,6 @@ $url = explode('.', parse_url($site_url, PHP_URL_HOST));
 <br>
 <br>
 <code>
-    $client = new Wptoffee\Client(<?php echo esc_url($site_url); ?>, <?php echo esc_html($url[0]); ?>, '<?php echo esc_html($plugin->plugin_key); ?>', 'Your Plugin Name', __FILE__);<br>
+    $client = new Wptoffee\Client('<?php echo esc_url($site_url); ?>', '<?php echo esc_html($url[0]); ?>', '<?php echo esc_html($plugin->plugin_key); ?>', 'Your Plugin Name', __FILE__);<br>
     $client->updater();
 </code>
