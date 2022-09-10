@@ -18,7 +18,7 @@ class Download{
         $id = isset( $_GET['id'] ) ? $_GET['id'] : '';
         $license = wpte_get_product_license_row_key( $license_key ) ? wpte_get_product_license_row_key( $license_key ) : (object)[];
         $product_file = isset($id) && $id ? wp_get_attachment_url($id) : '#';
-        $filename = $product_file ? basename( get_attached_file( $license->product_file ) ): '';
+        $filename = $product_file ? basename( get_attached_file( $product_file ) ): '';
         if ( $license && $product_file ) :
         ?>
         <p></p>

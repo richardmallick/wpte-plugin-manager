@@ -328,7 +328,7 @@ class Ajax{
         $token = bin2hex($token);
 
         $produt_id = isset($data['wpte_pm_license_product']) && $data['wpte_pm_license_product'] ? sanitize_text_field($data['wpte_pm_license_product']) : '';
-        $product = wpte_get_product_variation_by_id( $produt_id ) ? wpte_get_product_variation_by_id( $produt_id ) : (object)[];
+        $product   = wpte_get_product_variation_by_id( $produt_id ) ? wpte_get_product_variation_by_id( $produt_id ) : (object)[];
 
         if ( isset($product->recurring_payment) && $product->recurring_payment ) {
             $recurring_period = $product->recurring_period;

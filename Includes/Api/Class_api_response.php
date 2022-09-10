@@ -9,6 +9,7 @@ namespace WPTE_PM_MANAGER\Includes\Api;
  */
 class Class_api_response{
 
+    use \WPTE_PM_MANAGER\Includes\Admin\Email\Invoice;
     /**
      * Api Response class constructor
      * 
@@ -107,28 +108,51 @@ class Class_api_response{
             $expired_date = 'lifetime';
         }
 
+        $email      = $customer_email;
+        $first_name = $customer_frist_name;
+        $last_name  = $customer_last_name;
+        $password   = wpte_generate_password(16);
+
+        $user_id 	= wpte_add_new_user($email, $password, $first_name, $last_name);
+
         $args = [
             'plugin_id'         => $product->plugin_id,
             'license_key'       => $token,
-            'customer_name'     => $customer_frist_name .' '. $customer_last_name,
-            'customer_email'    => $customer_email,
-            'product_name'      => $product->variation_name,
-            'product_slug'      => $product->variation_slug,
             'activation_limit'  => $product->activation_limit,
-            'product_price'     => $product->variation_price,
-            'product_file'      => $product->variation_file,
+            'active'            => 0,
+            'customer_id'       => $user_id,
+            'status'            => 'active',
+            'product_id'        => $product->id,
             'recurring_payment' => $product->recurring_payment,
             'recurring_period'  => $product->recurring_period,
             'recurring_times'   => $product->recurring_times,
-            'is_active'         => 'active',
-            'activated'         => 0,
-            'domain'            => '',
             'created_date'      => current_time('mysql'),
             'expired_date'      => $expired_date,
-    
         ];
 
         $insert_id = wpte_pm_create_license( $args );
+		
+		// Send Invoice to customer
+        if ( $insert_id ) {
+
+            $to = [
+                $email
+            ];
+            $headers        = 'From: WPTOFFEE < order@wptoffee.com > ' . "\r\n";
+            $subject        = "Your order of ".$product->variation_name." is completed";
+            $emailtemplate  = $this->wpte_invoice( $insert_id );
+            $message = <<<EOT
+                    {$emailtemplate}
+EOT;
+            add_filter(
+                'wp_mail_content_type',
+                function ( $content_type ) {
+                    return 'text/html';
+                }
+            );
+            $email_sent = wp_mail( $to, $subject, $message, $headers );
+           
+        }
 
         if ( is_wp_error( $insert_id ) ) {
             wp_send_json_error( [
@@ -360,12 +384,12 @@ class Class_api_response{
         $get_license_db = wpte_get_product_license_row_key( $license_key ) ? wpte_get_product_license_row_key( $license_key ) : (object)[];
 
         $update = array(
-            "id"   => $plugin_data->plugin_key,
-            "name" => $plugin_data->plugin_name,
-            "slug" => $plugin_data->plugin_slug,
+            "id"     => $plugin_data->plugin_key,
+            "name"   => $plugin_data->plugin_name,
+            "slug"   => $plugin_data->plugin_slug,
             "plugin" => $plugin_data->plugin_slug."/".$plugin_data->plugin_slug."php",
-            "url" => "",
-            "icons" => [
+            "url"    => "",
+            "icons"  => [
                 '1x' => '',
                 '2x' => '',
             ],
@@ -373,21 +397,21 @@ class Class_api_response{
                 "low"  => "",
                 "high"  => ""
             ],
-            "tested"  => $plugin_data->tested_version,
+            "tested"        => $plugin_data->tested_version,
             "requires_php"  => $plugin_data->php_version,
-            "requires"  => $plugin_data->wordpress_version,
-            "sections"  => [
-                "description"  => $plugin_data->description,
+            "requires"      => $plugin_data->wordpress_version,
+            "sections"      => [
+                "description"   => $plugin_data->description,
                 "installation"  => "Click the activate button and that's it.",
-                "changelog"  => $plugin_data->change_log
+                "changelog"     => $plugin_data->change_log
             ],
-            'new_version' => $plugin_data->plugin_version,
+            'new_version'   => $plugin_data->plugin_version,
             "last_updated"  => $plugin_data->last_update,
             
         );
         if ( $license_key === $get_license_db->license_key ) {
-            $update["package"] = 'http://myplugin.test/wp-content/uploads/2022/07/product-layouts-pro.zip';
-            $update["download_link"] = 'http://myplugin.test/wp-content/uploads/2022/07/product-layouts-pro.zip';
+            $update["package"]       = 'https://app.wptoffee.com/wp-content/uploads/2022/07/product-layouts-pro.zip';
+            $update["download_link"] = 'https://app.wptoffee.com/wp-content/uploads/2022/07/product-layouts-pro.zip';
         }
        
         header( 'Content-Type: application/json' );

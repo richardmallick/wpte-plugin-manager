@@ -25,14 +25,14 @@ trait Invoice{
 
     // Get Product Data
     $product_name   = $license->variation_name ? $license->variation_name : '';
-    $product_price  = $license->variation_price ? $license->variation_price : '';
+    $product_price  = $license->variation_price ? $license->variation_price : 00;
     $file_id  = $license->file_id ? $license->file_id : '';
 
     // Get License
     $license_key      = $license->license_key ? $license->license_key : '';
     $activation_limit = $license->activation_limit ? $license->activation_limit : '';
     $_created_date    = current_time('mysql');
-    $created_date     = date("M d, Y", $_created_date);
+    $created_date     = date("M d, Y", strtotime($_created_date));
 
     if ( $license->expired_date !== 'lifetime' ) {
       $recurring_period = $license->recurring_period ? $license->recurring_period : '';
